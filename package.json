@@ -4,12 +4,13 @@
   "devDependencies": {
     "lerna": "^4.0.0"
   },
-  "workspaces":[
+  "workspaces": [
     "packages/*"
   ],
   "scripts": {
-    "start:dev":"lerna run start:dev --stream",
+    "start:dev": "lerna run start:dev --stream",
     "kill-port": "npx kill-port 3000 5000",
-    "lint:fix-client":"eslint --fix './packages/client/src/**/*.{ts,tsx}'"
-  } 
+    "lint:fix-client": "eslint --fix ./packages/client/src/**/*.{ts,tsx}",
+    "lint:fix-server": "eslint --fix ./packages/server/**/*.ts"
+  }
 }

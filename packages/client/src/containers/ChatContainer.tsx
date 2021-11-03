@@ -1,9 +1,46 @@
-import { FC, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { ChatMsg } from '../components/Message';
-import { ChatMsgType } from '../types/ChatTypes';
+import { ChatMsgType } from '../../../domain/types/chat';
 import colors from '../constants/colors';
+
+interface PropType {
+  chatList: ChatMsgType[];
+  sendChat: any;
+}
+
+const ChatContainer: FC<PropType> = ({ chatList, sendChat }) => {
+  const myName = 'a';
+  const isDark = true;
+  const [inputValue, setInputValue] = useState('');
+
+  const onClick = useCallback(() => {
+    sendChat({ userName: myName, msg: inputValue, profileImg: '' });
+    setInputValue('');
+  }, [inputValue]);
+
+  return (
+    <div css={chatContainerStyle}>
+      <div css={chatMsgsStyle}>
+        {chatList.map((chat) => (
+          <ChatMsg key={chat.userName + chat.msg} chat={chat} isMyMsg={myName === chat.userName} />
+        ))}
+      </div>
+      <form css={inputFormStyle(isDark)}>
+        <input
+          css={inputStyle(isDark)}
+          placeholder="메세지를 입력하세요"
+          value={inputValue}
+          onChange={({ target }) => setInputValue(target.value)}
+        />
+        <button type="button" css={inputButtonStyle(isDark)} onClick={onClick}>
+          <img src="/assets/icons/enter.png" alt="enter" />
+        </button>
+      </form>
+    </div>
+  );
+};
 
 const chatContainerStyle = css`
   display: flex;
@@ -61,48 +98,5 @@ const inputButtonStyle = (isDark: boolean) => css`
     height: 28px;
   }
 `;
-
-const ChatContainer: FC = () => {
-  const myName = 'a';
-  const isDark = true;
-  const [chatMsgs] = useState<ChatMsgType[]>([
-    {
-      userName: 'a',
-      msg: 'amfke',
-      profileImg: 'https://cdn-icons-png.flaticon.com/512/1946/1946429.png',
-    },
-    {
-      userName: 'b',
-      msg: 'amfkefasfe',
-      profileImg: 'https://cdn-icons-png.flaticon.com/512/1946/1946429.png',
-    },
-    {
-      userName: 'c',
-      msg: 'amfkeqlq;q;',
-      profileImg: 'https://cdn-icons-png.flaticon.com/512/1946/1946429.png',
-    },
-    {
-      userName: 'a',
-      msg: '추가 채팅',
-      profileImg: 'https://cdn-icons-png.flaticon.com/512/1946/1946429.png',
-    },
-  ]);
-
-  return (
-    <div css={chatContainerStyle}>
-      <div css={chatMsgsStyle}>
-        {chatMsgs.map((chat) => (
-          <ChatMsg key={chat.userName + chat.msg} chat={chat} isMyMsg={myName === chat.userName} />
-        ))}
-      </div>
-      <form css={inputFormStyle(isDark)}>
-        <input css={inputStyle(isDark)} placeholder="메세지를 입력하세요" />
-        <button type="button" css={inputButtonStyle(isDark)}>
-          <img src="/assets/icons/enter.png" alt="enter" />
-        </button>
-      </form>
-    </div>
-  );
-};
 
 export default ChatContainer;

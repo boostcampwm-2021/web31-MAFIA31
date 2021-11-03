@@ -15,7 +15,7 @@ const useChat = (roomId: string) => {
     });
 
     socketRef.current.on(RECEIVE_MESSAGE, (msg: ChatMsgType): void => {
-      setChatList([...chatList, msg]);
+      setChatList((prev) => [...prev, msg]);
     });
 
     return () => {
@@ -27,7 +27,7 @@ const useChat = (roomId: string) => {
     socketRef.current?.emit('send msg', msg);
   };
 
-  return { chatList: Array, sendChat };
+  return { chatList, sendChat };
 };
 
 export default useChat;

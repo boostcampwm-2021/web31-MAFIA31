@@ -1,7 +1,7 @@
 import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { ChatMsgType } from '../../types/ChatTypes';
+import { ChatMsgType } from '../../../../domain/types/chat';
 import colors from '../../constants/colors';
 
 interface PropType {

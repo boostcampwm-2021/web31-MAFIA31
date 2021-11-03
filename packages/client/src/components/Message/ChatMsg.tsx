@@ -9,7 +9,7 @@ interface PropType {
   isMyMsg: boolean;
 }
 
-const msgContainer = (isMyMsg: boolean) => css`
+const msgContainerStyle = (isMyMsg: boolean) => css`
   display: flex;
   align-self: ${isMyMsg ? 'end' : 'start'};
   gap: 16px;
@@ -35,7 +35,7 @@ const msgStyle = (isMyMsg: boolean) => css`
 `;
 
 const ChatMsg: FC<PropType> = ({ chat, isMyMsg }) => (
-  <div css={msgContainer(isMyMsg)}>
+  <div css={msgContainerStyle(isMyMsg)}>
     <img css={profileImgStyle(isMyMsg)} src={chat.profileImg} alt="profile" />
     <div css={msgStyle(isMyMsg)}>{chat.msg}</div>
   </div>

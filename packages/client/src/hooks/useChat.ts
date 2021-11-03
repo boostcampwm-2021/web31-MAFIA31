@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { ChatMsgType } from '../../../domain/types/chat';
 
 const RECEIVE_MESSAGE = 'receive msg';
 const SOCKET_SERVER_URL = 'localhost:5001/';
 
 const useChat = (roomId: string) => {
-  const [chatList, setChatList] = useState<Object[]>([]);
+  const [chatList, setChatList] = useState<ChatMsgType[]>([]);
   const socketRef = useRef<Socket | null>();
 
   useEffect(() => {
@@ -13,8 +14,8 @@ const useChat = (roomId: string) => {
       query: { roomId },
     });
 
-    socketRef.current.on(RECEIVE_MESSAGE, (msg: Object): void => {
-      setChatList([...chatList, msg]);
+    socketRef.current.on(RECEIVE_MESSAGE, (msg: ChatMsgType): void => {
+      setChatList((prev) => [...prev, msg]);
     });
 
     return () => {
@@ -22,11 +23,11 @@ const useChat = (roomId: string) => {
     };
   }, [roomId]);
 
-  const sendChat = (msg: Object): void => {
+  const sendChat = (msg: ChatMsgType): void => {
     socketRef.current?.emit('send msg', msg);
   };
 
-  return { chatList: Array, sendChat };
+  return { chatList, sendChat };
 };
 
 export default useChat;

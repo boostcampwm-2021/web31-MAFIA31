@@ -1,13 +1,20 @@
 import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { ChatMsgType } from '../../types/ChatTypes';
+import { ChatMsgType } from '../../../../domain/types/chat';
 import colors from '../../constants/colors';
 
 interface PropType {
   chat: ChatMsgType;
   isMyMsg: boolean;
 }
+
+const ChatMsg: FC<PropType> = ({ chat, isMyMsg }) => (
+  <div css={msgContainerStyle(isMyMsg)}>
+    <img css={profileImgStyle(isMyMsg)} src={chat.profileImg} alt="profile" />
+    <div css={msgStyle(isMyMsg)}>{chat.msg}</div>
+  </div>
+);
 
 const msgContainerStyle = (isMyMsg: boolean) => css`
   display: flex;
@@ -34,10 +41,4 @@ const msgStyle = (isMyMsg: boolean) => css`
   border-bottom-left-radius: ${isMyMsg ? '20px' : '0px'};
 `;
 
-const ChatMsg: FC<PropType> = ({ chat, isMyMsg }) => (
-  <div css={msgContainerStyle(isMyMsg)}>
-    <img css={profileImgStyle(isMyMsg)} src={chat.profileImg} alt="profile" />
-    <div css={msgStyle(isMyMsg)}>{chat.msg}</div>
-  </div>
-);
 export default ChatMsg;

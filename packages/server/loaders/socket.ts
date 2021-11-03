@@ -11,7 +11,7 @@ const socketLoader = (app: express.Application) => {
     console.log(`✅ Socket Server Listening on : http://localhost:${PORT} 🚀`),
   );
 
-  const io: Server = new Server(server);
+  const io: Server = new Server(server, { cors: { origin: '*' } });
   const namespace: Namespace = io.of('/');
   socketInit(namespace);
 };

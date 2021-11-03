@@ -7,7 +7,7 @@ const socketInit = (namespace: Namespace): void => {
     if (!roomId) return;
 
     socket.join(roomId);
-    chatSocketInit(socket, roomId);
+    chatSocketInit(namespace, socket, roomId);
 
     socket.on('disconnect', (): void => {});
   });

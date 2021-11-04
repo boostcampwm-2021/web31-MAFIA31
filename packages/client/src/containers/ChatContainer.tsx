@@ -1,6 +1,7 @@
 import { FC, useCallback, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import { v4 as uuidv4 } from 'uuid';
 import { ChatMsg } from '../components/Message';
 import { ChatMsgType } from '../../../domain/types/chat';
 import { primaryLight, primaryDark, white, titleActive } from '../constants/index';
@@ -8,10 +9,10 @@ import { primaryLight, primaryDark, white, titleActive } from '../constants/inde
 interface PropType {
   chatList: ChatMsgType[];
   sendChat: any;
+  myName: string;
 }
 
-const ChatContainer: FC<PropType> = ({ chatList, sendChat }) => {
-  const myName = 'a';
+const ChatContainer: FC<PropType> = ({ chatList, sendChat, myName }) => {
   const isDark = true;
   const [inputValue, setInputValue] = useState('');
 
@@ -24,7 +25,7 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat }) => {
     <div css={chatContainerStyle}>
       <div css={chatMsgsStyle}>
         {chatList.map((chat) => (
-          <ChatMsg key={chat.userName + chat.msg} chat={chat} isMyMsg={myName === chat.userName} />
+          <ChatMsg key={uuidv4()} chat={chat} isMyMsg={myName === chat.userName} />
         ))}
       </div>
       <form css={inputFormStyle(isDark)}>

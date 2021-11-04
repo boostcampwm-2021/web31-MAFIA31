@@ -34,8 +34,8 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat }) => {
           value={inputValue}
           onChange={({ target }) => setInputValue(target.value)}
         />
-        <button type="button" css={inputButtonStyle(isDark)} onClick={onClick}>
-          <img src="/assets/icons/enter.png" alt="enter" />
+        <button type="button" css={inputButtonStyle} onClick={onClick}>
+          <img src="/assets/icons/send(light).png" alt="send" />
         </button>
       </form>
     </div>
@@ -48,8 +48,11 @@ const chatContainerStyle = css`
   align-items: center;
   justify-content: flex-end;
 
+  width: 690px;
   height: 100%;
+  padding: 40px;
   gap: 20px;
+  background-color: ${white};
 `;
 
 const chatMsgsStyle = css`
@@ -63,23 +66,24 @@ const chatMsgsStyle = css`
 
 const inputFormStyle = (isDark: boolean) => css`
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 610px;
+
+  gap: 18px;
+  width: 100%;
   height: 50px;
   padding: 11px 16px;
-  background-color: ${isDark ? primaryDark : primaryLight};
   border-radius: 20px;
+  background-color: ${isDark ? primaryDark : primaryLight};
 `;
 
 const inputStyle = (isDark: boolean) => css`
-  width: 80%;
-  height: 50px;
-  border: none;
-  color: ${isDark ? white : titleActive};
-  background-color: ${isDark ? primaryDark : primaryLight};
+  width: 100%;
   font-size: 18px;
   line-height: 21px;
+
+  border: none;
+  background-color: transparent;
+  color: ${isDark ? white : titleActive};
+
   :focus {
     outline: none;
   }
@@ -88,14 +92,20 @@ const inputStyle = (isDark: boolean) => css`
   }
 `;
 
-const inputButtonStyle = (isDark: boolean) => css`
-  background-color: ${isDark ? primaryLight : primaryDark};
-  border: none;
-  border-radius: 50%;
+const inputButtonStyle = css`
   cursor: pointer;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+
+  width: 25px;
+  height: 25px;
+
   img {
-    width: 28px;
-    height: 28px;
+    width: 25px;
+    height: 25px;
   }
 `;
 

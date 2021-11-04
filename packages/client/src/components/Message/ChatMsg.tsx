@@ -9,12 +9,15 @@ interface PropType {
   isMyMsg: boolean;
 }
 
-const ChatMsg: FC<PropType> = ({ chat, isMyMsg }) => (
-  <div css={msgContainerStyle(isMyMsg)}>
-    <img css={profileImgStyle(isMyMsg)} src={chat.profileImg} alt="profile" />
-    <div css={msgStyle(isMyMsg)}>{chat.msg}</div>
-  </div>
-);
+const ChatMsg: FC<PropType> = ({ chat, isMyMsg }) => {
+  const PROFILE_IMG_URL = 'https://cdn-icons-png.flaticon.com/512/1946/1946429.png';
+  return (
+    <div css={msgContainerStyle(isMyMsg)}>
+      <img css={profileImgStyle(isMyMsg)} src={PROFILE_IMG_URL} alt="profile" />
+      <div css={msgStyle(isMyMsg)}>{chat.msg}</div>
+    </div>
+  );
+};
 
 const msgContainerStyle = (isMyMsg: boolean) => css`
   display: flex;

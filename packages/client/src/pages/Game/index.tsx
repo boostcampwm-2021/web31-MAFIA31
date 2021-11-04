@@ -1,7 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
+
+import VoteContainer from '../../containers/VoteContainer';
 import ChatContainer from '../../containers/ChatContainer';
 import GameLeftSideContainer from '../../containers/GameLeftSideContainer';
 import useChat from '../../hooks/useChat';
@@ -14,7 +16,6 @@ const Game = () => {
   const [userList] = useState([{ userName: 'name1' }, { userName: 'name2' }]);
   const userStateMap = new Map<string, boolean>();
   const [userState] = useState(userStateMap);
-
   const socketRef = useRef<Socket | null>();
 
   useEffect(() => {
@@ -37,14 +38,17 @@ const Game = () => {
 
   return (
     <div css={GamePageStyle}>
+       <VoteContainer />
       <GameLeftSideContainer userList={userList} roomId={ROOM_ID} />
       <ChatContainer chatList={chatList} sendChat={sendChat} />
     </div>
   );
 };
 
+
 const GamePageStyle = css`
   display: flex;
+  height: 100%;
 `;
 
 export default Game;

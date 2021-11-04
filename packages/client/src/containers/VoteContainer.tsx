@@ -2,7 +2,7 @@ import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { AbilityBtn } from '../components/Button';
-import colors from '../constants/colors';
+import { primaryDark } from '../constants/colors';
 import useVote from '../hooks/useVote';
 
 const VoteContainer: FC = () => {
@@ -19,7 +19,7 @@ const VoteContainer: FC = () => {
 
 const VoteContainerStyle = css`
   display: flex;
-  background-color: ${colors.primaryDark};
+  background-color: ${primaryDark};
 
   padding: 40px;
   width: 400px;

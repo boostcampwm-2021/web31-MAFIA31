@@ -1,7 +1,7 @@
 import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import colors from '../../constants/colors';
+import { white, titleActive } from '../../constants/colors';
 
 interface PropType {
   userImg: string;
@@ -22,7 +22,7 @@ const AbilityBtn: FC<PropType> = ({ userImg, nickName, voteCnt }) => (
 const BtnContainerStyle = css`
   display: flex;
   align-items: center;
-  background-color: ${colors.white};
+  background-color: ${white};
 
   padding: 12px;
   width: 152px;
@@ -48,7 +48,7 @@ const VoteCotnainerStyle = css`
   span {
     font-size: 10px;
     font-weight: bold;
-    color: ${colors.titleActive};
+    color: ${titleActive};
   }
 
   p {

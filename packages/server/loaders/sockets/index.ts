@@ -1,6 +1,6 @@
 import { Namespace, Socket } from 'socket.io';
 import chatSocketInit from './chat';
-import gameSocketInit from './game';
+import gameSocketInit, { startVoteTime } from './game';
 
 const socketInit = (namespace: Namespace): void => {
   namespace.on('connection', (socket: Socket): void => {
@@ -10,6 +10,8 @@ const socketInit = (namespace: Namespace): void => {
     socket.join(roomId);
     chatSocketInit(namespace, socket, roomId);
     gameSocketInit(namespace, socket, roomId);
+
+    startVoteTime(namespace, roomId, 5000);
 
     socket.on('disconnect', (): void => {});
   });

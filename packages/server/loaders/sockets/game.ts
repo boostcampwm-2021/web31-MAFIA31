@@ -62,8 +62,7 @@ const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): v
     voteInfo[roomId][vote.to] += 1;
     namespace.to(roomId).emit('publish vote', vote);
   });
-
-  startVoteTime(namespace, roomId, 5000);
 };
 
+export { startVoteTime };
 export default gameSocketInit;

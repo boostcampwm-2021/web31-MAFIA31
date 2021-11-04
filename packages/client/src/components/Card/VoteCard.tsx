@@ -2,21 +2,17 @@ import { FC, useEffect, useRef } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { io, Socket } from 'socket.io-client';
+import { Vote } from '../../../../domain/types/vote';
 
 type Props = {
   roomId: string;
   userName: string;
 };
 
-interface Vote {
-  from: string;
-  to: string;
-}
-
 const VoteCard: FC<Props> = ({ roomId, userName }: Props) => {
   const SOCKET_SERVER_URL = 'localhost:5001/';
-  const myName = 'myName';
   const USER_PROFILE_SRC = 'https://cdn-icons-png.flaticon.com/512/1946/1946429.png';
+  const myName = 'myName';
   const socketRef = useRef<Socket | null>();
 
   const onClick = (voteContent: Vote) => {

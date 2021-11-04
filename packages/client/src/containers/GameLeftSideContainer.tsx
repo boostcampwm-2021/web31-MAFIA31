@@ -12,8 +12,8 @@ type Props = {
 
 const GameLeftSideContainer: FC<Props> = ({ roomId, userList }: Props) => (
   <div css={GameLeftSideContainerStyle}>
-    {userList.map((user) => (
-      <VoteCard key={user.userName} userName={user.userName} roomId={roomId} />
+    {userList.map(({ userName }) => (
+      <VoteCard key={userName} userName={userName} roomId={roomId} />
     ))}
   </div>
 );

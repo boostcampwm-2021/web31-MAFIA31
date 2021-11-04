@@ -1,14 +1,13 @@
 import { Namespace, Socket } from 'socket.io';
 import { GameResult, Job } from '../../../domain/types/game';
-import { Vote } from '../../../domain/types/vote';
+import { RoomVote, Vote } from '../../../domain/types/vote';
 import { canVote, startVoteTime } from './vote';
 
-interface VoteInfo {
-  [roomId: string]: {
-    [userName: string]: number;
-  };
+interface ChannelVote {
+  [roomId: string]: RoomVote;
 }
-interface UserInfo {
+
+interface ChannelUser {
   [roomId: string]: {
     [userName: string]: Object;
   };
@@ -26,14 +25,14 @@ const TURN_CHANGE = 'turn change';
 const VOTE = 'vote';
 const PUBLISH_VOTE = 'publish vote';
 
-const userInfo: UserInfo = { hi: { user1: {}, user2: {}, user3: {} } };
-const voteInfo: VoteInfo = {};
-const getVoteInfo = (roomId: string) => voteInfo[roomId];
-const getUserInfo = (roomId: string) => userInfo[roomId];
+const channelUser: ChannelUser = { hi: { user1: {}, user2: {}, user3: {} } };
+const channelVote: ChannelVote = {};
+const getChannelVote = (roomId: string) => channelVote[roomId];
+const getChannelUser = (roomId: string) => channelUser[roomId];
 
-const resetVoteInfo = (roomId: string) => {
-  Object.keys(userInfo[roomId]).forEach((user) => {
-    voteInfo[roomId][user] = 0;
+const resetChannelVote = (roomId: string) => {
+  Object.keys(channelUser[roomId]).forEach((user) => {
+    channelVote[roomId][user] = 0;
   });
 };
 
@@ -55,8 +54,8 @@ const getGameResult = (dashBoard: DashBoard, jobAssignment: Job[]): GameResult[]
 };
 
 const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): void => {
-  voteInfo[roomId] = {};
-  resetVoteInfo(roomId);
+  channelVote[roomId] = {};
+  resetChannelVote(roomId);
 
   // 직업 배정 로직으로 초기화 할 값 (dashBoard, jobAssignment)
   const dashBoard: DashBoard = { mafia: 2, citizen: 6 };
@@ -74,8 +73,8 @@ const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): v
   socket.on(VOTE, ({ to: userName }: Vote) => {
     if (!canVote()) return;
 
-    voteInfo[roomId][userName] += 1;
-    namespace.to(roomId).emit(PUBLISH_VOTE, voteInfo[roomId]);
+    channelVote[roomId][userName] += 1;
+    namespace.to(roomId).emit(PUBLISH_VOTE, channelVote[roomId]);
   });
 
   socket.on(GAME_START, () => {
@@ -107,6 +106,6 @@ const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): v
   });
 };
 
-export { resetVoteInfo, getUserInfo, getVoteInfo };
+export { resetChannelVote, getChannelUser, getChannelVote };
 
 export default gameSocketInit;

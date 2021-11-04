@@ -3,9 +3,8 @@ import { css } from '@emotion/react';
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-import VoteContainer from '../../containers/VoteContainer';
 import ChatContainer from '../../containers/ChatContainer';
-import GameLeftSideContainer from '../../containers/GameLeftSideContainer';
+import LeftSideContainer from '../../containers/LeftSideContainer';
 import useChat from '../../hooks/useChat';
 import { User } from '../../../../domain/types/user';
 
@@ -38,13 +37,11 @@ const Game = () => {
 
   return (
     <div css={GamePageStyle}>
-       <VoteContainer />
-      <GameLeftSideContainer userList={userList} roomId={ROOM_ID} />
+      <LeftSideContainer roomId={ROOM_ID} />
       <ChatContainer chatList={chatList} sendChat={sendChat} />
     </div>
   );
 };
-
 
 const GamePageStyle = css`
   display: flex;

@@ -1,44 +1,29 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { useEffect, useRef, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
+import { useRef } from 'react';
+// import { io, Socket } from 'socket.io-client';
+import { v4 as uuidv4 } from 'uuid';
 
 import ChatContainer from '../../containers/ChatContainer';
 import LeftSideContainer from '../../containers/LeftSideContainer';
 import useChat from '../../hooks/useChat';
-import { User } from '../../../../domain/types/user';
+// import { User } from '../../../../domain/types/user';
 
 const Game = () => {
-  const SOCKET_SERVER_URL = 'localhost:5001/';
+  const myName = useRef(uuidv4());
   const ROOM_ID = 'hi';
   const { chatList, sendChat } = useChat(ROOM_ID);
-  const [userList] = useState([{ userName: 'name1' }, { userName: 'name2' }]);
-  const userStateMap = new Map<string, boolean>();
-  const [userState] = useState(userStateMap);
-  const socketRef = useRef<Socket | null>();
+  // const [userList, setUserList] = useState([myName]);
 
-  useEffect(() => {
-    socketRef.current = io(SOCKET_SERVER_URL, {
-      query: { ROOM_ID },
-    });
-
-    socketRef.current.on('execution', (user: User) => {
-      userList.forEach((u) => {
-        if (u.userName === user.userName) {
-          userState.set(u.userName, true);
-        }
-      });
-    });
-
-    return () => {
-      socketRef.current!.disconnect();
-    };
-  }, [ROOM_ID]);
+  // useEffect(() => {
+  //   myName =;
+  //   console.log(myName);
+  // }, []);
 
   return (
     <div css={GamePageStyle}>
       <LeftSideContainer roomId={ROOM_ID} />
-      <ChatContainer chatList={chatList} sendChat={sendChat} />
+      <ChatContainer chatList={chatList} sendChat={sendChat} myName={myName.current} />
     </div>
   );
 };

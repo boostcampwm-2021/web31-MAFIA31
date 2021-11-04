@@ -6,14 +6,19 @@ interface VoteInfo {
     [key: string]: number;
   };
 }
+interface UserInfo {
+  [key: string]: {
+    [key: string]: Object;
+  };
+}
 
-const userInfo: string[] = ['user1', 'user2', 'user3'];
+const userInfo: UserInfo = { hi: { user1: {}, user2: {}, user3: {} } };
 const voteInfo: VoteInfo = {};
 let canVote: boolean = false;
 
 const publish = (namespace: Namespace, roomId: string) => {
   let maxCnt = 0;
-  let maxName = userInfo[0];
+  let maxName = Object.keys(userInfo[roomId])[0];
   let sameCnt = 0;
 
   Object.keys(voteInfo[roomId]).forEach((userName) => {
@@ -39,7 +44,7 @@ const startVoteTime = (namespace: Namespace, roomId: string, time: number) => {
     canVote = false;
     publish(namespace, roomId);
 
-    userInfo.forEach((user) => {
+    Object.keys(userInfo[roomId]).forEach((user) => {
       voteInfo[roomId][user] = 0;
     });
   }, time);
@@ -47,7 +52,7 @@ const startVoteTime = (namespace: Namespace, roomId: string, time: number) => {
 
 const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): void => {
   voteInfo[roomId] = {};
-  userInfo.forEach((user) => {
+  Object.keys(userInfo[roomId]).forEach((user) => {
     voteInfo[roomId][user] = 0;
   });
 

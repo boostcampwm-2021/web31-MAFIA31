@@ -2,7 +2,7 @@ import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { ChatMsgType } from '../../../../domain/types/chat';
-import colors from '../../constants/colors';
+import { primaryLight, primaryDark, white, titleActive } from '../../constants/index';
 
 interface PropType {
   chat: ChatMsgType;
@@ -34,8 +34,8 @@ const msgStyle = (isMyMsg: boolean) => css`
   display: flex;
   max-width: 450px;
   padding: 12px;
-  background-color: ${isMyMsg ? colors.primaryDark : colors.primaryLight};
-  color: ${isMyMsg ? colors.white : colors.titleActive};
+  background-color: ${isMyMsg ? primaryDark : primaryLight};
+  color: ${isMyMsg ? white : titleActive};
   border-radius: 20px;
   border-top-right-radius: ${isMyMsg ? '0px' : '20px'};
   border-bottom-left-radius: ${isMyMsg ? '20px' : '0px'};

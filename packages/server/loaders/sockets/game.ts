@@ -1,5 +1,6 @@
 import { Namespace, Socket } from 'socket.io';
 import { Vote } from '../../../domain/types/vote';
+import { canVote, startVoteTime } from './vote';
 
 interface VoteInfo {
   [key: string]: {
@@ -12,57 +13,33 @@ interface UserInfo {
   };
 }
 
+const VOTE = 'vote';
+const PUBLISH_VOTE = 'publish vote';
+
 const userInfo: UserInfo = { hi: { user1: {}, user2: {}, user3: {} } };
 const voteInfo: VoteInfo = {};
-let canVote: boolean = false;
+const getVoteInfo = (roomId: string) => voteInfo[roomId];
+const getUserInfo = (roomId: string) => userInfo[roomId];
 
-const publish = (namespace: Namespace, roomId: string) => {
-  let maxCnt = 0;
-  let maxName = Object.keys(userInfo[roomId])[0];
-  let sameCnt = 0;
-
-  Object.keys(voteInfo[roomId]).forEach((userName) => {
-    if (voteInfo[roomId][userName] >= maxCnt) {
-      if (voteInfo[roomId][userName] === maxCnt) sameCnt += 1;
-      else {
-        maxCnt = voteInfo[roomId][userName];
-        maxName = userName;
-        sameCnt = 0;
-      }
-    }
+const resetVoteInfo = (roomId: string) => {
+  Object.keys(userInfo[roomId]).forEach((user) => {
+    voteInfo[roomId][user] = 0;
   });
-
-  namespace
-    .to(roomId)
-    .emit('execution', { userName: maxCnt === 0 || sameCnt > 0 ? undefined : maxName });
-};
-
-const startVoteTime = (namespace: Namespace, roomId: string, time: number) => {
-  canVote = true;
-
-  setTimeout(() => {
-    canVote = false;
-    publish(namespace, roomId);
-
-    Object.keys(userInfo[roomId]).forEach((user) => {
-      voteInfo[roomId][user] = 0;
-    });
-  }, time);
 };
 
 const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): void => {
   voteInfo[roomId] = {};
-  Object.keys(userInfo[roomId]).forEach((user) => {
-    voteInfo[roomId][user] = 0;
-  });
+  resetVoteInfo(roomId);
 
-  socket.on('vote', (vote: Vote) => {
-    if (!canVote) return;
+  socket.on(VOTE, (vote: Vote) => {
+    if (!canVote()) return;
 
     voteInfo[roomId][vote.to] += 1;
-    namespace.to(roomId).emit('publish vote', vote);
+    namespace.to(roomId).emit(PUBLISH_VOTE, vote);
   });
+
+  startVoteTime(namespace, roomId, 6000);
 };
 
-export { startVoteTime };
+export { resetVoteInfo, getUserInfo, getVoteInfo };
 export default gameSocketInit;

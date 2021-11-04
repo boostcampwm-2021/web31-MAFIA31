@@ -3,7 +3,7 @@ import { FC, useCallback, useState } from 'react';
 import { css } from '@emotion/react';
 import { ChatMsg } from '../components/Message';
 import { ChatMsgType } from '../../../domain/types/chat';
-import colors from '../constants/colors';
+import { primaryLight, primaryDark, white, titleActive } from '../constants/index';
 
 interface PropType {
   chatList: ChatMsgType[];
@@ -68,7 +68,7 @@ const inputFormStyle = (isDark: boolean) => css`
   width: 610px;
   height: 50px;
   padding: 11px 16px;
-  background-color: ${isDark ? colors.primaryDark : colors.primaryLight};
+  background-color: ${isDark ? primaryDark : primaryLight};
   border-radius: 20px;
 `;
 
@@ -76,20 +76,20 @@ const inputStyle = (isDark: boolean) => css`
   width: 80%;
   height: 50px;
   border: none;
-  color: ${isDark ? colors.white : colors.titleActive};
-  background-color: ${isDark ? colors.primaryDark : colors.primaryLight};
+  color: ${isDark ? white : titleActive};
+  background-color: ${isDark ? primaryDark : primaryLight};
   font-size: 18px;
   line-height: 21px;
   :focus {
     outline: none;
   }
   ::placeholder {
-    color: ${isDark ? colors.white : colors.titleActive};
+    color: ${isDark ? white : titleActive};
   }
 `;
 
 const inputButtonStyle = (isDark: boolean) => css`
-  background-color: ${isDark ? colors.primaryLight : colors.primaryDark};
+  background-color: ${isDark ? primaryLight : primaryDark};
   border: none;
   border-radius: 50%;
   cursor: pointer;

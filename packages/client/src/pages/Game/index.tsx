@@ -3,10 +3,11 @@ import { css } from '@emotion/react';
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
+import { User } from '../../../../domain/types/user';
+import { primaryDark } from '../../constants/index';
 import ChatContainer from '../../containers/ChatContainer';
 import LeftSideContainer from '../../containers/LeftSideContainer';
 import useChat from '../../hooks/useChat';
-import { User } from '../../../../domain/types/user';
 
 const Game = () => {
   const SOCKET_SERVER_URL = 'localhost:5001/';
@@ -45,7 +46,9 @@ const Game = () => {
 
 const GamePageStyle = css`
   display: flex;
-  height: 100%;
+
+  height: 100vh;
+  background-color: ${primaryDark};
 `;
 
 export default Game;

@@ -19,7 +19,7 @@ interface DashBoard {
 }
 
 const GAME_OVER = 'game over';
-const GAME_START = 'game start';
+// const GAME_START = 'game start';
 const TIMER = 'timer';
 const TURN_CHANGE = 'turn change';
 const VOTE = 'vote';
@@ -77,33 +77,33 @@ const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): v
     namespace.to(roomId).emit(PUBLISH_VOTE, channelVote[roomId]);
   });
 
-  socket.on(GAME_START, () => {
-    let counter = 0;
-    const interval = 60;
-    let isNight: boolean = true;
+  // socket.on(GAME_START, () => {
+  let counter = 0;
+  const interval = 60;
+  let isNight: boolean = true;
 
-    const gameInterval = setInterval(() => {
-      if (counter % interval === 0) {
-        if (checkEnd(dashBoard)) {
-          namespace.to(roomId).emit(GAME_OVER, getGameResult(dashBoard, jobAssignment));
-          clearInterval(gameInterval);
+  const gameInterval = setInterval(() => {
+    if (counter % interval === 0) {
+      if (checkEnd(dashBoard)) {
+        namespace.to(roomId).emit(GAME_OVER, getGameResult(dashBoard, jobAssignment));
+        clearInterval(gameInterval);
 
-          return;
-        }
-
-        isNight = !isNight;
-        if (!isNight) {
-          startVoteTime(namespace, roomId, 6000);
-        }
-        namespace.to(roomId).emit(TURN_CHANGE, isNight);
+        return;
       }
 
-      const remainSecond = interval - (counter % interval);
-      namespace.to(roomId).emit(TIMER, remainSecond);
+      isNight = !isNight;
+      if (!isNight) {
+        startVoteTime(namespace, roomId, 10000);
+      }
+      namespace.to(roomId).emit(TURN_CHANGE, isNight);
+    }
 
-      counter += 1;
-    }, 1000);
-  });
+    const remainSecond = interval - (counter % interval);
+    namespace.to(roomId).emit(TIMER, remainSecond);
+
+    counter += 1;
+  }, 1000);
+  // });
 };
 
 export { resetChannelVote, getChannelUser, getChannelVote };

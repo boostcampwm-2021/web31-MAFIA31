@@ -17,8 +17,20 @@ const useVote = (myUserName: string, roomId: string) => {
     {
       userImg:
         'https://real-dnb.s3.ap-northeast-2.amazonaws.com/static/images/basic-profile-img.png',
-      userName: 'nickname',
-      voteCnt: 8,
+      userName: 'user1',
+      voteCnt: 0,
+    },
+    {
+      userImg:
+        'https://real-dnb.s3.ap-northeast-2.amazonaws.com/static/images/basic-profile-img.png',
+      userName: 'user2',
+      voteCnt: 0,
+    },
+    {
+      userImg:
+        'https://real-dnb.s3.ap-northeast-2.amazonaws.com/static/images/basic-profile-img.png',
+      userName: 'user3',
+      voteCnt: 0,
     },
   ]);
   const socketRef = useRef<Socket | null>();

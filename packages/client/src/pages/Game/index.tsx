@@ -3,7 +3,6 @@ import { css } from '@emotion/react';
 import { useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { User } from '../../../../domain/types/user';
 import { primaryDark } from '../../constants/index';
 import ChatContainer from '../../containers/ChatContainer';
 import LeftSideContainer from '../../containers/LeftSideContainer';

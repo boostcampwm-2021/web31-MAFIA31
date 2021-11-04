@@ -1,10 +1,5 @@
 import express from 'express';
-import initLoader from './loaders';
 
-const startServer = () => {
-  const app: express.Application = express();
+const app = express();
 
-  initLoader(app);
-};
-
-startServer();
+app.listen(process.env.PORT || 5000, () => console.log('server is running...'));

@@ -5,21 +5,22 @@ import { white, titleActive } from '../../constants/colors';
 
 interface PropType {
   userImg: string;
-  nickName: string;
+  userName: string;
   voteCnt: number;
+  onClick: any;
 }
 
-const AbilityBtn: FC<PropType> = ({ userImg, nickName, voteCnt }) => (
-  <button type="button" css={BtnContainerStyle}>
+const AbilityButton: FC<PropType> = ({ userImg, userName, voteCnt, onClick }) => (
+  <button type="button" css={buttonStyle} onClick={() => onClick(userName)}>
     <img src={userImg} alt="" css={userImgStyle} />
-    <div css={VoteCotnainerStyle}>
-      <span>{nickName}</span>
+    <div css={voteInfoStyle}>
+      <span>{userName}</span>
       <p>{'💜'.repeat(voteCnt)}</p>
     </div>
   </button>
 );
 
-const BtnContainerStyle = css`
+const buttonStyle = css`
   display: flex;
   align-items: center;
   background-color: ${white};
@@ -36,7 +37,7 @@ const userImgStyle = css`
   border-radius: 50%;
 `;
 
-const VoteCotnainerStyle = css`
+const voteInfoStyle = css`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -57,4 +58,4 @@ const VoteCotnainerStyle = css`
   }
 `;
 
-export default AbilityBtn;
+export default AbilityButton;

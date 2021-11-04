@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { Vote } from '../../../domain/types/vote';
+import { RoomVote } from '../../../domain/types/vote';
 
 const VOTE = 'vote';
 const PUBLISH_VOTE = 'publish vote';
@@ -8,16 +8,16 @@ const SOCKET_SERVER_URL = 'localhost:5001/';
 
 interface PlayerInfo {
   userImg: string;
-  nickname: string;
+  userName: string;
   voteCnt: number;
 }
 
-const useVote = (myNickname: string, roomId: string) => {
+const useVote = (myUserName: string, roomId: string) => {
   const [playerList, setPlayerList] = useState<PlayerInfo[]>([
     {
       userImg:
         'https://real-dnb.s3.ap-northeast-2.amazonaws.com/static/images/basic-profile-img.png',
-      nickname: 'nickname',
+      userName: 'nickname',
       voteCnt: 8,
     },
   ]);
@@ -28,12 +28,9 @@ const useVote = (myNickname: string, roomId: string) => {
       query: { roomId },
     });
 
-    socketRef.current.on(PUBLISH_VOTE, (vote: Vote): void => {
-      const { to } = vote;
+    socketRef.current.on(PUBLISH_VOTE, (roomVote: RoomVote): void => {
       setPlayerList((prev) =>
-        prev.map((player) =>
-          to === player.nickname ? { ...player, voteCnt: player.voteCnt + 1 } : player,
-        ),
+        prev.map((player) => ({ ...player, voteCnt: roomVote[player.userName] })),
       );
     });
 
@@ -42,8 +39,8 @@ const useVote = (myNickname: string, roomId: string) => {
     };
   }, [roomId]);
 
-  const voteUser = (nickname: string): void => {
-    socketRef.current?.emit(VOTE, { from: myNickname, to: nickname });
+  const voteUser = (userName: string): void => {
+    socketRef.current?.emit(VOTE, { from: myUserName, to: userName });
   };
 
   return { playerList, voteUser };

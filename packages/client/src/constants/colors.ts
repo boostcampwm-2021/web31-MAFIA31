@@ -1,8 +1,4 @@
-const colors = {
-  primaryLight: '#F4F7FB',
-  primaryDark: '#4E416D',
-  white: '#FFFFFF',
-  titleActive: '#3C3C3C',
-};
-
-export default colors;
+export const primaryLight = '#F4F7FB';
+export const primaryDark = '#4E416D';
+export const white = '#FFFFFF';
+export const titleActive = '#3C3C3C';

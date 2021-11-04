@@ -1,11 +1,11 @@
 import { Namespace } from 'socket.io';
-import { getUserInfo, getVoteInfo, resetVoteInfo } from './game';
+import { getChannelUser, getChannelVote, resetChannelVote } from './game';
 
 let flag: boolean = false;
 
 const publish = (namespace: Namespace, roomId: string) => {
-  const userInfo = getUserInfo(roomId);
-  const voteInfo = getVoteInfo(roomId);
+  const userInfo = getChannelUser(roomId);
+  const voteInfo = getChannelVote(roomId);
   let maxCnt = 0;
   let maxName = Object.keys(userInfo)[0];
   let sameCnt = 0;
@@ -31,7 +31,7 @@ const startVoteTime = (namespace: Namespace, roomId: string, time: number) => {
   setTimeout(() => {
     flag = false;
     publish(namespace, roomId);
-    resetVoteInfo(roomId);
+    resetChannelVote(roomId);
   }, time);
 };
 

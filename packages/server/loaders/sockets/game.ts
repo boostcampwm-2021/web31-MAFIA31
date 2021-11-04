@@ -4,13 +4,13 @@ import { Vote } from '../../../domain/types/vote';
 import { canVote, startVoteTime } from './vote';
 
 interface VoteInfo {
-  [key: string]: {
-    [key: string]: number;
+  [roomId: string]: {
+    [userName: string]: number;
   };
 }
 interface UserInfo {
-  [key: string]: {
-    [key: string]: Object;
+  [roomId: string]: {
+    [userName: string]: Object;
   };
 }
 
@@ -19,10 +19,10 @@ interface DashBoard {
   citizen: number;
 }
 
-const GAME_OVER_CHANNEL = 'gameover';
-const GAME_START_CHANNEL = 'gamestart';
-const TIMER_CHANNEL = 'timer';
-const TURN_CHANGE_CHANNEL = 'turnchange';
+const GAME_OVER = 'game over';
+const GAME_START = 'game start';
+const TIMER = 'timer';
+const TURN_CHANGE = 'turn change';
 const VOTE = 'vote';
 const PUBLISH_VOTE = 'publish vote';
 
@@ -71,14 +71,14 @@ const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): v
     { userName: 'h', job: 'citizen' },
   ];
 
-  socket.on(VOTE, (vote: Vote) => {
+  socket.on(VOTE, ({ to: userName }: Vote) => {
     if (!canVote()) return;
 
-    voteInfo[roomId][vote.to] += 1;
-    namespace.to(roomId).emit(PUBLISH_VOTE, vote);
+    voteInfo[roomId][userName] += 1;
+    namespace.to(roomId).emit(PUBLISH_VOTE, voteInfo[roomId]);
   });
 
-  socket.on(GAME_START_CHANNEL, () => {
+  socket.on(GAME_START, () => {
     let counter = 0;
     const interval = 60;
     let isNight: boolean = true;
@@ -86,19 +86,21 @@ const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): v
     const gameInterval = setInterval(() => {
       if (counter % interval === 0) {
         if (checkEnd(dashBoard)) {
-          namespace.to(roomId).emit(GAME_OVER_CHANNEL, getGameResult(dashBoard, jobAssignment));
+          namespace.to(roomId).emit(GAME_OVER, getGameResult(dashBoard, jobAssignment));
           clearInterval(gameInterval);
+
+          return;
         }
 
         isNight = !isNight;
         if (!isNight) {
           startVoteTime(namespace, roomId, 6000);
         }
-        namespace.to(roomId).emit(TURN_CHANGE_CHANNEL, isNight);
+        namespace.to(roomId).emit(TURN_CHANGE, isNight);
       }
 
       const remainSecond = interval - (counter % interval);
-      namespace.to(roomId).emit(TIMER_CHANNEL, remainSecond);
+      namespace.to(roomId).emit(TIMER, remainSecond);
 
       counter += 1;
     }, 1000);

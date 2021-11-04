@@ -3,3 +3,8 @@ export interface GameResult {
   job: string;
   result: boolean;
 }
+
+export interface Job {
+  userName: string;
+  job: string;
+}

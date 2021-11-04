@@ -1,5 +1,5 @@
-import AbilityButton from './AbilityButton';
-import DefaultButton from './DefaultButton';
-import IconButton from './IconButton';
+import AbilityBtn from './AbilityBtn';
+import DefaultBtn from './DefaultBtn';
+import IconBtn from './IconBtn';
 
-export { AbilityButton, DefaultButton, IconButton };
+export { AbilityBtn, DefaultBtn, IconBtn };

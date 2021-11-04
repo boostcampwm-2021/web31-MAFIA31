@@ -4,7 +4,6 @@ about: 개발을 진행하며 고려한 부분을 위한 이슈 템플릿입니�
 title: '[CONSIDER] '
 labels: '🤔 Thinking'
 assignees: ''
-projects: 'MAFIA 31'
 ---
 
 ## 고려한 부분

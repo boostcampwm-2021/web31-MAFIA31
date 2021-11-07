@@ -11,15 +11,15 @@ interface PropType {
 const ResultCard: FC<PropType> = ({ userName, job, isWinner }) => {
   const WINNER_STAMP_SRC = '/assets/icons/stamp-winner.png';
   return (
-    <div css={ResultCardStyle}>
-      <img css={WinnerStampStyle(isWinner)} src={WINNER_STAMP_SRC} alt="winner stamp" />
+    <div css={resultCardStyle}>
+      <img css={winnerStampStyle(isWinner)} src={WINNER_STAMP_SRC} alt="winner stamp" />
       <div>{job}</div>
       <div>{userName}</div>
     </div>
   );
 };
 
-const ResultCardStyle = css`
+const resultCardStyle = css`
   position: relative;
   width: 190px;
   height: 243px;
@@ -29,7 +29,7 @@ const ResultCardStyle = css`
   border-radius: 20px;
 `;
 
-const WinnerStampStyle = (isWinner: boolean) => css`
+const winnerStampStyle = (isWinner: boolean) => css`
   display: ${isWinner ? 'block' : 'none'};
 
   animation-name: pulse;

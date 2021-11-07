@@ -57,6 +57,11 @@ const buttonSizeStyle: themeOptions = {
   MEDIUM: css`
     width: 300px;
     height: 80px;
+    font-family: Noto Sans KR;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 32px;
+    line-height: 46px;
   `,
   LARGE: css`
     width: 500px;

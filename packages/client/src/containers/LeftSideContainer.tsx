@@ -1,14 +1,16 @@
 import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import { PlayerState } from '../../../domain/types/user';
 import { AbilityButton } from '../components/Button';
 import useVote from '../hooks/useVote';
 
 type PropType = {
   roomId: string;
+  playerStateList: PlayerState[];
 };
 
-const LeftSideContainer: FC<PropType> = ({ roomId }) => {
+const LeftSideContainer: FC<PropType> = ({ roomId, playerStateList }) => {
   const { playerList, voteUser } = useVote('mafia31', roomId);
 
   return (
@@ -20,7 +22,7 @@ const LeftSideContainer: FC<PropType> = ({ roomId }) => {
             userImg={userImg}
             userName={userName}
             voteCnt={voteCnt}
-            isDead
+            isDead={playerStateList.filter((player) => player.userName === userName)[0].isDead}
             onClick={voteUser}
           />
         ))}

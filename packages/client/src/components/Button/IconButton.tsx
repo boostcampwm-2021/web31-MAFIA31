@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /** @jsxImportSource @emotion/react */
 import { css, SerializedStyles } from '@emotion/react';
+import { primaryDark, primaryLight, titleActive, white } from '../../constants';
 
 type themeOptions = {
   [key: string]: SerializedStyles;
@@ -13,31 +14,39 @@ export enum ButtonSizeList {
   LARGE = 'LARGE',
 }
 
+// eslint-disable-next-line no-shadow
+export enum ButtonThemeList {
+  LIGHT = 'LIGHT',
+  DARK = 'DARK',
+}
+
 interface Props {
   size: ButtonSizeList;
-  color: string;
+  theme: ButtonThemeList;
   imageSrc: string;
   text: string;
   onClick: () => void;
 }
 
-const IconButton = ({ size, color, imageSrc, text, onClick }: Props) => (
-  <button css={buttonStyle(size, color)} type="button" onClick={onClick}>
+const IconButton = ({ size, theme, imageSrc, text, onClick }: Props) => (
+  <button css={buttonStyle(size, theme)} type="button" onClick={onClick}>
     <img src={imageSrc} alt="button" />
     <p>{text}</p>
   </button>
 );
 
-const buttonStyle = (size: string, color: string) => css`
+const buttonStyle = (size: string, theme: string) => css`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
 
-  background-color: ${color};
   box-shadow: 4px 4px 4px rgba(78, 65, 109, 0.25);
   border-radius: 20px;
 
+  cursor: pointer;
+
   ${buttonSizeStyle[size]}
+  ${buttonThemeStyle[theme]}
 `;
 
 const buttonSizeStyle: themeOptions = {
@@ -52,6 +61,17 @@ const buttonSizeStyle: themeOptions = {
   LARGE: css`
     width: 500px;
     height: 100px;
+  `,
+};
+
+const buttonThemeStyle: themeOptions = {
+  LIGHT: css`
+    color: ${titleActive};
+    background-color: ${primaryLight};
+  `,
+  DARK: css`
+    color: ${white};
+    background-color: ${primaryDark};
   `,
 };
 

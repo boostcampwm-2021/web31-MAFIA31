@@ -18,16 +18,16 @@ const GameResult = () => {
   const [playerResultList] = useState<PlayerResult[]>([
     { userName: 'user1', job: 'mafia', isWinner: true },
     { userName: 'user2', job: 'mafia', isWinner: true },
-    { userName: 'user3', job: 'mafia', isWinner: true },
-    { userName: 'user4', job: 'mafia', isWinner: true },
-    // { userName: 'user5', job: 'mafia', isWinner: true },
-    // { userName: 'user6', job: 'mafia', isWinner: true },
-    // { userName: 'user7', job: 'mafia', isWinner: true },
-    // { userName: 'user8', job: 'mafia', isWinner: true },
-    // { userName: 'user9', job: 'mafia', isWinner: true },
-    // { userName: 'user10', job: 'mafia', isWinner: true },
-    // { userName: 'user11', job: 'mafia', isWinner: true },
-    // { userName: 'user12', job: 'mafia', isWinner: true },
+    { userName: 'user3', job: 'citizen', isWinner: false },
+    { userName: 'user4', job: 'citizen', isWinner: false },
+    { userName: 'user5', job: 'citizen', isWinner: false },
+    { userName: 'user6', job: 'mafia', isWinner: true },
+    { userName: 'user7', job: 'citizen', isWinner: false },
+    { userName: 'user8', job: 'mafia', isWinner: true },
+    { userName: 'user9', job: 'citizen', isWinner: false },
+    { userName: 'user10', job: 'mafia', isWinner: true },
+    { userName: 'user11', job: 'mafia', isWinner: true },
+    { userName: 'user12', job: 'citizen', isWinner: false },
   ]);
   return (
     <div css={resultPageStyle}>
@@ -67,7 +67,7 @@ const resultPageStyle = css`
   flex-direction: column;
   align-items: center;
 
-  height: 100vh;
+  height: 100%;
 
   background: ${primaryLight};
 `;
@@ -114,12 +114,14 @@ const resultCardListStyle = (count: number) => css`
   grid-template-columns: repeat(${count <= MAX_USER / 2 ? count : Math.round(count / 2)}, 1fr);
   grid-template-rows: repeat(${count <= MAX_USER / 2 ? 1 : 2}, 1fr);
   margin: 80px 0px;
+  gap: 37px;
 `;
 
 const buttonDivStyle = css`
   display: flex;
   align-items: center;
   gap: 411px;
+  margin-bottom: 40px;
 `;
 
 export default GameResult;

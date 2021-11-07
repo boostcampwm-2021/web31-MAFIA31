@@ -32,8 +32,12 @@ const buttonStyle = (size: string, color: string) => css`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: ${buttonSizeStyle[size]};
+
   background-color: ${color};
+  box-shadow: 4px 4px 4px rgba(78, 65, 109, 0.25);
+  border-radius: 20px;
+
+  ${buttonSizeStyle[size]}
 `;
 
 const buttonSizeStyle: themeOptions = {

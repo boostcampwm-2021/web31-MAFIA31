@@ -5,3 +5,5 @@ export const titleActive = '#3C3C3C';
 export const grey1 = '#D7D7D7';
 export const grey2 = '#BBBBBB';
 export const grey3 = '#D9DCE0';
+export const mafia = '#E95151';
+export const citizen = '#6DC436';

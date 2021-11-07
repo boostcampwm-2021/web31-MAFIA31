@@ -5,17 +5,12 @@ import { User } from '../../../domain/types/user';
 const EXECUTION = 'execution';
 const SOCKET_SERVER_URL = 'localhost:5001/';
 
-interface PlayerStatus {
-  userName: string;
-  isDead: boolean;
-}
-
 const useExecute = (roomId: string) => {
-  const [playerStateList, setplayerStateList] = useState<PlayerStatus[]>([
-    { userName: 'user1', isDead: true },
-    { userName: 'user2', isDead: false },
-    { userName: 'user3', isDead: false },
-  ]);
+  const [playerState] = useState({
+    user1: true,
+    user2: false,
+    user3: true,
+  });
   const socketRef = useRef<Socket | null>();
 
   useEffect(() => {
@@ -23,20 +18,14 @@ const useExecute = (roomId: string) => {
       query: { roomId },
     });
 
-    socketRef.current.on(EXECUTION, (user: User) => {
-      setplayerStateList((prev) =>
-        prev.map((player) =>
-          player.userName === user.userName ? { userName: player.userName, isDead: true } : player,
-        ),
-      );
+    socketRef.current.on(EXECUTION, (user: User) => user.userName);
 
-      return () => {
-        socketRef.current!.disconnect();
-      };
-    });
+    return () => {
+      socketRef.current!.disconnect();
+    };
   }, [roomId]);
 
-  return playerStateList;
+  return playerState;
 };
 
 export default useExecute;

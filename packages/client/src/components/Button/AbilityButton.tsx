@@ -1,17 +1,18 @@
 import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { white, titleActive } from '../../constants/colors';
+import { white, titleActive, grey3 } from '../../constants/colors';
 
 interface PropType {
   userImg: string;
   userName: string;
   voteCnt: number;
+  isDead: boolean;
   onClick: any;
 }
 
-const AbilityButton: FC<PropType> = ({ userImg, userName, voteCnt, onClick }) => (
-  <button type="button" css={buttonStyle} onClick={() => onClick(userName)}>
+const AbilityButton: FC<PropType> = ({ userImg, userName, voteCnt, isDead, onClick }) => (
+  <button type="button" css={buttonStyle(isDead)} onClick={() => onClick(userName)}>
     <img src={userImg} alt="" css={userImgStyle} />
     <div css={voteInfoStyle}>
       <span>{userName}</span>
@@ -20,10 +21,10 @@ const AbilityButton: FC<PropType> = ({ userImg, userName, voteCnt, onClick }) =>
   </button>
 );
 
-const buttonStyle = css`
+const buttonStyle = (isDead: boolean) => css`
   display: flex;
   align-items: center;
-  background-color: ${white};
+  background-color: ${isDead ? grey3 : white};
 
   padding: 12px;
   width: 152px;

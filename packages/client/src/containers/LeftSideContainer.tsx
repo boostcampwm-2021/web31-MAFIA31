@@ -20,6 +20,7 @@ const LeftSideContainer: FC<PropType> = ({ roomId }) => {
             userImg={userImg}
             userName={userName}
             voteCnt={voteCnt}
+            isDead
             onClick={voteUser}
           />
         ))}

@@ -11,7 +11,7 @@ const GameResult = () => {
         <div>MAFIA WIN!</div>
         <div>YOU LOSE</div>
       </div>
-      <ResultCard userName="user1" job="mafia" isWinner={false} />
+      <ResultCard userName="user1" job="mafia" isWinner />
       <div>{temp}</div>
       <div>
         <button type="button">돌아가기</button>

@@ -3,6 +3,7 @@
   "version": "0.1.1",
   "private": true,
   "dependencies": {
+    "domain": "^1.0.0",
     "@craco/craco": "^6.4.0",
     "@emotion/react": "^11.5.0",
     "@testing-library/jest-dom": "^5.11.4",

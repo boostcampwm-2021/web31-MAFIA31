@@ -13,14 +13,15 @@ jobs:
     steps:
       - name: Deploy server
         uses: appleboy/ssh-action@master
-        env:
-          repo: ${{ secrets.REPOS }}
-          socket: ${{ secrets.SOCKET_URL }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PWD }}
           port: ${{ secrets.SSH_PORT }} 
-          envs: repo,socket
-          script: sh deploy.sh
+          script: |
+            export repo=${{ secrets.REPOS }}
+            export socket=${{ secrets.SOCKET_URL }}
+            sh deploy.sh
+        
+        
                  

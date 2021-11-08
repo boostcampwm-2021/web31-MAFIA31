@@ -1,6 +1,7 @@
+import { GAME_OVER, PUBLISH_VOTE, TIMER, TURN_CHANGE, VOTE } from 'domain/constants/event';
+import { GameResult, Job } from 'domain/types/game';
+import { RoomVote, Vote } from 'domain/types/vote';
 import { Namespace, Socket } from 'socket.io';
-import { GameResult, Job } from '../../../domain/types/game';
-import { RoomVote, Vote } from '../../../domain/types/vote';
 import { canVote, startVoteTime } from './vote';
 
 interface ChannelVote {
@@ -17,13 +18,6 @@ interface DashBoard {
   mafia: number;
   citizen: number;
 }
-
-const GAME_OVER = 'game over';
-// const GAME_START = 'game start';
-const TIMER = 'timer';
-const TURN_CHANGE = 'turn change';
-const VOTE = 'vote';
-const PUBLISH_VOTE = 'publish vote';
 
 const channelUser: ChannelUser = { hi: { user1: {}, user2: {}, user3: {} } };
 const channelVote: ChannelVote = {};

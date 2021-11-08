@@ -1,9 +1,9 @@
+import { EXECUTION } from 'domain/constants/event';
+import { PlayerState, User } from 'domain/types/user';
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { PlayerState, User } from '../../../domain/types/user';
 
-const EXECUTION = 'execution';
-const SOCKET_SERVER_URL = 'localhost:5001/';
+const SOCKET_URL: string = process.env.REACT_APP_SOCKET_URL || 'localhost:5001';
 
 const useExecute = (roomId: string) => {
   const [playerState, setPlayerList] = useState<PlayerState[]>([
@@ -14,7 +14,7 @@ const useExecute = (roomId: string) => {
   const socketRef = useRef<Socket | null>();
 
   useEffect(() => {
-    socketRef.current = io(SOCKET_SERVER_URL, {
+    socketRef.current = io(SOCKET_URL, {
       query: { roomId },
     });
 

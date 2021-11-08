@@ -124,6 +124,9 @@ blockquote,
 q {
   quotes: none;
 }
+button {
+  border: none;
+}
 blockquote:after,
 blockquote:before,
 q:after,

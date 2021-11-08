@@ -1,10 +1,7 @@
+import { PUBLISH_VOTE, VOTE } from 'domain/constants/event';
+import { RoomVote } from 'domain/types/vote';
 import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { RoomVote } from '../../../domain/types/vote';
-
-const VOTE = 'vote';
-const PUBLISH_VOTE = 'publish vote';
-const SOCKET_SERVER_URL = 'localhost:5001/';
 
 interface PlayerInfo {
   userImg: string;
@@ -34,9 +31,10 @@ const useVote = (myUserName: string, roomId: string) => {
     },
   ]);
   const socketRef = useRef<Socket | null>();
+  const SOCKET_URL: string = process.env.REACT_APP_SOCKET_URL || 'localhost:5001';
 
   useEffect(() => {
-    socketRef.current = io(SOCKET_SERVER_URL, {
+    socketRef.current = io(SOCKET_URL, {
       query: { roomId },
     });
 

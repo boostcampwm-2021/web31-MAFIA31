@@ -27,8 +27,7 @@
         "tsx": "never"
       }
     ],
-    "no-use-before-define": "off",
-    "import/no-extraneous-dependencies": "off"
+    "no-use-before-define": "off"
   },
   "settings": {
     "import/resolver": {
@@ -37,7 +36,6 @@
       },
       "alias": {
         "map": [
-          ["@domain", "../domain"],
           ["@src", "./src"],
           ["@styles", "./src/styles"],
           ["@hooks", "./src/hooks"],

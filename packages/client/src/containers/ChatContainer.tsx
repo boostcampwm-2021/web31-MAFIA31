@@ -3,7 +3,7 @@ import { FC, useCallback, useState } from 'react';
 import { css } from '@emotion/react';
 import { v4 as uuidv4 } from 'uuid';
 import { ChatMsg } from '@components/Message';
-import { ChatMsgType } from '@domain/types/chat';
+import { ChatMsgType } from 'domain/types/chat';
 import { primaryLight, primaryDark, white, titleActive } from '../constants/index';
 
 interface PropType {

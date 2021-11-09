@@ -3,12 +3,12 @@ import { css } from '@emotion/react';
 import { useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { primaryDark } from '../../constants/index';
-import ChatContainer from '../../containers/ChatContainer';
-import LeftSideContainer from '../../containers/LeftSideContainer';
-import RightSideContainer from '../../containers/RightSideContainer';
-import useChat from '../../hooks/useChat';
-import useExecute from '../../hooks/useExecute';
+import useChat from '@hooks/useChat';
+import useExecute from '@hooks/useExecute';
+import { primaryDark } from '@constants/index';
+import ChatContainer from '@containers/ChatContainer';
+import LeftSideContainer from '@containers/LeftSideContainer';
+import RightSideContainer from '@containers/RightSideContainer';
 
 const Game = () => {
   const myName = useRef(uuidv4());

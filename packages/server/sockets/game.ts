@@ -26,7 +26,7 @@ const getChannelUser = (roomId: string) => channelUser[roomId];
 
 const resetChannelVote = (roomId: string) => {
   Object.keys(channelUser[roomId]).forEach((user) => {
-    channelVote[roomId][user] = 0;
+    channelVote[roomId][user] = [];
   });
 };
 
@@ -49,6 +49,7 @@ const getGameResult = (dashBoard: DashBoard, jobAssignment: Job[]): GameResult[]
 
 const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): void => {
   channelVote[roomId] = {};
+  channelUser[roomId] = {};
   resetChannelVote(roomId);
 
   // 직업 배정 로직으로 초기화 할 값 (dashBoard, jobAssignment)
@@ -64,11 +65,11 @@ const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): v
     { userName: 'h', job: 'citizen' },
   ];
 
-  socket.on(VOTE, ({ to: userName }: Vote) => {
+  socket.on(VOTE, ({ to, from }: Vote) => {
     if (!canVote()) return;
 
-    channelVote[roomId][userName] += 1;
-    namespace.to(roomId).emit(PUBLISH_VOTE, channelVote[roomId]);
+    channelVote[roomId][to] = [...new Set(channelVote[roomId][to] ?? []).add(from)];
+    namespace.emit(PUBLISH_VOTE, channelVote[roomId]);
   });
 
   // socket.on(GAME_START, () => {
@@ -79,7 +80,7 @@ const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): v
   const gameInterval = setInterval(() => {
     if (counter % interval === 0) {
       if (checkEnd(dashBoard)) {
-        namespace.to(roomId).emit(GAME_OVER, getGameResult(dashBoard, jobAssignment));
+        namespace.emit(GAME_OVER, getGameResult(dashBoard, jobAssignment));
         clearInterval(gameInterval);
 
         return;
@@ -89,11 +90,11 @@ const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): v
       if (!isNight) {
         startVoteTime(namespace, roomId, 10000);
       }
-      namespace.to(roomId).emit(TURN_CHANGE, isNight);
+      namespace.emit(TURN_CHANGE, isNight);
     }
 
     const remainSecond = interval - (counter % interval);
-    namespace.to(roomId).emit(TIMER, remainSecond);
+    namespace.emit(TIMER, remainSecond);
 
     counter += 1;
   }, 1000);

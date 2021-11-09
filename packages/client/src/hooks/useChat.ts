@@ -1,29 +1,23 @@
 import { MESSAGE, PUBLISH_MESSAGE } from 'domain/constants/event';
 import { ChatMsgType } from 'domain/types/chat';
-import { useEffect, useRef, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
+import { useEffect, useState } from 'react';
 
-const useChat = (roomId: string) => {
+const useChat = (socketRef: any) => {
   const [chatList, setChatList] = useState<ChatMsgType[]>([]);
-  const socketRef = useRef<Socket | null>();
-
-  const SOCKET_URL: string = process.env.REACT_APP_SOCKET_URL || 'localhost:5001';
+  const updateChatList = (msg: ChatMsgType): void => {
+    setChatList((prev) => [...prev, msg]);
+  };
 
   useEffect(() => {
-    socketRef.current = io(SOCKET_URL, {
-      query: { roomId },
-    });
-
-    socketRef.current.on(PUBLISH_MESSAGE, (msg: ChatMsgType): void => {
-      setChatList((prev) => [...prev, msg]);
-    });
+    socketRef.current?.on(PUBLISH_MESSAGE, updateChatList);
 
     return () => {
-      socketRef.current!.disconnect();
+      socketRef.current.off(PUBLISH_MESSAGE, updateChatList);
     };
-  }, [roomId]);
+  }, [socketRef.current]);
 
   const sendChat = (msg: ChatMsgType): void => {
+    if (msg.msg === '') return;
     socketRef.current?.emit(MESSAGE, msg);
   };
 

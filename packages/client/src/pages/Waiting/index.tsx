@@ -1,14 +1,28 @@
-import { DefaultButton } from '@src/components/Button';
-import { ButtonSizeList, ButtonThemeList } from '@src/components/Button/IconButton';
+import { useLocation, Link } from 'react-router-dom';
+import { DefaultButton } from '@components/Button';
+import { ButtonSizeList, ButtonThemeList } from '@components/Button/IconButton';
 import Header from '@src/templates/Header';
+import { RoomInfo } from '@src/types';
+import useSocket from '@hooks/useSocket';
+
+interface locationType {
+  roomInfo: RoomInfo;
+}
 
 const Waiting = () => {
-  console.log(ButtonSizeList.MEDIUM);
+  const location = useLocation<locationType>();
+  const { roomId } = location.state.roomInfo;
+  const { socketRef } = useSocket(roomId);
+  console.log(socketRef); // TODO: socket을 useContext로 관리, 여기서 할당해주기!
+
   return (
     <>
       <Header />
-      <DefaultButton text="READY" size={ButtonSizeList.MEDIUM} theme={ButtonThemeList.LIGHT} />
+      <Link to="/game">
+        <DefaultButton text="READY" size={ButtonSizeList.MEDIUM} theme={ButtonThemeList.LIGHT} />
+      </Link>
     </>
   );
 };
+
 export default Waiting;

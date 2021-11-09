@@ -1,31 +1,37 @@
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useState, useRef, useEffect } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { v4 as uuidv4 } from 'uuid';
+
 import { ChatMsg } from '@components/Message';
 import { ChatMsgType } from 'domain/types/chat';
-import { primaryLight, primaryDark, white, titleActive } from '../constants/index';
+import { primaryLight, primaryDark, white, titleActive } from '@constants/index';
 
 interface PropType {
   chatList: ChatMsgType[];
   sendChat: any;
-  myName: string;
 }
 
-const ChatContainer: FC<PropType> = ({ chatList, sendChat, myName }) => {
+const ChatContainer: FC<PropType> = ({ chatList, sendChat }) => {
+  const myName = 'user1';
   const isDark = true;
   const [inputValue, setInputValue] = useState('');
+  const chatMsgsRef = useRef<HTMLDivElement>(null);
 
   const onClick = useCallback(() => {
-    sendChat({ userName: myName, msg: inputValue, profileImg: '' });
+    sendChat({ id: Date.now() + myName, userName: myName, msg: inputValue, profileImg: '' });
     setInputValue('');
   }, [inputValue]);
 
+  useEffect(() => {
+    if (!chatMsgsRef.current) return;
+    chatMsgsRef.current.scrollTop = chatMsgsRef.current.scrollHeight;
+  }, [chatList]);
+
   return (
     <div css={chatContainerStyle}>
-      <div css={chatMsgsStyle}>
+      <div css={chatMsgsStyle} ref={chatMsgsRef}>
         {chatList.map((chat) => (
-          <ChatMsg key={uuidv4()} chat={chat} isMyMsg={myName === chat.userName} />
+          <ChatMsg key={chat.id} chat={chat} isMyMsg={myName === chat.userName} />
         ))}
       </div>
       <form css={inputFormStyle(isDark)}>
@@ -49,7 +55,7 @@ const chatContainerStyle = css`
   align-items: center;
   justify-content: flex-end;
 
-  width: 690px;
+  width: 50%;
   height: 100%;
   padding: 40px;
   gap: 20px;
@@ -59,10 +65,18 @@ const chatContainerStyle = css`
 const chatMsgsStyle = css`
   display: flex;
   flex-direction: column;
-  width: 610px;
+  overflow: scroll;
+  -ms-overflow-style: none;
+
+  width: 100%;
+  /* height: 100%; */
   gap: 16px;
   font-size: 16px;
   line-height: 23px;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const inputFormStyle = (isDark: boolean) => css`
@@ -89,7 +103,7 @@ const inputStyle = (isDark: boolean) => css`
     outline: none;
   }
   ::placeholder {
-    color: ${isDark ? white : titleActive};
+    color: ${isDark ? 'rgba(255, 255, 255, 0.6)' : titleActive};
   }
 `;
 
@@ -98,16 +112,10 @@ const inputButtonStyle = css`
   display: flex;
   align-content: center;
   justify-content: center;
-  border: none;
   background-color: transparent;
 
   width: 25px;
   height: 25px;
-
-  img {
-    width: 25px;
-    height: 25px;
-  }
 `;
 
 export default ChatContainer;

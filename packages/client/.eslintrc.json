@@ -11,7 +11,7 @@
     },
     "ecmaVersion": 12,
     "sourceType": "module",
-    "project": "./tsconfig.json"
+    "project": "**/tsconfig.json"
   },
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
@@ -41,6 +41,7 @@
           ["@styles", "./src/styles"],
           ["@hooks", "./src/hooks"],
           ["@pages", "./src/pages"],
+          ["@constants", "./src/constants"],
           ["@containers", "./src/containers"],
           ["@components", "./src/components"]
         ],

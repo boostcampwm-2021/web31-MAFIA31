@@ -1,18 +1,19 @@
 import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { Link } from 'react-router-dom';
 import { primaryDark, white } from '../../constants';
 
 const Login: FC = () => (
   <div css={containerStyle}>
     <div css={logoTextStyle}>MAFIA 31</div>
-    <img css={logoImageStyle} src="/assets/icons/home.png" alt="home" />
-    <Link to="/game">
+    <img css={logoImageStyle} src="/assets/images/home.png" alt="home" />
+    <a
+      href={`https:github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}`}
+    >
       <button css={buttonStyle} type="button">
         <img css={iconImageStyle} src="/assets/icons/github.png" alt="github" /> Github 로그인
       </button>
-    </Link>
+    </a>
   </div>
 );
 
@@ -55,6 +56,7 @@ const buttonStyle = css`
   border-radius: 15px;
   font-size: 40px;
   color: ${white};
+  cursor: pointer;
 `;
 
 export default Login;

@@ -16,11 +16,11 @@ interface JobTable {
 
 const jobTable: JobTable = {
   mafia: {
-    imgSrc: 'assets/icons/mafia.png',
+    imgSrc: 'assets/images/mafia.png',
     koreanName: '마피아',
   },
   citizen: {
-    imgSrc: 'assets/icons/citizen.png',
+    imgSrc: 'assets/images/citizen.png',
     koreanName: '시민',
   },
 };

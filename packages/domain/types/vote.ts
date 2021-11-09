@@ -4,5 +4,5 @@ export interface Vote {
 }
 
 export interface RoomVote {
-  [userName: string]: number;
+  [userName: string]: string[];
 }

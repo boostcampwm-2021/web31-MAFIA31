@@ -6,28 +6,25 @@ import { io, Socket } from 'socket.io-client';
 interface PlayerInfo {
   userImg: string;
   userName: string;
-  voteCnt: number;
+  voteFrom: string[];
 }
 
 const useVote = (myUserName: string, roomId: string) => {
   const [playerList, setPlayerList] = useState<PlayerInfo[]>([
     {
-      userImg:
-        'https://real-dnb.s3.ap-northeast-2.amazonaws.com/static/images/basic-profile-img.png',
+      userImg: '/assets/icons/profile.svg',
       userName: 'user1',
-      voteCnt: 0,
+      voteFrom: ['user2', 'user3'],
     },
     {
-      userImg:
-        'https://real-dnb.s3.ap-northeast-2.amazonaws.com/static/images/basic-profile-img.png',
+      userImg: '/assets/icons/profile.svg',
       userName: 'user2',
-      voteCnt: 0,
+      voteFrom: [],
     },
     {
-      userImg:
-        'https://real-dnb.s3.ap-northeast-2.amazonaws.com/static/images/basic-profile-img.png',
+      userImg: '/assets/icons/profile.svg',
       userName: 'user3',
-      voteCnt: 0,
+      voteFrom: [],
     },
   ]);
   const socketRef = useRef<Socket | null>();
@@ -40,7 +37,7 @@ const useVote = (myUserName: string, roomId: string) => {
 
     socketRef.current.on(PUBLISH_VOTE, (roomVote: RoomVote): void => {
       setPlayerList((prev) =>
-        prev.map((player) => ({ ...player, voteCnt: roomVote[player.userName] })),
+        prev.map((player) => ({ ...player, voteFrom: roomVote[player.userName] })),
       );
     });
 

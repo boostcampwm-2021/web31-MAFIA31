@@ -1,22 +1,30 @@
 import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { white, titleActive, grey3 } from '../../constants/colors';
+import { white, titleActive, grey3 } from '@constants/colors';
 
 interface PropType {
   userImg: string;
   userName: string;
-  voteCnt: number;
+  voteFrom: string[];
   isDead: boolean;
   onClick: any;
 }
 
-const AbilityButton: FC<PropType> = ({ userImg, userName, voteCnt, isDead, onClick }) => (
+const AbilityButton: FC<PropType> = ({ userImg, userName, voteFrom, isDead, onClick }) => (
   <button type="button" css={buttonStyle(isDead)} onClick={() => onClick(userName)}>
     <img src={userImg} alt="" css={userImgStyle} />
     <div css={voteInfoStyle}>
       <span>{userName}</span>
-      <p>{'💜'.repeat(voteCnt)}</p>
+      {!voteFrom.length ? (
+        <></>
+      ) : (
+        <div>
+          {voteFrom.map((voteUser) => (
+            <img key={voteUser} src="/assets/icons/vote.svg" alt="vote-icon" />
+          ))}
+        </div>
+      )}
     </div>
   </button>
 );
@@ -24,11 +32,13 @@ const AbilityButton: FC<PropType> = ({ userImg, userName, voteCnt, isDead, onCli
 const buttonStyle = (isDead: boolean) => css`
   display: flex;
   align-items: center;
+  cursor: pointer;
   background-color: ${isDead ? grey3 : white};
+  box-shadow: 1px 2px 4px rgba(78, 65, 109, 0.25);
 
   padding: 12px;
-  width: 152px;
-  height: 75px;
+  width: 48%;
+  min-height: 75px;
   border-radius: 15px;
 `;
 
@@ -44,18 +54,26 @@ const voteInfoStyle = css`
   justify-content: center;
   align-items: center;
 
-  gap: 3px;
-  width: 110px;
+  gap: 8px;
+  width: 100%;
 
   span {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: bold;
     color: ${titleActive};
   }
 
-  p {
-    width: 61px;
-    font-size: 9px;
+  div {
+    display: flex;
+    flex-wrap: wrap;
+
+    width: 100%;
+    padding: 0 10px;
+
+    img {
+      width: 10px;
+      height: 10px;
+    }
   }
 `;
 

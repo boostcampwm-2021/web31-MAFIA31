@@ -24,6 +24,7 @@ const useChat = (roomId: string) => {
   }, [roomId]);
 
   const sendChat = (msg: ChatMsgType): void => {
+    if (msg.msg === '') return;
     socketRef.current?.emit(MESSAGE, msg);
   };
 

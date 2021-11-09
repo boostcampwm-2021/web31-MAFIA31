@@ -1,16 +1,18 @@
 import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { primaryDark } from '../../constants';
+import { primaryDark, white } from '../../constants';
 
 const Login: FC = () => (
   <div css={containerStyle}>
     <div css={logoTextStyle}>MAFIA 31</div>
     <img css={logoImageStyle} src="/assets/icons/home.png" alt="home" />
     <a
-      href={`https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}`}
+      href={`https:github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}`}
     >
-      Login
+      <button css={buttonStyle} type="button">
+        <img css={iconImageStyle} src="/assets/icons/github.png" alt="github" /> Github 로그인
+      </button>
     </a>
   </div>
 );
@@ -31,9 +33,9 @@ const logoImageStyle = css`
   margin-bottom: 80px;
 `;
 
-// const iconImageStyle = css`
-//   margin-right: 16px;
-// `;
+const iconImageStyle = css`
+  margin-right: 16px;
+`;
 
 const containerStyle = css`
   display: flex;
@@ -43,17 +45,18 @@ const containerStyle = css`
   align-items: center;
 `;
 
-// const buttonStyle = css`
-//   display: flex;
-//   align-items: center;
-//   background-color: ${primaryDark};
-//   justify-content: center;
-//   padding: 12px;
-//   width: 500px;
-//   height: 75px;
-//   border-radius: 15px;
-//   font-size: 40px;
-//   color: ${white};
-// `;
+const buttonStyle = css`
+  display: flex;
+  align-items: center;
+  background-color: ${primaryDark};
+  justify-content: center;
+  padding: 12px;
+  width: 500px;
+  height: 75px;
+  border-radius: 15px;
+  font-size: 40px;
+  color: ${white};
+  cursor: pointer;
+`;
 
 export default Login;

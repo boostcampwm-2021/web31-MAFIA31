@@ -4,12 +4,12 @@ import gameSocketInit from './game';
 
 const socketInit = (namespace: Namespace): void => {
   namespace.on('connection', (socket: Socket): void => {
-    const { roomId }: { roomId?: string } = socket.handshake.query;
+    const { nsp } = socket;
+    const { name: roomId } = nsp;
     if (!roomId) return;
 
-    socket.join(roomId);
-    chatSocketInit(namespace, socket, roomId);
-    gameSocketInit(namespace, socket, roomId);
+    chatSocketInit(nsp, socket, roomId);
+    gameSocketInit(nsp, socket, roomId);
 
     socket.on('disconnect', (): void => {});
   });

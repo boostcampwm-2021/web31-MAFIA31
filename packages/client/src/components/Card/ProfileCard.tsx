@@ -1,7 +1,7 @@
 import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { primaryDark, white } from '@src/constants';
+import { primaryDark, primaryLight, white } from '@src/constants';
 
 interface Prop {
   userName: string;
@@ -13,7 +13,9 @@ interface Prop {
 const ProfileCard: FC<Prop> = ({ userName, profileImg, status, fill }) => (
   <div css={cardStyle}>
     <div css={textStyle}>{userName}</div>
-    <img css={imgStyle} src={profileImg} alt="profileImg" />
+    <div css={imgWrapperStyle}>
+      <img css={imgStyle} src={profileImg} alt="profileImg" />
+    </div>
     <div css={statusStyle(fill)}>{status}</div>
   </div>
 );
@@ -31,11 +33,17 @@ const cardStyle = css`
   padding: 30px;
 `;
 
+const imgWrapperStyle = css`
+  background-color: ${primaryLight};
+  box-shadow: 1px 2px 4px rgba(78, 65, 109, 0.25);
+  border-radius: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+`;
+
 const imgStyle = css`
   width: 100px;
   height: 100px;
-  margin-top: 10px;
-  margin-bottom: 10px;
 `;
 
 const textStyle = css`
@@ -58,11 +66,11 @@ const statusStyle = (fill: 'true' | 'false') => css`
 const fillStyle = {
   true: css`
     color: ${primaryDark};
-    text-shadow: ${primaryDark};
+    text-shadow: 1px 1px 2px ${primaryDark};
   `,
   false: css`
     color: ${white};
-    text-shadow: ${primaryDark};
+    text-shadow: 2px 2px 2px ${primaryDark};
   `,
 };
 

@@ -69,7 +69,7 @@ const scrollStyle = css`
   align-items: center;
 
   width: 90%;
-  height: 680px;
+  height: 600px;
 
   overflow: scroll;
   &::-webkit-scrollbar {
@@ -83,13 +83,11 @@ const marginStyle = css`
 `;
 
 const bottomBarStyle = css`
-  position: fixed;
-  bottom: 0px;
   width: 100%;
-  height: 160px;
+  height: 140px;
   background-color: ${white};
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding-top: 30px;
+  padding-bottom: 30px;
   padding-left: 70%;
 `;
 

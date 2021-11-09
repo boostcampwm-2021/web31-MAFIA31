@@ -12,7 +12,7 @@ const headerStyle = css`
   display: flex;
   align-items: center;
   width: 100%;
-  height: 140px;
+  height: 120px;
   background-color: ${primaryDark};
 `;
 

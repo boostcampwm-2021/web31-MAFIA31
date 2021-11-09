@@ -7,14 +7,12 @@ type themeOptions = {
   [key: string]: SerializedStyles;
 };
 
-// eslint-disable-next-line no-shadow
 export enum ButtonSizeList {
   SMALL = 'SMALL',
   MEDIUM = 'MEDIUM',
   LARGE = 'LARGE',
 }
 
-// eslint-disable-next-line no-shadow
 export enum ButtonThemeList {
   LIGHT = 'LIGHT',
   DARK = 'DARK',

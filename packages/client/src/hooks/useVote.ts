@@ -1,15 +1,9 @@
+import { PlayerInfo } from '@src/types';
 import { PUBLISH_VOTE, VOTE } from 'domain/constants/event';
 import { RoomVote } from 'domain/types/vote';
-import { useEffect, useRef, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
+import { useEffect, useState } from 'react';
 
-interface PlayerInfo {
-  userImg: string;
-  userName: string;
-  voteFrom: string[];
-}
-
-const useVote = (myUserName: string, roomId: string) => {
+const useVote = (socketRef: any, myUserName: string) => {
   const [playerList, setPlayerList] = useState<PlayerInfo[]>([
     {
       userImg: '/assets/icons/profile.svg',
@@ -27,24 +21,19 @@ const useVote = (myUserName: string, roomId: string) => {
       voteFrom: [],
     },
   ]);
-  const socketRef = useRef<Socket | null>();
-  const SOCKET_URL: string = process.env.REACT_APP_SOCKET_URL || 'localhost:5001';
+  const updatePlayerList = (roomVote: RoomVote): void => {
+    setPlayerList((prev) =>
+      prev.map((player) => ({ ...player, voteFrom: roomVote[player.userName] ?? [] })),
+    );
+  };
 
   useEffect(() => {
-    socketRef.current = io(SOCKET_URL, {
-      query: { roomId },
-    });
-
-    socketRef.current.on(PUBLISH_VOTE, (roomVote: RoomVote): void => {
-      setPlayerList((prev) =>
-        prev.map((player) => ({ ...player, voteFrom: roomVote[player.userName] })),
-      );
-    });
+    socketRef.current?.on(PUBLISH_VOTE, updatePlayerList);
 
     return () => {
-      socketRef.current!.disconnect();
+      socketRef.current.off(PUBLISH_VOTE, updatePlayerList);
     };
-  }, [roomId]);
+  }, [socketRef.current]);
 
   const voteUser = (userName: string): void => {
     socketRef.current?.emit(VOTE, { from: myUserName, to: userName });

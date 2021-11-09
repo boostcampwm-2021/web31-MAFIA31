@@ -1,27 +1,29 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { useRef } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+
+import useChat from '@src/hooks/useChat';
 import { primaryDark } from '../../constants/index';
 import ChatContainer from '../../containers/ChatContainer';
 import LeftSideContainer from '../../containers/LeftSideContainer';
 import RightSideContainer from '../../containers/RightSideContainer';
 import useSocket from '../../hooks/useSocket';
-import useChat from '../../hooks/useChat';
+import useVote from '../../hooks/useVote';
 import useExecute from '../../hooks/useExecute';
-import { Socket } from 'socket.io-client';
 
-const Game = ({ socket }: { socket: Socket }) => {
-  const myName = useRef(uuidv4());
-  const ROOM_ID = 'hi';
-  const dummyUUID = '123e4567-e89b-12d3-a456-426614174000';
-  const { chatList, sendChat } = useChat(socket);
-  const playerStateList = useExecute(ROOM_ID);
+const Game = () => {
+  const { socketRef } = useSocket('123e4567-e89b-12d3-a456-426614174000');
+  const playerStateList = useExecute(socketRef);
+  const { chatList, sendChat } = useChat(socketRef);
+  const { playerList, voteUser } = useVote(socketRef, 'user1');
 
   return (
     <div css={GamePageStyle}>
-      <LeftSideContainer roomId={ROOM_ID} playerStateList={playerStateList} />
-      <ChatContainer chatList={chatList} sendChat={sendChat} myName={myName.current} />
+      <LeftSideContainer
+        playerStateList={playerStateList}
+        playerList={playerList}
+        voteUser={voteUser}
+      />
+      <ChatContainer chatList={chatList} sendChat={sendChat} />
       <RightSideContainer playerStateList={playerStateList} />
     </div>
   );

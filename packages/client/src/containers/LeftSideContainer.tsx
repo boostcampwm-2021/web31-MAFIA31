@@ -1,35 +1,32 @@
 import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import { PlayerInfo } from '@src/types';
 import { PlayerState } from '../../../domain/types/user';
 import { AbilityButton } from '../components/Button';
-import useVote from '../hooks/useVote';
 
 type PropType = {
-  roomId: string;
   playerStateList: PlayerState[];
+  playerList: PlayerInfo[];
+  voteUser: any;
 };
 
-const LeftSideContainer: FC<PropType> = ({ roomId, playerStateList }) => {
-  const { playerList, voteUser } = useVote('mafia31', roomId);
-
-  return (
-    <div css={LeftSideContainerStyle}>
-      <div css={AbilityStyle}>
-        {playerList.map(({ userImg, userName, voteCnt }) => (
-          <AbilityButton
-            key={userName}
-            userImg={userImg}
-            userName={userName}
-            voteCnt={voteCnt}
-            isDead={playerStateList.filter((player) => player.userName === userName)[0].isDead}
-            onClick={voteUser}
-          />
-        ))}
-      </div>
+const LeftSideContainer: FC<PropType> = ({ playerStateList, playerList, voteUser }) => (
+  <div css={LeftSideContainerStyle}>
+    <div css={AbilityStyle}>
+      {playerList.map(({ userImg, userName, voteCnt }) => (
+        <AbilityButton
+          key={userName}
+          userImg={userImg}
+          userName={userName}
+          voteCnt={voteCnt}
+          isDead={playerStateList.filter((player) => player.userName === userName)[0].isDead}
+          onClick={voteUser}
+        />
+      ))}
     </div>
-  );
-};
+  </div>
+);
 
 const LeftSideContainerStyle = css`
   display: flex;

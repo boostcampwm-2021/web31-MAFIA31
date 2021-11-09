@@ -6,3 +6,4 @@ export const GAME_OVER = 'game over';
 export const GAME_START = 'game start';
 export const TIMER = 'timer';
 export const TURN_CHANGE = 'turn change';
+export const EXECUTION = 'execution';

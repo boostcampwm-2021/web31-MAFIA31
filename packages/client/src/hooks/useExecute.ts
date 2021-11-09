@@ -1,7 +1,6 @@
+import { EXECUTION } from 'domain/constants/event';
+import { PlayerState, User } from 'domain/types/user';
 import { useEffect, useState } from 'react';
-import { PlayerState, User } from '../../../domain/types/user';
-
-const EXECUTION = 'execution';
 
 const useExecute = (socketRef: any) => {
   const [playerState, setPlayerList] = useState<PlayerState[]>([

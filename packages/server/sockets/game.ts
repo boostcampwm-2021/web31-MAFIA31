@@ -26,7 +26,7 @@ const getChannelUser = (roomId: string) => channelUser[roomId];
 
 const resetChannelVote = (roomId: string) => {
   Object.keys(channelUser[roomId]).forEach((user) => {
-    channelVote[roomId][user] = 0;
+    channelVote[roomId][user] = [];
   });
 };
 
@@ -65,10 +65,10 @@ const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): v
     { userName: 'h', job: 'citizen' },
   ];
 
-  socket.on(VOTE, ({ to: userName }: Vote) => {
+  socket.on(VOTE, ({ to, from }: Vote) => {
     if (!canVote()) return;
 
-    channelVote[roomId][userName] = (channelVote[roomId][userName] ?? 0) + 1;
+    channelVote[roomId][to] = [...new Set(channelVote[roomId][to] ?? []).add(from)];
     namespace.emit(PUBLISH_VOTE, channelVote[roomId]);
   });
 

@@ -17,6 +17,7 @@ const useChat = (socketRef: any) => {
   }, [socketRef.current]);
 
   const sendChat = (msg: ChatMsgType): void => {
+    if (msg.msg === '') return;
     socketRef.current?.emit(MESSAGE, msg);
   };
 

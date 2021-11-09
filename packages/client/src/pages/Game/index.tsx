@@ -1,14 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-import useChat from '@src/hooks/useChat';
-import { primaryDark } from '../../constants/index';
-import ChatContainer from '../../containers/ChatContainer';
-import LeftSideContainer from '../../containers/LeftSideContainer';
-import RightSideContainer from '../../containers/RightSideContainer';
-import useSocket from '../../hooks/useSocket';
-import useVote from '../../hooks/useVote';
-import useExecute from '../../hooks/useExecute';
+import useSocket from '@hooks/useSocket';
+import useExecute from '@hooks/useExecute';
+import useVote from '@hooks/useVote';
+import useChat from '@hooks/useChat';
+import { primaryDark } from '@constants/index';
+import ChatContainer from '@containers/ChatContainer';
+import LeftSideContainer from '@containers/LeftSideContainer';
+import RightSideContainer from '@containers/RightSideContainer';
 
 const Game = () => {
   const { socketRef } = useSocket('123e4567-e89b-12d3-a456-426614174000');

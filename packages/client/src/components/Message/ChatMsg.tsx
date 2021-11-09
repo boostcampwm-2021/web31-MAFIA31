@@ -1,47 +1,51 @@
 import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { ChatMsgType } from '../../../../domain/types/chat';
-import { primaryLight, primaryDark, white, titleActive } from '../../constants/index';
+
+import { ChatMsgType } from 'domain/types/chat';
+import { primaryLight, primaryDark, white, titleActive } from '@constants/index';
 
 interface PropType {
   chat: ChatMsgType;
   isMyMsg: boolean;
 }
 
-const ChatMsg: FC<PropType> = ({ chat, isMyMsg }) => {
-  const PROFILE_IMG_URL = 'https://cdn-icons-png.flaticon.com/512/1946/1946429.png';
-  return (
-    <div css={msgContainerStyle(isMyMsg)}>
-      <img css={profileImgStyle(isMyMsg)} src={PROFILE_IMG_URL} alt="profile" />
-      <div css={msgStyle(isMyMsg)}>{chat.msg}</div>
-    </div>
-  );
-};
+const ChatMsg: FC<PropType> = ({ chat, isMyMsg }) => (
+  <div css={msgContainerStyle(isMyMsg)}>
+    <img css={profileImgStyle(isMyMsg)} src="/assets/icons/profile.svg" alt="profile" />
+    <div css={msgStyle(isMyMsg)}>{chat.msg}</div>
+  </div>
+);
 
 const msgContainerStyle = (isMyMsg: boolean) => css`
   display: flex;
-  align-self: ${isMyMsg ? 'end' : 'start'};
+  align-items: flex-end;
+  justify-content: ${isMyMsg ? 'flex-end' : 'flex-start'};
+
+  width: 100%;
   gap: 16px;
-  img {
-    width: 48px;
-    height: 48px;
-  }
 `;
 
 const profileImgStyle = (isMyMsg: boolean) => css`
   display: ${isMyMsg ? 'none' : 'inline'};
+
+  width: 40px;
+  height: 40px;
+  padding: 3px;
+  border-radius: 50%;
+  border: 2px solid ${titleActive};
 `;
 
 const msgStyle = (isMyMsg: boolean) => css`
-  display: flex;
-  max-width: 450px;
-  padding: 12px;
-  background-color: ${isMyMsg ? primaryDark : primaryLight};
-  color: ${isMyMsg ? white : titleActive};
+  max-width: 65%;
+  padding: 14px;
+  font-size: 16px;
+  line-height: 23px;
   border-radius: 20px;
-  border-top-right-radius: ${isMyMsg ? '0px' : '20px'};
-  border-bottom-left-radius: ${isMyMsg ? '20px' : '0px'};
+  color: ${isMyMsg ? white : titleActive};
+  background-color: ${isMyMsg ? primaryDark : primaryLight};
+  border-top-right-radius: ${isMyMsg ? 0 : '20px'};
+  border-bottom-left-radius: ${isMyMsg ? '20px' : 0};
 `;
 
 export default ChatMsg;

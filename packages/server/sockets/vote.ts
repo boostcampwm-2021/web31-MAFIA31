@@ -11,10 +11,10 @@ const publish = (namespace: Namespace, roomId: string) => {
   let sameCnt = 0;
 
   Object.keys(userInfo).forEach((userName) => {
-    if (voteInfo[userName] >= maxCnt) {
-      if (voteInfo[userName] === maxCnt) sameCnt += 1;
+    if (voteInfo[userName].length >= maxCnt) {
+      if (voteInfo[userName].length === maxCnt) sameCnt += 1;
       else {
-        maxCnt = voteInfo[userName];
+        maxCnt = voteInfo[userName].length;
         maxName = userName;
         sameCnt = 0;
       }

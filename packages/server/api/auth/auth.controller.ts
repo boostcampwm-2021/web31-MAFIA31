@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { User } from 'domain/types/user';
 import dotenv from 'dotenv';
 import express from 'express';
 
@@ -33,8 +34,8 @@ const AuthController = {
         Authorization: `token ${accessToken}`,
       },
     });
-
-    res.json(data);
+    const user: User = { userName: data.login };
+    res.json(user);
   },
 };
 

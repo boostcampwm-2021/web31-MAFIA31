@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Callback from './pages/Callback';
 import Game from './pages/Game';
 import GameResult from './pages/GameResult';
 import Login from './pages/Login';
@@ -9,6 +10,7 @@ import Waiting from './pages/Waiting';
 const App = () => (
   <Router>
     <Switch>
+      <Route exact path="/callback" component={Callback} />
       <Route exact path="/profile" component={Profile} />
       <Route exact path="/rooms" component={Rooms} />
       <Route exact path="/waiting" component={Waiting} />

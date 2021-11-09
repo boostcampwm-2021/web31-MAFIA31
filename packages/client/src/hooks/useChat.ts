@@ -1,19 +1,23 @@
 import { MESSAGE, PUBLISH_MESSAGE } from 'domain/constants/event';
 import { ChatMsgType } from 'domain/types/chat';
 import { useEffect, useState } from 'react';
-import { Socket } from 'socket.io-client';
 
-const useChat = (socket: Socket) => {
+const useChat = (socketRef: any) => {
   const [chatList, setChatList] = useState<ChatMsgType[]>([]);
+  const updateChatList = (msg: ChatMsgType): void => {
+    setChatList((prev) => [...prev, msg]);
+  };
 
   useEffect(() => {
-    socket.on(PUBLISH_MESSAGE, (msg: ChatMsgType): void => {
-      setChatList((prev) => [...prev, msg]);
-    });
-  }, [socket]);
+    socketRef.current?.on(PUBLISH_MESSAGE, updateChatList);
+
+    return () => {
+      socketRef.current.off(PUBLISH_MESSAGE, updateChatList);
+    };
+  }, [socketRef.current]);
 
   const sendChat = (msg: ChatMsgType): void => {
-    socket?.emit(MESSAGE, msg);
+    socketRef.current?.emit(MESSAGE, msg);
   };
 
   return { chatList, sendChat };

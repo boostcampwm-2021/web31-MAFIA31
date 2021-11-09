@@ -13,7 +13,7 @@ const useSocket = (roomId: string) => {
     };
   }, [roomId]);
 
-  return { socket: socketRef.current || io(SOCKET_URL) };
+  return { socketRef };
 };
 
 export default useSocket;

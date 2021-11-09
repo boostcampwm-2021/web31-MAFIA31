@@ -8,7 +8,7 @@ const Login: FC = () => (
   <div css={containerStyle}>
     <div css={logoTextStyle}>MAFIA 31</div>
     <img css={logoImageStyle} src="/assets/icons/home.png" alt="home" />
-    <Link to="/game">
+    <Link to="/rooms">
       <button css={buttonStyle} type="button">
         <img css={iconImageStyle} src="/assets/icons/github.png" alt="github" /> Github 로그인
       </button>

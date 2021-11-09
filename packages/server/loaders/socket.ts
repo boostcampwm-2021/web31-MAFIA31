@@ -1,7 +1,7 @@
 import express from 'express';
 import http from 'http';
 import { Namespace, Server } from 'socket.io';
-import socketInit from './sockets';
+import socketInit from '../sockets';
 
 const socketLoader = (app: express.Application) => {
   const PORT: string = process.env.SOCKET_PORT || '5001';
@@ -12,7 +12,10 @@ const socketLoader = (app: express.Application) => {
   );
 
   const io: Server = new Server(server, { cors: { origin: '*' } });
-  const namespace: Namespace = io.of('/');
+  const namespace: Namespace = io.of(
+    /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/,
+  );
+
   socketInit(namespace);
 };
 

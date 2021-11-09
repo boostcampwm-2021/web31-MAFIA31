@@ -3,3 +3,9 @@ export interface RoomInfo {
   title: string;
   host: string;
 }
+
+export interface PlayerInfo {
+  userImg: string;
+  userName: string;
+  voteCnt: number;
+}

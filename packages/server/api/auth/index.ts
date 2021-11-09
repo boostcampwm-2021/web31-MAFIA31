@@ -3,6 +3,6 @@ import AuthController from './auth.controller';
 
 const authRouter = express.Router();
 
-authRouter.get('/user', AuthController.getAcccessToken);
+authRouter.get('/user', AuthController.getUserInfo);
 
 export default authRouter;

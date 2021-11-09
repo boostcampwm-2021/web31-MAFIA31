@@ -8,7 +8,7 @@ const Login: FC = () => (
     <div css={logoTextStyle}>MAFIA 31</div>
     <img css={logoImageStyle} src="/assets/icons/home.png" alt="home" />
     <a
-      href={`https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}`}
+      href={`https://github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}`}
     >
       Login
     </a>

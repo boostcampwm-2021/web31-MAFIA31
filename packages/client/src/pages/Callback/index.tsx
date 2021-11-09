@@ -4,7 +4,6 @@ import { Redirect, useLocation } from 'react-router-dom';
 const Callback = () => {
   const getUserData = async (code: string) => {
     const url = `${process.env.REACT_APP_API_URL}/api/auth/user?code=${code}`;
-    console.log(url);
     const response = await fetch(url);
     const userData = await response.json();
     console.log(userData);

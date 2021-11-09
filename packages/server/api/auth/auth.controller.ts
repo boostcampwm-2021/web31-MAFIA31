@@ -1,24 +1,40 @@
 import axios from 'axios';
+import dotenv from 'dotenv';
 import express from 'express';
 
+dotenv.config();
+
+const getAccessToken = async (code: string) => {
+  const {
+    data: { access_token: accessToken },
+  } = await axios({
+    method: 'POST',
+    url: `https://github.com/login/oauth/access_token`,
+    data: {
+      client_id: process.env.GITHUB_CLIENT_ID,
+      client_secret: process.env.GITHUB_CLIENT_SECRET,
+      code,
+    },
+    headers: { Accept: 'application/json' },
+  });
+
+  return accessToken;
+};
+
 const AuthController = {
-  getAcccessToken: async (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction,
-  ) => {
+  async getUserInfo(req: express.Request, res: express.Response) {
+    if (!req.query.code) return;
+
+    const accessToken = await getAccessToken(req.query.code as string);
     const { data } = await axios({
-      method: 'POST',
-      url: `https://github.com/login/oauth/access_token`,
-      data: {
-        client_id: process.env.GITHUB_CLIENT_ID,
-        client_secret: process.env.GITHUB_CLIENT_SECRET,
-        code: req.query.code,
+      method: 'GET',
+      url: 'https://api.github.com/user',
+      headers: {
+        Authorization: `token ${accessToken}`,
       },
-      headers: { Accept: 'application/json' },
     });
-    console.log(data);
-    next();
+
+    res.json(data);
   },
 };
 

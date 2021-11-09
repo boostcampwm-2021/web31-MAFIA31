@@ -6,27 +6,24 @@ import { useEffect, useState } from 'react';
 const useVote = (socketRef: any, myUserName: string) => {
   const [playerList, setPlayerList] = useState<PlayerInfo[]>([
     {
-      userImg:
-        'https://real-dnb.s3.ap-northeast-2.amazonaws.com/static/images/basic-profile-img.png',
+      userImg: '/assets/icons/profile.svg',
       userName: 'user1',
-      voteCnt: 0,
+      voteFrom: ['user2', 'user3'],
     },
     {
-      userImg:
-        'https://real-dnb.s3.ap-northeast-2.amazonaws.com/static/images/basic-profile-img.png',
+      userImg: '/assets/icons/profile.svg',
       userName: 'user2',
-      voteCnt: 0,
+      voteFrom: [],
     },
     {
-      userImg:
-        'https://real-dnb.s3.ap-northeast-2.amazonaws.com/static/images/basic-profile-img.png',
+      userImg: '/assets/icons/profile.svg',
       userName: 'user3',
-      voteCnt: 0,
+      voteFrom: [],
     },
   ]);
   const updatePlayerList = (roomVote: RoomVote): void => {
     setPlayerList((prev) =>
-      prev.map((player) => ({ ...player, voteCnt: roomVote[player.userName] })),
+      prev.map((player) => ({ ...player, voteFrom: roomVote[player.userName] ?? [] })),
     );
   };
 

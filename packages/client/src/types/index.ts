@@ -7,5 +7,5 @@ export interface RoomInfo {
 export interface PlayerInfo {
   userImg: string;
   userName: string;
-  voteCnt: number;
+  voteFrom: string[];
 }

@@ -1,8 +1,10 @@
 import { FC, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { PlayerState } from '../../../domain/types/user';
-import MemoButton from '../components/Button/MemoButton';
+
+import { PlayerState } from 'domain/types/user';
+import MemoButton from '@components/Button/MemoButton';
+import { grey1 } from '@constants/index';
 
 type PropType = {
   playerStateList: PlayerState[];
@@ -22,6 +24,7 @@ const RightSideContainer: FC<PropType> = ({ playerStateList }) => {
 
   return (
     <div css={RightSideContainerStyle}>
+      <hr css={hrStyle} />
       <div>
         {memoList.map(({ userName, guessJob }) => (
           <MemoButton
@@ -32,16 +35,21 @@ const RightSideContainer: FC<PropType> = ({ playerStateList }) => {
           />
         ))}
       </div>
+      <hr css={hrStyle} />
     </div>
   );
 };
 
 const RightSideContainerStyle = css`
-  display: flex;
-
-  width: 400px;
+  width: 23%;
   height: 100%;
   padding: 40px;
+`;
+
+const hrStyle = css`
+  border: 0;
+  margin: 24px 0;
+  border-top: 1px solid ${grey1};
 `;
 
 export default RightSideContainer;

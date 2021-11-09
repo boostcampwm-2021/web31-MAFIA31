@@ -26,6 +26,9 @@ const ProfileContainer: FC<Prop> = ({ userList, host }) => (
 const containerStyle = css`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  row-gap: 55px;
+  column-gap: 40px;
+
   width: 920px;
 `;
 

@@ -8,6 +8,7 @@ import { RoomInfo } from '@src/types';
 import useSocket from '@hooks/useSocket';
 import { User } from 'domain/types/user';
 import ProfileContainer from '@src/containers/ProfileContainer';
+import { white } from '@src/constants';
 
 interface locationType {
   roomInfo: RoomInfo;
@@ -34,13 +35,25 @@ const Waiting = () => {
   console.log(socketRef); // TODO: socket을 useContext로 관리, 여기서 할당해주기!
 
   return (
-    <div css={pageStyle}>
+    <>
       <Header />
-      <ProfileContainer userList={dummyData} host={host} />
-      <Link to="/game">
-        <DefaultButton text="READY" size={ButtonSizeList.MEDIUM} theme={ButtonThemeList.LIGHT} />
-      </Link>
-    </div>
+      <div css={pageStyle}>
+        <div css={scrollStyle}>
+          <div css={marginStyle}>
+            <ProfileContainer userList={dummyData} host={host} />
+          </div>
+        </div>
+        <div css={bottomBarStyle}>
+          <Link to="/game">
+            <DefaultButton
+              text="READY"
+              size={ButtonSizeList.MEDIUM}
+              theme={ButtonThemeList.LIGHT}
+            />
+          </Link>
+        </div>
+      </div>
+    </>
   );
 };
 
@@ -48,6 +61,36 @@ const pageStyle = css`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+const scrollStyle = css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 90%;
+  height: 680px;
+
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const marginStyle = css`
+  margin-top: 40px;
+  margin-bottom: 40px;
+`;
+
+const bottomBarStyle = css`
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  height: 160px;
+  background-color: ${white};
+  padding-top: 40px;
+  padding-bottom: 40px;
+  padding-left: 70%;
 `;
 
 export default Waiting;

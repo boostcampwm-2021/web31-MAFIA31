@@ -2,14 +2,24 @@
 import { css } from '@emotion/react';
 import { RoomCard } from '@src/components/Card';
 import { RoomInfo } from '@src/types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const RoomContainer = () => {
-  const [roomList] = useState<RoomInfo[]>([
-    { roomId: '123e4567-e89b-12d3-a456-426614174000', title: '1번째 방', host: 'user1' },
-    { roomId: '123e5237-e89b-12d3-a456-426614179560', title: '2번째 방', host: 'user2' },
-  ]);
+  const [roomList, setRoomList] = useState<RoomInfo[]>([]);
+
+  const updateRoomList = async () => {
+    const url = `${process.env.REACT_APP_API_URL}/api/room`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    setRoomList(data.roomList);
+  };
+
+  useEffect(() => {
+    updateRoomList();
+  }, [roomList]);
 
   return (
     <div css={roomContainerStyle}>

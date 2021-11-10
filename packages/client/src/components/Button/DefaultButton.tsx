@@ -1,3 +1,4 @@
+import { FC } from 'react';
 import { css } from '@emotion/react';
 /** @jsxImportSource @emotion/react */
 import { primaryDark, primaryLight, titleActive, white } from '@src/constants';
@@ -7,12 +8,18 @@ interface Props {
   text: string;
   size: ButtonSizeList;
   theme: ButtonThemeList;
+  onClick?: any;
 }
-const DefaultButton = ({ text, size, theme }: Props) => (
-  <button type="button" css={buttonStyle(size, theme)}>
+
+const DefaultButton: FC<Props> = ({ text, size, theme, onClick }: Props) => (
+  <button type="button" onClick={() => onClick!()} css={buttonStyle(size, theme)}>
     {text}
   </button>
 );
+
+DefaultButton.defaultProps = {
+  onClick: () => {},
+};
 
 const buttonStyle = (size: ButtonSizeList, theme: ButtonThemeList) => css`
   display: flex;

@@ -33,6 +33,7 @@ const RoomContainer = () => {
 };
 
 const roomContainerStyle = css`
+  margin-top: 20vh;
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;

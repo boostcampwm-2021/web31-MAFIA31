@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
 import { RoomCard } from '@src/components/Card';
 import { RoomInfo } from '@src/types';
 import { useState } from 'react';
@@ -10,7 +12,7 @@ const RoomContainer = () => {
   ]);
 
   return (
-    <div>
+    <div css={roomContainerStyle}>
       {roomList.map((roomInfo) => (
         <Link to={{ pathname: '/waiting', state: { roomInfo } }} key={roomInfo.roomId}>
           <RoomCard roomInfo={roomInfo} />
@@ -19,5 +21,12 @@ const RoomContainer = () => {
     </div>
   );
 };
+
+const roomContainerStyle = css`
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px 30px;
+`;
 
 export default RoomContainer;

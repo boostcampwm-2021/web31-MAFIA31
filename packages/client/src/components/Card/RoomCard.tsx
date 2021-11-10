@@ -40,6 +40,9 @@ const roomCardStyle = css`
     font-size: 16px;
     line-height: 19px;
   }
+  &:hover {
+    opacity: 0.7;
+  }
 `;
 
 const leftSide = css`

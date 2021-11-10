@@ -52,6 +52,7 @@ const Profile: FC = () => {
                 title={e.title}
                 imgSrc={e.imgSrc}
                 isAccomplished={e.isAccomplished}
+                description={e.description}
               />
             ))}
           </div>

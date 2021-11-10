@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { primaryDark, primaryLight, titleActive, white } from '@src/constants';
-import { ButtonSizeList, ButtonThemeList } from './IconButton';
+import { ButtonSizeList, ButtonThemeList } from '.';
 
 interface Props {
   text: string;
@@ -22,7 +23,9 @@ const buttonStyle = (size: ButtonSizeList, theme: ButtonThemeList) => css`
   justify-content: center;
   align-items: center;
   padding: 0px;
+  gap: 15px;
   box-shadow: 4px 4px 4px rgba(78, 65, 109, 0.25);
+  cursor: pointer;
 
   ${buttonSizeStyle[size]}
   ${buttonThemeStyle[theme]}

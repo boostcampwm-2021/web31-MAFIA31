@@ -2,8 +2,7 @@
 import { css } from '@emotion/react';
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { DefaultButton } from '@src/components/Button';
-import { ButtonSizeList, ButtonThemeList } from '@src/components/Button/IconButton';
+import { DefaultButton, ButtonSizeList, ButtonThemeList } from '@src/components/Button';
 import { primaryDark, white } from '@src/constants';
 
 const TITLE = 'MAFIA31';

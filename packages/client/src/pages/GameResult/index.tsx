@@ -3,8 +3,7 @@ import { useState } from 'react';
 import { css } from '@emotion/react';
 import { citizen, mafia, primaryLight, white } from '../../constants/colors';
 import { ResultCard } from '../../components/Card';
-import { IconButton } from '../../components/Button';
-import { ButtonSizeList, ButtonThemeList } from '../../components/Button/IconButton';
+import { IconButton, ButtonSizeList, ButtonThemeList } from '../../components/Button';
 
 interface PlayerResult {
   userName: string;

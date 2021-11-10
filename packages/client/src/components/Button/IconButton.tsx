@@ -1,22 +1,12 @@
 /* eslint-disable no-unused-vars */
 /** @jsxImportSource @emotion/react */
 import { css, SerializedStyles } from '@emotion/react';
+import { ButtonSizeList, ButtonThemeList } from '.';
 import { primaryDark, primaryLight, titleActive, white } from '../../constants';
 
 type themeOptions = {
   [key: string]: SerializedStyles;
 };
-
-export enum ButtonSizeList {
-  SMALL = 'SMALL',
-  MEDIUM = 'MEDIUM',
-  LARGE = 'LARGE',
-}
-
-export enum ButtonThemeList {
-  LIGHT = 'LIGHT',
-  DARK = 'DARK',
-}
 
 interface Props {
   size: ButtonSizeList;

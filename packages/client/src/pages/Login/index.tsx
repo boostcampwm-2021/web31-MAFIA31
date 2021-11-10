@@ -1,8 +1,13 @@
 import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import { DefaultButton, ButtonSizeList, ButtonThemeList } from '@src/components/Button';
 import { primaryDark, white } from '../../constants';
 
+const BUTTON_TEXT = 'Github 로그인';
+const BUTTON_SIZE = ButtonSizeList.LARGE;
+const BUTTON_THEME = ButtonThemeList.LIGHT;
+const BUTTON_IMAGE_SRC = '/assets/icons/github.png';
 const Login: FC = () => (
   <div css={containerStyle}>
     <div css={logoTextStyle}>MAFIA 31</div>
@@ -10,9 +15,13 @@ const Login: FC = () => (
     <a
       href={`https:github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}`}
     >
-      <button css={buttonStyle} type="button">
-        <img css={iconImageStyle} src="/assets/icons/github.png" alt="github" /> Github 로그인
-      </button>
+      <DefaultButton
+        css={buttonStyle}
+        text={BUTTON_TEXT}
+        size={BUTTON_SIZE}
+        theme={BUTTON_THEME}
+        imageSrc={BUTTON_IMAGE_SRC}
+      />
     </a>
   </div>
 );
@@ -31,10 +40,6 @@ const logoImageStyle = css`
   width: 400px;
   height: 400px;
   margin-bottom: 80px;
-`;
-
-const iconImageStyle = css`
-  margin-right: 16px;
 `;
 
 const containerStyle = css`

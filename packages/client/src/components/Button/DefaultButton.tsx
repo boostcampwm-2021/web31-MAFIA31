@@ -1,5 +1,5 @@
-import { css } from '@emotion/react';
 /** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
 import { primaryDark, primaryLight, titleActive, white } from '@src/constants';
 import { ButtonSizeList, ButtonThemeList } from './IconButton';
 
@@ -7,10 +7,12 @@ interface Props {
   text: string;
   size: ButtonSizeList;
   theme: ButtonThemeList;
+  imageSrc?: string;
 }
-const DefaultButton = ({ text, size, theme }: Props) => (
+const DefaultButton = ({ text, size, theme, imageSrc }: Props) => (
   <button type="button" css={buttonStyle(size, theme)}>
-    {text}
+    {imageSrc ? <img src={imageSrc} alt="button" /> : ''}
+    <p>{text}</p>
   </button>
 );
 

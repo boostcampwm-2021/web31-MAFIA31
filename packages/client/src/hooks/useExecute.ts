@@ -7,6 +7,7 @@ const useExecute = (socketRef: any) => {
     { userName: 'user1', isDead: true },
     { userName: 'user2', isDead: false },
     { userName: 'user3', isDead: true },
+    { userName: 'user4', isDead: false },
   ]);
   const updatePlayerState = (user: User) => {
     setPlayerList((prev) =>

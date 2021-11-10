@@ -11,23 +11,24 @@ interface PropType {
 
 const MemoButton: FC<PropType> = ({ userName, guessJob, isDead }) => (
   <button type="button" css={buttonStyle(isDead)}>
-    <img src="" alt="" />
-    <div>{userName}</div>
-    <div>{guessJob}</div>
+    <img src={`/assets/images/${guessJob}.png`} alt={guessJob + userName} />
   </button>
 );
 
 const buttonStyle = (isDead: boolean) => css`
   display: flex;
   align-items: center;
-  padding: 16px;
+  cursor: pointer;
 
-  width: 84px;
-  height: 84px;
-
+  width: 100%;
+  padding: 10px;
+  border-radius: 20px;
   background-color: ${isDead ? grey3 : white};
   box-shadow: 1px 2px 4px rgba(78, 65, 109, 0.25);
-  border-radius: 20px;
+
+  img {
+    width: 100%;
+  }
 `;
 
 export default MemoButton;

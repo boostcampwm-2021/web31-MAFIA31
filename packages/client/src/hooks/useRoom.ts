@@ -1,4 +1,4 @@
-import { PUBLISH_READY, READY } from 'domain/constants/event';
+import { GAME_START, PUBLISH_READY, READY } from 'domain/constants/event';
 import { WaitingInfo } from 'domain/types/user';
 import { useEffect, useState } from 'react';
 
@@ -34,9 +34,12 @@ const useRoom = (socketRef: any) => {
       })),
     );
   };
+
   const sendReady = (userInfo: WaitingInfo) => socketRef.current?.emit(READY, userInfo);
 
-  return { waitingUserList, sendReady };
+  const sendGameStart = () => socketRef.current?.emit(GAME_START);
+
+  return { waitingUserList, sendReady, sendGameStart };
 };
 
 export default useRoom;

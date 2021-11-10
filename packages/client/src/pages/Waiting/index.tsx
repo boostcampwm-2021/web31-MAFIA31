@@ -19,10 +19,16 @@ const Waiting = () => {
   const location = useLocation<locationType>();
   const { roomId } = location.state.roomInfo;
   const { socketRef } = useSocket(roomId);
-  const { waitingUserList, sendReady } = useRoom(socketRef);
+  const { waitingUserList, sendReady, sendGameStart } = useRoom(socketRef);
   const { userInfo } = useUserInfo();
   const isHost =
     waitingUserList.filter(({ userName }) => userName === userInfo?.userName)[0]?.isHost ?? false;
+  const getReady = () => {
+    const me = waitingUserList.filter((user) => userInfo?.userName === user.userName)[0];
+    if (!me) return;
+
+    sendReady({ userName: me.userName, isReady: !me.isReady, isHost: me.isHost });
+  };
   // TODO: socket을 useContext로 관리, 여기서 할당해주기!
 
   return (
@@ -46,6 +52,7 @@ const Waiting = () => {
                   text="START"
                   size={ButtonSizeList.MEDIUM}
                   theme={ButtonThemeList.LIGHT}
+                  onClick={sendGameStart}
                 />
               </Link>
             </div>
@@ -54,13 +61,7 @@ const Waiting = () => {
               text="READY"
               size={ButtonSizeList.MEDIUM}
               theme={ButtonThemeList.LIGHT}
-              onClick={() => {
-                const me = waitingUserList.filter(
-                  (user) => userInfo?.userName === user.userName,
-                )[0];
-                if (!me) return;
-                sendReady({ userName: me.userName, isReady: !me.isReady, isHost: me.isHost });
-              }}
+              onClick={getReady}
             />
           )}
         </div>

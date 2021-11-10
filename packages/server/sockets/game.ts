@@ -1,5 +1,6 @@
 import {
   GAME_OVER,
+  GAME_START,
   PUBLISH_READY,
   PUBLISH_VOTE,
   READY,
@@ -114,6 +115,8 @@ const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): v
     channelVote[roomId][to] = [...new Set(channelVote[roomId][to] ?? []).add(from)];
     namespace.emit(PUBLISH_VOTE, channelVote[roomId]);
   });
+
+  socket.on(GAME_START, () => {});
 
   // socket.on(GAME_START, () => {
   startTimer(dashBoard, jobAssignment, namespace, roomId);

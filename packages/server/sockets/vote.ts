@@ -1,3 +1,4 @@
+import { EXECUTION } from 'domain/constants/event';
 import { Namespace } from 'socket.io';
 import { getChannelUser, getChannelVote, resetChannelVote } from './game';
 
@@ -20,9 +21,7 @@ const publish = (namespace: Namespace, roomId: string) => {
       }
     }
   });
-  namespace
-    .to(roomId)
-    .emit('execution', { userName: maxCnt === 0 || sameCnt > 0 ? undefined : maxName });
+  namespace.emit(EXECUTION, { userName: maxCnt === 0 || sameCnt > 0 ? undefined : maxName });
 };
 
 const startVoteTime = (namespace: Namespace, roomId: string, time: number) => {

@@ -1,4 +1,13 @@
-import { GAME_OVER, PUBLISH_VOTE, TIMER, TURN_CHANGE, VOTE } from 'domain/constants/event';
+import {
+  GAME_OVER,
+  GAME_START,
+  PUBLISH_READY,
+  PUBLISH_VOTE,
+  READY,
+  TIMER,
+  TURN_CHANGE,
+  VOTE,
+} from 'domain/constants/event';
 import { GameResult, Job } from 'domain/types/game';
 import { RoomVote, Vote } from 'domain/types/vote';
 import { Namespace, Socket } from 'socket.io';
@@ -48,6 +57,38 @@ const getGameResult = (dashBoard: DashBoard, jobAssignment: Job[]): GameResult[]
   return jobAssignment.map((el) => ({ ...el, result: el.job === 'mafia' }));
 };
 
+const startTimer = (
+  dashBoard: DashBoard,
+  jobAssignment: Job[],
+  namespace: Namespace,
+  roomId: string,
+) => {
+  let counter = 0;
+  const interval = 60;
+  let isNight: boolean = true;
+
+  const gameInterval = setInterval(() => {
+    if (counter % interval === 0) {
+      if (checkEnd(dashBoard)) {
+        namespace.emit(GAME_OVER, getGameResult(dashBoard, jobAssignment));
+        clearInterval(gameInterval);
+        return;
+      }
+
+      isNight = !isNight;
+      if (!isNight) {
+        startVoteTime(namespace, roomId, 10000);
+      }
+      namespace.emit(TURN_CHANGE, isNight);
+    }
+
+    const remainSecond = interval - (counter % interval);
+    namespace.emit(TIMER, remainSecond);
+
+    counter += 1;
+  }, 1000);
+};
+
 const assignJobs = () => {
   const shuffle = (arr: string[]) => arr.sort(() => Math.random() - 0.5);
 
@@ -76,39 +117,20 @@ const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): v
     { userName: 'h', job: 'citizen' },
   ];
 
+  socket.on(READY, (userInfo: { userName: string; isReady: boolean; isHost: boolean }) => {
+    namespace.emit(PUBLISH_READY, userInfo);
+  });
+
   socket.on(VOTE, ({ to, from }: Vote) => {
     if (!canVote()) return;
-
     channelVote[roomId][to] = [...new Set(channelVote[roomId][to] ?? []).add(from)];
     namespace.emit(PUBLISH_VOTE, channelVote[roomId]);
   });
 
+  socket.on(GAME_START, () => {});
+
   // socket.on(GAME_START, () => {
-  let counter = 0;
-  const interval = 60;
-  let isNight: boolean = true;
-
-  const gameInterval = setInterval(() => {
-    if (counter % interval === 0) {
-      if (checkEnd(dashBoard)) {
-        namespace.emit(GAME_OVER, getGameResult(dashBoard, jobAssignment));
-        clearInterval(gameInterval);
-
-        return;
-      }
-
-      isNight = !isNight;
-      if (!isNight) {
-        startVoteTime(namespace, roomId, 10000);
-      }
-      namespace.emit(TURN_CHANGE, isNight);
-    }
-
-    const remainSecond = interval - (counter % interval);
-    namespace.emit(TIMER, remainSecond);
-
-    counter += 1;
-  }, 1000);
+  startTimer(dashBoard, jobAssignment, namespace, roomId);
   // });
 };
 

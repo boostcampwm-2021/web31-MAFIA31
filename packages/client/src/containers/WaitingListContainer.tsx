@@ -11,10 +11,9 @@ interface Prop {
 const WaitingListContainer: FC<Prop> = ({ userList }) => (
   <div css={containerStyle}>
     {userList.map(({ userName, isHost, isReady }) => (
-      <div css={wrapperStyle}>
+      <div key={userName} css={wrapperStyle}>
         <img css={decoStyle(isHost)} src="\assets\icons\host.png" alt="host" />
         <ProfileCard
-          key={userName}
           userName={userName}
           status={isHost ? 'WAITING' : 'READY'}
           profileImg="assets/images/mafia.png"

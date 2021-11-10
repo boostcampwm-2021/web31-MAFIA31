@@ -48,5 +48,3 @@ const buttonWrapperStyle = css`
   display: flex;
   gap: 10px;
 `;
-
-export default Header;

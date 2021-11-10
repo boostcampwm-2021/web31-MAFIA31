@@ -6,17 +6,17 @@ import { useEffect, useState } from 'react';
 const useVote = (socketRef: any, myUserName: string) => {
   const [playerList, setPlayerList] = useState<PlayerInfo[]>([
     {
-      userImg: '/assets/icons/profile.svg',
+      userImg: '/assets/icons/profile.png',
       userName: 'user1',
       voteFrom: ['user2', 'user3'],
     },
     {
-      userImg: '/assets/icons/profile.svg',
+      userImg: '/assets/icons/profile.png',
       userName: 'user2',
       voteFrom: [],
     },
     {
-      userImg: '/assets/icons/profile.svg',
+      userImg: '/assets/icons/profile.png',
       userName: 'user3',
       voteFrom: [],
     },

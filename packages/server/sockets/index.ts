@@ -8,7 +8,7 @@ const socketInit = (namespace: Namespace): void => {
     const { name: roomId } = nsp;
     if (!roomId) return;
 
-    chatSocketInit(nsp, socket, roomId);
+    chatSocketInit(nsp, socket);
     gameSocketInit(nsp, socket, roomId);
 
     socket.on('disconnect', (): void => {});

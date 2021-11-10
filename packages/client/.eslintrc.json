@@ -28,7 +28,9 @@
       }
     ],
     "no-use-before-define": "off",
-    "no-shadow": "off"
+    "no-shadow": "off",
+    "react/require-default-props": "off",
+    "import/no-unresolved": "off"
   },
   "settings": {
     "import/resolver": {

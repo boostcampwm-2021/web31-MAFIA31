@@ -1,16 +1,9 @@
 /* eslint-disable no-unused-vars */
 import AbilityButton from './AbilityButton';
+import { ButtonSizeList, ButtonThemeList } from './Button.st';
 import DefaultButton from './DefaultButton';
 import IconButton from './IconButton';
+import MemoButton from './MemoButton';
 
-enum ButtonSizeList {
-  SMALL = 'SMALL',
-  MEDIUM = 'MEDIUM',
-  LARGE = 'LARGE',
-}
-enum ButtonThemeList {
-  LIGHT = 'LIGHT',
-  DARK = 'DARK',
-}
-
-export { AbilityButton, DefaultButton, IconButton, ButtonSizeList, ButtonThemeList };
+export { AbilityButton, DefaultButton, IconButton, MemoButton };
+export { ButtonSizeList, ButtonThemeList };

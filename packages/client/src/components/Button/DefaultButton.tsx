@@ -2,7 +2,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { primaryDark, primaryLight, titleActive, white } from '@src/constants';
-import { ButtonSizeList, ButtonThemeList } from '.';
+import { ButtonSizeList, ButtonThemeList } from './Button.st';
 
 interface Props {
   text: string;

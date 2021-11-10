@@ -2,8 +2,10 @@ import { FC, useCallback, useState, useRef, useEffect } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-import { ChatMsg } from '@components/Message';
 import { ChatMsgType } from 'domain/types/chat';
+import { ChatMsg } from '@components/Message';
+import { SendIcon } from '@components/Icon';
+import { IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { primaryLight, primaryDark, white, titleActive } from '@constants/index';
 
 interface PropType {
@@ -41,9 +43,12 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat }) => {
           value={inputValue}
           onChange={({ target }) => setInputValue(target.value)}
         />
-        <button type="button" css={inputButtonStyle} onClick={onClick}>
-          <img src="/assets/icons/send(light).png" alt="send" />
-        </button>
+        <IconButton
+          icon={SendIcon}
+          size={ButtonSizeList.MEDIUM}
+          theme={isDark ? ButtonThemeList.DARK : ButtonThemeList.LIGHT}
+          onClick={onClick}
+        />
       </form>
     </div>
   );
@@ -81,10 +86,10 @@ const chatMsgsStyle = css`
 
 const inputFormStyle = (isDark: boolean) => css`
   display: flex;
+  align-content: center;
 
   gap: 18px;
   width: 100%;
-  height: 50px;
   padding: 11px 16px;
   border-radius: 20px;
   background-color: ${isDark ? primaryDark : primaryLight};
@@ -105,17 +110,6 @@ const inputStyle = (isDark: boolean) => css`
   ::placeholder {
     color: ${isDark ? 'rgba(255, 255, 255, 0.6)' : titleActive};
   }
-`;
-
-const inputButtonStyle = css`
-  cursor: pointer;
-  display: flex;
-  align-content: center;
-  justify-content: center;
-  background-color: transparent;
-
-  width: 25px;
-  height: 25px;
 `;
 
 export default ChatContainer;

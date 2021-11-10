@@ -1,4 +1,4 @@
-import { WaitingInfo } from '@src/types';
+import { WaitingInfo } from 'domain/types/user';
 import { useEffect, useState } from 'react';
 
 const useRoom = (socketRef: any) => {

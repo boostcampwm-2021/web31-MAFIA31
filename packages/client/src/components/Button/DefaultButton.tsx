@@ -28,7 +28,6 @@ const buttonStyle = (size: ButtonSizeList, theme: ButtonThemeList) => css`
   align-items: center;
   padding: 0px;
   box-shadow: 4px 4px 4px rgba(78, 65, 109, 0.25);
-
   ${buttonSizeStyle[size]}
   ${buttonThemeStyle[theme]}
 `;

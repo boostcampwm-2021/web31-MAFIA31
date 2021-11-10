@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { DefaultButton } from '@components/Button';
 import { ButtonSizeList, ButtonThemeList } from '@components/Button/IconButton';
 import Header from '@src/templates/Header';
@@ -21,6 +21,8 @@ const Waiting = () => {
   const { socketRef } = useSocket(roomId);
   const { waitingUserList, sendReady } = useRoom(socketRef);
   const { userInfo } = useUserInfo();
+  const isHost =
+    waitingUserList.filter(({ userName }) => userName === userInfo?.userName)[0]?.isHost ?? false;
   // TODO: socket을 useContext로 관리, 여기서 할당해주기!
 
   return (
@@ -33,16 +35,34 @@ const Waiting = () => {
           </div>
         </div>
         <div css={bottomBarStyle}>
-          <DefaultButton
-            text="READY"
-            size={ButtonSizeList.MEDIUM}
-            theme={ButtonThemeList.LIGHT}
-            onClick={() => {
-              const me = waitingUserList.filter((user) => userInfo?.userName === user.userName)[0];
-              if (!me) return;
-              sendReady({ userName: me.userName, isReady: !me.isReady, isHost: me.isHost });
-            }}
-          />
+          {isHost ? (
+            <div
+              css={gameStartStyle(
+                waitingUserList.filter(({ isReady }) => isReady === false).length === 0,
+              )}
+            >
+              <Link to="/game">
+                <DefaultButton
+                  text="START"
+                  size={ButtonSizeList.MEDIUM}
+                  theme={ButtonThemeList.LIGHT}
+                />
+              </Link>
+            </div>
+          ) : (
+            <DefaultButton
+              text="READY"
+              size={ButtonSizeList.MEDIUM}
+              theme={ButtonThemeList.LIGHT}
+              onClick={() => {
+                const me = waitingUserList.filter(
+                  (user) => userInfo?.userName === user.userName,
+                )[0];
+                if (!me) return;
+                sendReady({ userName: me.userName, isReady: !me.isReady, isHost: me.isHost });
+              }}
+            />
+          )}
         </div>
       </div>
     </>
@@ -83,5 +103,14 @@ const bottomBarStyle = css`
   padding-bottom: 30px;
   padding-left: 70%;
 `;
+
+const gameStartStyle = (isAllReady: boolean) =>
+  isAllReady
+    ? css`
+        cursor: pointer;
+      `
+    : css`
+        pointer-events: none;
+      `;
 
 export default Waiting;

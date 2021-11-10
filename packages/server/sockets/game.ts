@@ -47,6 +47,38 @@ const getGameResult = (dashBoard: DashBoard, jobAssignment: Job[]): GameResult[]
   return jobAssignment.map((el) => ({ ...el, result: el.job === 'mafia' }));
 };
 
+const startTimer = (
+  dashBoard: DashBoard,
+  jobAssignment: Job[],
+  namespace: Namespace,
+  roomId: string,
+) => {
+  let counter = 0;
+  const interval = 60;
+  let isNight: boolean = true;
+
+  const gameInterval = setInterval(() => {
+    if (counter % interval === 0) {
+      if (checkEnd(dashBoard)) {
+        namespace.emit(GAME_OVER, getGameResult(dashBoard, jobAssignment));
+        clearInterval(gameInterval);
+        return;
+      }
+
+      isNight = !isNight;
+      if (!isNight) {
+        startVoteTime(namespace, roomId, 10000);
+      }
+      namespace.emit(TURN_CHANGE, isNight);
+    }
+
+    const remainSecond = interval - (counter % interval);
+    namespace.emit(TIMER, remainSecond);
+
+    counter += 1;
+  }, 1000);
+};
+
 const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): void => {
   channelVote[roomId] = {};
   channelUser[roomId] = {};
@@ -73,31 +105,7 @@ const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): v
   });
 
   // socket.on(GAME_START, () => {
-  let counter = 0;
-  const interval = 60;
-  let isNight: boolean = true;
-
-  const gameInterval = setInterval(() => {
-    if (counter % interval === 0) {
-      if (checkEnd(dashBoard)) {
-        namespace.emit(GAME_OVER, getGameResult(dashBoard, jobAssignment));
-        clearInterval(gameInterval);
-
-        return;
-      }
-
-      isNight = !isNight;
-      if (!isNight) {
-        startVoteTime(namespace, roomId, 10000);
-      }
-      namespace.emit(TURN_CHANGE, isNight);
-    }
-
-    const remainSecond = interval - (counter % interval);
-    namespace.emit(TIMER, remainSecond);
-
-    counter += 1;
-  }, 1000);
+  startTimer(dashBoard, jobAssignment, namespace, roomId);
   // });
 };
 

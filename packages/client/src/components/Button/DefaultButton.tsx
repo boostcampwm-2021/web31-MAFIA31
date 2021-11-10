@@ -1,5 +1,6 @@
-import { css } from '@emotion/react';
+/* eslint-disable no-unused-vars */
 /** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
 import { primaryDark, primaryLight, titleActive, white } from '@src/constants';
 import { ButtonSizeList, ButtonThemeList } from './Button.st';
 
@@ -7,10 +8,12 @@ interface Props {
   text: string;
   size: ButtonSizeList;
   theme: ButtonThemeList;
+  imageSrc?: string;
 }
-const DefaultButton = ({ text, size, theme }: Props) => (
+const DefaultButton = ({ text, size, theme, imageSrc }: Props) => (
   <button type="button" css={buttonStyle(size, theme)}>
-    {text}
+    {imageSrc ? <img src={imageSrc} alt="button" /> : ''}
+    <p>{text}</p>
   </button>
 );
 
@@ -20,7 +23,9 @@ const buttonStyle = (size: ButtonSizeList, theme: ButtonThemeList) => css`
   justify-content: center;
   align-items: center;
   padding: 0px;
+  gap: 15px;
   box-shadow: 4px 4px 4px rgba(78, 65, 109, 0.25);
+  cursor: pointer;
 
   ${buttonSizeStyle[size]}
   ${buttonThemeStyle[theme]}

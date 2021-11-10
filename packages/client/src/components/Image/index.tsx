@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /** @jsxImportSource @emotion/react */
 import { css, SerializedStyles } from '@emotion/react';
-import { white } from '@constants/index';
+import { white } from '@src/constants';
 
 type themeOptions = {
   [key: string]: SerializedStyles;
@@ -10,6 +10,7 @@ type themeOptions = {
 // eslint-disable-next-line no-shadow
 export enum ImageSizeList {
   SMALL = 'SMALL',
+  SMALL_MEDIUM = 'SMALL_MEDIUM',
   MEDIUM = 'MEDIUM',
   LARGE = 'LARGE',
 }
@@ -41,6 +42,10 @@ const imageSizeStyle: themeOptions = {
     width: 80px;
     height: 80px;
     padding: 7px;
+  `,
+  SMALL_MEDIUM: css`
+    width: 120px;
+    height: 120px;
   `,
   MEDIUM: css`
     width: 120px;

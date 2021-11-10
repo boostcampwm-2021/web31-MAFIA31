@@ -2,7 +2,7 @@ import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { ProfileCard } from '@src/components/Card';
-import { WaitingInfo } from '@src/types';
+import { WaitingInfo } from 'domain/types/user';
 
 interface Prop {
   userList: WaitingInfo[];

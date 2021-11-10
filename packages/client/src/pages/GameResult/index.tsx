@@ -1,8 +1,8 @@
 import { useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { citizen, mafia, primaryLight, white } from '../../constants/colors';
-import { ResultCard } from '../../components/Card';
+import { citizen, mafia, primaryLight, white } from '@constants/colors';
+import { ResultCard } from '@components/Card';
 
 interface PlayerResult {
   userName: string;

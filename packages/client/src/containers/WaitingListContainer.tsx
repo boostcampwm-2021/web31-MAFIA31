@@ -1,29 +1,24 @@
 import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { User } from 'domain/types/user';
 import { ProfileCard } from '@src/components/Card';
+import { WaitingInfo } from '@src/types';
 
 interface Prop {
-  userList: User[];
-  host: string;
+  userList: WaitingInfo[];
 }
 
-const ProfileContainer: FC<Prop> = ({ userList, host }) => (
+const WaitingListContainer: FC<Prop> = ({ userList }) => (
   <div css={containerStyle}>
-    {userList.map(({ userName }) => (
+    {userList.map(({ userName, isHost, isReady }) => (
       <div css={wrapperStyle}>
-        <img
-          css={decoStyle[host === userName ? 'true' : 'false']}
-          src="\assets\icons\host.png"
-          alt="host"
-        />
+        <img css={decoStyle(isHost)} src="\assets\icons\host.png" alt="host" />
         <ProfileCard
           key={userName}
           userName={userName}
-          status={userName === host ? 'WAITING' : 'READY'}
+          status={isHost ? 'WAITING' : 'READY'}
           profileImg="assets/images/mafia.png"
-          fill="true"
+          fill={isReady}
         />
       </div>
     ))}
@@ -42,15 +37,15 @@ const wrapperStyle = css`
   position: relative;
 `;
 
-const decoStyle = {
-  true: css`
-    position: absolute;
-    right: -30px;
-    top: -30px;
-  `,
-  false: css`
-    display: none;
-  `,
-};
+const decoStyle = (isHost: boolean) => (isHost ? iconStyle : iconNone);
 
-export default ProfileContainer;
+const iconStyle = css`
+  position: absolute;
+  right: -30px;
+  top: -30px;
+`;
+const iconNone = css`
+  display: none;
+`;
+
+export default WaitingListContainer;

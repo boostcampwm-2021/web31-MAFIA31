@@ -7,7 +7,7 @@ interface Prop {
   userName: string;
   profileImg: string;
   status: string;
-  fill: 'true' | 'false';
+  fill: boolean;
 }
 
 const ProfileCard: FC<Prop> = ({ userName, profileImg, status, fill }) => (
@@ -54,24 +54,19 @@ const textStyle = css`
   line-height: 23px;
 `;
 
-const statusStyle = (fill: 'true' | 'false') => css`
+const statusStyle = (fill: boolean) => css`
   font-family: Noto Sans KR;
   font-style: normal;
   font-weight: bold;
   font-size: 24px;
   line-height: 35px;
-  ${fillStyle[fill]}
+  ${fillStyle(fill)}
 `;
 
-const fillStyle = {
-  true: css`
-    color: ${primaryDark};
-    text-shadow: 1px 1px 2px ${primaryDark};
-  `,
-  false: css`
-    color: ${white};
-    text-shadow: 2px 2px 2px ${primaryDark};
-  `,
-};
+const fillStyle = (fill: boolean) =>
+  css`
+    color: ${fill ? primaryDark : white};
+    text-shadow: ${fill ? `1px 1px` : `2px 2px`} 2px ${primaryDark};
+  `;
 
 export default ProfileCard;

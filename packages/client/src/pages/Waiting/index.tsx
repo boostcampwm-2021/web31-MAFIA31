@@ -4,30 +4,30 @@ import { useLocation, Link } from 'react-router-dom';
 import { DefaultButton } from '@components/Button';
 import { ButtonSizeList, ButtonThemeList } from '@components/Button/IconButton';
 import Header from '@src/templates/Header';
-import { RoomInfo } from '@src/types';
+import { WaitingInfo, RoomInfo } from '@src/types';
 import useSocket from '@hooks/useSocket';
-import { User } from 'domain/types/user';
-import ProfileContainer from '@src/containers/ProfileContainer';
 import { white } from '@src/constants';
+import WaitingListContainer from '@src/containers/WaitingListContainer';
 
 interface locationType {
   roomInfo: RoomInfo;
 }
-const dummyData: User[] = [
-  { userName: 'user1' },
-  { userName: 'user2' },
-  { userName: 'user3' },
-  { userName: 'user4' },
-  { userName: 'user5' },
-  { userName: 'user6' },
-  { userName: 'user7' },
-  { userName: 'user8' },
-  { userName: 'user9' },
-  { userName: 'user10' },
-  { userName: 'user11' },
-  { userName: 'user12' },
+
+const dummyData: WaitingInfo[] = [
+  { userName: 'user1', isHost: true, isReady: true },
+  { userName: 'user2', isHost: false, isReady: true },
+  { userName: 'user3', isHost: false, isReady: false },
+  { userName: 'user4', isHost: false, isReady: true },
+  { userName: 'user5', isHost: false, isReady: true },
+  { userName: 'user6', isHost: false, isReady: false },
+  { userName: 'user7', isHost: false, isReady: false },
+  { userName: 'user8', isHost: false, isReady: true },
+  { userName: 'user9', isHost: false, isReady: true },
+  { userName: 'user10', isHost: false, isReady: true },
+  { userName: 'user11', isHost: false, isReady: true },
+  { userName: 'user12', isHost: false, isReady: false },
 ];
-const host = 'user1';
+
 const Waiting = () => {
   const location = useLocation<locationType>();
   const { roomId } = location.state.roomInfo;
@@ -40,7 +40,7 @@ const Waiting = () => {
       <div css={pageStyle}>
         <div css={scrollStyle}>
           <div css={marginStyle}>
-            <ProfileContainer userList={dummyData} host={host} />
+            <WaitingListContainer userList={dummyData} />
           </div>
         </div>
         <div css={bottomBarStyle}>

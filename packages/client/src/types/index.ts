@@ -10,8 +10,3 @@ export interface PlayerInfo extends User {
   userImg: string;
   voteFrom: string[];
 }
-
-export interface WaitingInfo extends User {
-  isHost: boolean;
-  isReady: boolean;
-}

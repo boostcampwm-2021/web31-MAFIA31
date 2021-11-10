@@ -1,4 +1,12 @@
-import { GAME_OVER, PUBLISH_VOTE, TIMER, TURN_CHANGE, VOTE } from 'domain/constants/event';
+import {
+  GAME_OVER,
+  PUBLISH_READY,
+  PUBLISH_VOTE,
+  READY,
+  TIMER,
+  TURN_CHANGE,
+  VOTE,
+} from 'domain/constants/event';
 import { GameResult, Job } from 'domain/types/game';
 import { RoomVote, Vote } from 'domain/types/vote';
 import { Namespace, Socket } from 'socket.io';
@@ -97,9 +105,12 @@ const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): v
     { userName: 'h', job: 'citizen' },
   ];
 
+  socket.on(READY, (userInfo: { userName: string; isReady: boolean; isHost: boolean }) => {
+    namespace.emit(PUBLISH_READY, userInfo);
+  });
+
   socket.on(VOTE, ({ to, from }: Vote) => {
     if (!canVote()) return;
-
     channelVote[roomId][to] = [...new Set(channelVote[roomId][to] ?? []).add(from)];
     namespace.emit(PUBLISH_VOTE, channelVote[roomId]);
   });

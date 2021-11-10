@@ -1,38 +1,34 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { useLocation, Link } from 'react-router-dom';
-import { DefaultButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
+import { Link, useLocation } from 'react-router-dom';
 import Header from '@src/templates/Header';
 import { RoomInfo } from '@src/types';
-import { WaitingInfo } from 'domain/types/user';
-import useSocket from '@hooks/useSocket';
 import { white } from '@src/constants';
 import WaitingListContainer from '@src/containers/WaitingListContainer';
+import useSocket from '@hooks/useSocket';
+import useRoom from '@hooks/useRoom';
+import { useUserInfo } from '@src/contexts/userInfo';
+import { DefaultButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 
 interface locationType {
   roomInfo: RoomInfo;
 }
 
-const dummyData: WaitingInfo[] = [
-  { userName: 'user1', isHost: true, isReady: true },
-  { userName: 'user2', isHost: false, isReady: true },
-  { userName: 'user3', isHost: false, isReady: false },
-  { userName: 'user4', isHost: false, isReady: true },
-  { userName: 'user5', isHost: false, isReady: true },
-  { userName: 'user6', isHost: false, isReady: false },
-  { userName: 'user7', isHost: false, isReady: false },
-  { userName: 'user8', isHost: false, isReady: true },
-  { userName: 'user9', isHost: false, isReady: true },
-  { userName: 'user10', isHost: false, isReady: true },
-  { userName: 'user11', isHost: false, isReady: true },
-  { userName: 'user12', isHost: false, isReady: false },
-];
-
 const Waiting = () => {
   const location = useLocation<locationType>();
   const { roomId } = location.state.roomInfo;
   const { socketRef } = useSocket(roomId);
-  console.log(socketRef); // TODO: socket을 useContext로 관리, 여기서 할당해주기!
+  const { waitingUserList, sendReady, sendGameStart } = useRoom(socketRef);
+  const { userInfo } = useUserInfo();
+  const isHost =
+    waitingUserList.filter(({ userName }) => userName === userInfo?.userName)[0]?.isHost ?? false;
+  const getReady = () => {
+    const me = waitingUserList.filter((user) => userInfo?.userName === user.userName)[0];
+    if (!me) return;
+
+    sendReady({ userName: me.userName, isReady: !me.isReady, isHost: me.isHost });
+  };
+  // TODO: socket을 useContext로 관리, 여기서 할당해주기!
 
   return (
     <>
@@ -40,17 +36,33 @@ const Waiting = () => {
       <div css={pageStyle}>
         <div css={scrollStyle}>
           <div css={marginStyle}>
-            <WaitingListContainer userList={dummyData} />
+            <WaitingListContainer userList={waitingUserList} />
           </div>
         </div>
         <div css={bottomBarStyle}>
-          <Link to="/game">
+          {isHost ? (
+            <div
+              css={gameStartStyle(
+                waitingUserList.filter(({ isReady }) => isReady === false).length === 0,
+              )}
+            >
+              <Link to="/game">
+                <DefaultButton
+                  text="START"
+                  size={ButtonSizeList.MEDIUM}
+                  theme={ButtonThemeList.LIGHT}
+                  onClick={sendGameStart}
+                />
+              </Link>
+            </div>
+          ) : (
             <DefaultButton
               text="READY"
               size={ButtonSizeList.MEDIUM}
               theme={ButtonThemeList.LIGHT}
+              onClick={getReady}
             />
-          </Link>
+          )}
         </div>
       </div>
     </>
@@ -83,6 +95,7 @@ const marginStyle = css`
 `;
 
 const bottomBarStyle = css`
+  display: flex;
   width: 100%;
   height: 140px;
   background-color: ${white};
@@ -90,5 +103,14 @@ const bottomBarStyle = css`
   padding-bottom: 30px;
   padding-left: 70%;
 `;
+
+const gameStartStyle = (isAllReady: boolean) =>
+  isAllReady
+    ? css`
+        cursor: pointer;
+      `
+    : css`
+        pointer-events: none;
+      `;
 
 export default Waiting;

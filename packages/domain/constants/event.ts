@@ -7,3 +7,5 @@ export const GAME_START = 'game start';
 export const TIMER = 'timer';
 export const TURN_CHANGE = 'turn change';
 export const EXECUTION = 'execution';
+export const READY = 'ready';
+export const PUBLISH_READY = 'publish ready';

@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { primaryDark, primaryLight, titleActive, white } from '@src/constants';
@@ -9,13 +9,19 @@ interface Props {
   size: ButtonSizeList;
   theme: ButtonThemeList;
   imageSrc?: string;
+  onClick?: any;
 }
-const DefaultButton = ({ text, size, theme, imageSrc }: Props) => (
-  <button type="button" css={buttonStyle(size, theme)}>
+
+const DefaultButton: FC<Props> = ({ text, size, theme, imageSrc, onClick }) => (
+  <button type="button" onClick={() => onClick!()} css={buttonStyle(size, theme)}>
     {imageSrc ? <img src={imageSrc} alt="button" /> : ''}
     <p>{text}</p>
   </button>
 );
+
+DefaultButton.defaultProps = {
+  onClick: () => {},
+};
 
 const buttonStyle = (size: ButtonSizeList, theme: ButtonThemeList) => css`
   display: flex;

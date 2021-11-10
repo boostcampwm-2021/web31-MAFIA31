@@ -1,8 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { Link, useLocation } from 'react-router-dom';
-import { DefaultButton } from '@components/Button';
-import { ButtonSizeList, ButtonThemeList } from '@components/Button/IconButton';
 import Header from '@src/templates/Header';
 import { RoomInfo } from '@src/types';
 import { white } from '@src/constants';
@@ -10,6 +8,7 @@ import WaitingListContainer from '@src/containers/WaitingListContainer';
 import useSocket from '@hooks/useSocket';
 import useRoom from '@hooks/useRoom';
 import { useUserInfo } from '@src/contexts/userInfo';
+import { DefaultButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 
 interface locationType {
   roomInfo: RoomInfo;

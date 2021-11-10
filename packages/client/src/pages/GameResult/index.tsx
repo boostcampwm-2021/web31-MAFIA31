@@ -1,10 +1,8 @@
 import { useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { citizen, mafia, primaryLight, white } from '../../constants/colors';
-import { ResultCard } from '../../components/Card';
-import { IconButton } from '../../components/Button';
-import { ButtonSizeList, ButtonThemeList } from '../../components/Button/IconButton';
+import { citizen, mafia, primaryLight, white } from '@constants/colors';
+import { ResultCard } from '@components/Card';
 
 interface PlayerResult {
   userName: string;
@@ -42,22 +40,7 @@ const GameResult = () => {
           <ResultCard key={userName} userName={userName} job={job} isWinner={isWinner} />
         ))}
       </div>
-      <div css={buttonDivStyle}>
-        <IconButton
-          size={ButtonSizeList.MEDIUM}
-          theme={ButtonThemeList.DARK}
-          imageSrc="/assets/icons/undo.png"
-          text="돌아가기"
-          onClick={() => {}}
-        />
-        <IconButton
-          size={ButtonSizeList.MEDIUM}
-          theme={ButtonThemeList.DARK}
-          imageSrc="/assets/icons/exit.png"
-          text="방 나가기"
-          onClick={() => {}}
-        />
-      </div>
+      <div css={buttonDivStyle} />
     </div>
   );
 };

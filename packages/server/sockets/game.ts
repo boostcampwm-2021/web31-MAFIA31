@@ -11,6 +11,7 @@ import {
 import { GameResult, Job } from 'domain/types/game';
 import { RoomVote, Vote } from 'domain/types/vote';
 import { Namespace, Socket } from 'socket.io';
+import { JOB_ARR } from '../constants/job';
 import { canVote, startVoteTime } from './vote';
 
 interface ChannelVote {
@@ -86,6 +87,16 @@ const startTimer = (
 
     counter += 1;
   }, 1000);
+};
+
+const assignJobs = () => {
+  const shuffle = (arr: string[]) => arr.sort(() => Math.random() - 0.5);
+
+  const mixedArr = shuffle([]);
+  const jobs = JOB_ARR[mixedArr.length];
+
+  if (jobs.length <= 0) return false;
+  return mixedArr.map((username, idx) => ({ [username]: jobs[idx] }));
 };
 
 const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): void => {

@@ -1,19 +1,21 @@
 import { FC } from 'react';
-import { css } from '@emotion/react';
 /** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
 import { primaryDark, primaryLight, titleActive, white } from '@src/constants';
-import { ButtonSizeList, ButtonThemeList } from './IconButton';
+import { ButtonSizeList, ButtonThemeList } from './Button.st';
 
 interface Props {
   text: string;
   size: ButtonSizeList;
   theme: ButtonThemeList;
+  imageSrc?: string;
   onClick?: any;
 }
 
-const DefaultButton: FC<Props> = ({ text, size, theme, onClick }: Props) => (
+const DefaultButton: FC<Props> = ({ text, size, theme, imageSrc, onClick }) => (
   <button type="button" onClick={() => onClick!()} css={buttonStyle(size, theme)}>
-    {text}
+    {imageSrc ? <img src={imageSrc} alt="button" /> : ''}
+    <p>{text}</p>
   </button>
 );
 
@@ -27,7 +29,10 @@ const buttonStyle = (size: ButtonSizeList, theme: ButtonThemeList) => css`
   justify-content: center;
   align-items: center;
   padding: 0px;
+  gap: 15px;
   box-shadow: 4px 4px 4px rgba(78, 65, 109, 0.25);
+  cursor: pointer;
+
   ${buttonSizeStyle[size]}
   ${buttonThemeStyle[theme]}
 `;

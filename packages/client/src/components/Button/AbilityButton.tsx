@@ -2,6 +2,7 @@ import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { white, titleActive, grey3 } from '@constants/colors';
+import { VoteIcon } from '@components/Icon';
 
 interface PropType {
   userImg: string;
@@ -21,7 +22,7 @@ const AbilityButton: FC<PropType> = ({ userImg, userName, voteFrom, isDead, onCl
       ) : (
         <div>
           {voteFrom.map((voteUser) => (
-            <img key={voteUser} src="/assets/icons/vote.svg" alt="vote-icon" />
+            <VoteIcon key={voteUser} />
           ))}
         </div>
       )}
@@ -45,7 +46,6 @@ const buttonStyle = (isDead: boolean) => css`
 const userImgStyle = css`
   width: 18px;
   height: 18px;
-  border-radius: 50%;
 `;
 
 const voteInfoStyle = css`

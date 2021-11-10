@@ -1,46 +1,30 @@
-/* eslint-disable no-unused-vars */
 /** @jsxImportSource @emotion/react */
 import { css, SerializedStyles } from '@emotion/react';
-import { primaryDark, primaryLight, titleActive, white } from '../../constants';
+import { titleActive, white } from '@constants/colors';
+import { ButtonSizeList, ButtonThemeList } from './Button.st';
 
 type themeOptions = {
   [key: string]: SerializedStyles;
 };
 
-export enum ButtonSizeList {
-  SMALL = 'SMALL',
-  MEDIUM = 'MEDIUM',
-  LARGE = 'LARGE',
-}
-
-export enum ButtonThemeList {
-  LIGHT = 'LIGHT',
-  DARK = 'DARK',
-}
-
 interface Props {
+  icon: any;
   size: ButtonSizeList;
   theme: ButtonThemeList;
-  imageSrc: string;
-  text: string;
   onClick: () => void;
 }
 
-const IconButton = ({ size, theme, imageSrc, text, onClick }: Props) => (
+const IconButton = ({ icon: Icon, size, theme, onClick }: Props) => (
   <button css={buttonStyle(size, theme)} type="button" onClick={onClick}>
-    <img src={imageSrc} alt="button" />
-    <p>{text}</p>
+    <Icon />
   </button>
 );
 
 const buttonStyle = (size: string, theme: string) => css`
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
-
-  box-shadow: 4px 4px 4px rgba(78, 65, 109, 0.25);
-  border-radius: 20px;
-
+  justify-content: center;
+  background-color: transparent;
   cursor: pointer;
 
   ${buttonSizeStyle[size]}
@@ -49,32 +33,29 @@ const buttonStyle = (size: string, theme: string) => css`
 
 const buttonSizeStyle: themeOptions = {
   SMALL: css`
-    width: 150px;
-    height: 60px;
+    width: 25px;
+    height: 25px;
   `,
   MEDIUM: css`
-    width: 300px;
-    height: 80px;
-    font-family: Noto Sans KR;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 32px;
-    line-height: 46px;
+    width: 32px;
+    height: 32px;
   `,
   LARGE: css`
-    width: 500px;
-    height: 100px;
+    width: 40px;
+    height: 40px;
   `,
 };
 
 const buttonThemeStyle: themeOptions = {
   LIGHT: css`
-    color: ${titleActive};
-    background-color: ${primaryLight};
+    svg path {
+      fill: ${white};
+    }
   `,
   DARK: css`
-    color: ${white};
-    background-color: ${primaryDark};
+    svg {
+      fill: ${titleActive};
+    }
   `,
 };
 

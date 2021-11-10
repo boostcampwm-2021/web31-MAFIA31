@@ -1,6 +1,5 @@
 import { useLocation, Link } from 'react-router-dom';
-import { DefaultButton } from '@components/Button';
-import { ButtonSizeList, ButtonThemeList } from '@components/Button/IconButton';
+import { DefaultButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import Header from '@src/templates/Header';
 import { RoomInfo } from '@src/types';
 import useSocket from '@hooks/useSocket';

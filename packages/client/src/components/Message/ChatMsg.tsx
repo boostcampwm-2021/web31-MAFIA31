@@ -2,11 +2,11 @@ import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-import { ChatMsgType } from '@mafia/domain/types/chat';
+import { Message } from '@mafia/domain/types/chat';
 import { primaryLight, primaryDark, white, titleActive } from '@constants/index';
 
 interface PropType {
-  chat: ChatMsgType;
+  chat: Message;
   isMyMsg: boolean;
 }
 

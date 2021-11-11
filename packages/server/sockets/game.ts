@@ -127,7 +127,7 @@ const gameSocketInit = (
   ];
 
   socket.on(READY, ({ userName, isReady }: WaitingInfo) => {
-    const readyUser = playerList.filter((player) => player.userName === userName)[0];
+    const readyUser = playerList.find((player) => player.userName === userName);
     if (!readyUser) return;
 
     readyUser.isReady = isReady;

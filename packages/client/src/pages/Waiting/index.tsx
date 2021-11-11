@@ -26,10 +26,10 @@ const Waiting = () => {
   const { socketRef } = useSocket(roomId);
   const { waitingUserList, sendReady, sendGameStart } = useRoom(socketRef);
   const isHost =
-    waitingUserList.filter(({ userName }) => userName === userInfo?.userName)[0]?.isHost ?? false;
+    waitingUserList.find(({ userName }) => userName === userInfo?.userName)?.isHost ?? false;
 
   const getReady = () => {
-    const me = waitingUserList.filter((user) => userInfo?.userName === user.userName)[0];
+    const me = waitingUserList.find((user) => userInfo?.userName === user.userName);
     if (!me) return;
 
     sendReady({ userName: me.userName, isReady: !me.isReady, isHost: me.isHost });
@@ -47,11 +47,7 @@ const Waiting = () => {
         </div>
         <div css={bottomBarStyle}>
           {isHost ? (
-            <div
-              css={gameStartStyle(
-                waitingUserList.filter(({ isReady }) => isReady === false).length === 0,
-              )}
-            >
+            <div css={gameStartStyle(!waitingUserList.some(({ isReady }) => isReady === false))}>
               <Link to="/game">
                 <DefaultButton
                   text="START"

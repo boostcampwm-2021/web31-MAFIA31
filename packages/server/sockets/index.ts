@@ -26,11 +26,8 @@ const socketInit = (namespace: Namespace): void => {
         isDead: false,
         voteFrom: [],
       };
-      if (!roomStore[roomId]) {
-        roomStore[roomId] = [newUser];
-      } else {
-        roomStore[roomId].push(newUser);
-      }
+      roomStore[roomId] = roomStore[roomId] ?? [];
+      roomStore[roomId].push(newUser);
 
       socket.emit('join', roomStore[roomId]);
     });

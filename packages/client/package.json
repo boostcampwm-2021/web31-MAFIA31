@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "private": true,
   "dependencies": {
-    "domain": "^1.0.0",
+    "@mafia/domain": "^1.0.0",
     "@craco/craco": "^6.4.0",
     "craco-alias": "^3.0.1",
     "@emotion/react": "^11.5.0",

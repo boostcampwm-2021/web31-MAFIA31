@@ -1,5 +1,5 @@
+import { User } from '@mafia/domain/types/user';
 import axios from 'axios';
-import { User } from 'domain/types/user';
 import dotenv from 'dotenv';
 import express from 'express';
 

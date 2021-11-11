@@ -1,7 +1,7 @@
 import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { white } from '../../constants/colors';
+import { white } from '@constants/colors';
 import { ImageSizeList, Image } from '../Image';
 
 interface PropType {

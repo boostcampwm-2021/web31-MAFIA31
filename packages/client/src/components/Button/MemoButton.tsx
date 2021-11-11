@@ -1,7 +1,7 @@
 import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { white, grey3 } from '../../constants/colors';
+import { white, grey3 } from '@constants/colors';
 
 interface PropType {
   userName: string;

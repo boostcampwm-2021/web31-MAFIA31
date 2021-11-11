@@ -1,5 +1,5 @@
-import { GAME_START, PUBLISH_READY, READY } from 'domain/constants/event';
-import { WaitingInfo } from 'domain/types/user';
+import { GAME_START, PUBLISH_READY, READY } from '@mafia/domain/constants/event';
+import { WaitingInfo } from '@mafia/domain/types/user';
 import { useEffect, useState } from 'react';
 
 const useRoom = (socketRef: any) => {

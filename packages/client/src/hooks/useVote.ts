@@ -1,6 +1,6 @@
+import { PUBLISH_VOTE, VOTE } from '@mafia/domain/constants/event';
+import { RoomVote } from '@mafia/domain/types/vote';
 import { PlayerInfo } from '@src/types';
-import { PUBLISH_VOTE, VOTE } from 'domain/constants/event';
-import { RoomVote } from 'domain/types/vote';
 import { useEffect, useState } from 'react';
 
 const useVote = (socketRef: any, myUserName: string) => {

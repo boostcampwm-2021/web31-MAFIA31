@@ -2,7 +2,7 @@ import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-import { PlayerState } from 'domain/types/user';
+import { PlayerState } from '@mafia/domain/types/user';
 import { PlayerInfo } from '@src/types';
 import { titleActive, white, grey1 } from '@constants/index';
 import { AbilityButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';

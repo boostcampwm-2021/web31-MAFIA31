@@ -1,4 +1,4 @@
-import { User } from 'domain/types/user';
+import { User } from '@mafia/domain/types/user';
 import React, { createContext, FC, ReactNode, useContext, useState } from 'react';
 
 interface UserValue {

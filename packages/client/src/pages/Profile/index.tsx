@@ -4,7 +4,7 @@ import { css } from '@emotion/react';
 import { Image, ImageSizeList } from '@src/components/Image';
 import Header from '@src/templates/Header';
 import { grey4, primaryDark, primaryLight, titleActive, white } from '@src/constants';
-import { Achievement } from 'domain/types/achievement';
+import { Achievement } from '@mafia/domain/types/achievement';
 import { AchievementCard } from '@src/components/Card';
 import dummmyAchievementList from './dummyData';
 

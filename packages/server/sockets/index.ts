@@ -56,7 +56,7 @@ const socketInit = (namespace: Namespace): void => {
       voteFrom: [],
     };
     if (roomStore[roomId]) roomStore[roomId].push(newPlayer);
-    roomStore[roomId] = [newPlayer, ...mockPlayers];
+    else roomStore[roomId] = [newPlayer, ...mockPlayers];
 
     chatSocketInit(nsp, socket);
     gameSocketInit(nsp, socket, roomId, roomStore[roomId]);

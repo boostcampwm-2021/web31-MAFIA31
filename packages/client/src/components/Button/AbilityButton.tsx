@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from 'react';
 import { css } from '@emotion/react';
 import { white, titleActive, grey3, mafia } from '@constants/colors';
 import { VoteIcon } from '@components/Icon';
-import { PUBLISH_VICTIM } from 'domain/constants/event';
+import { PUBLISH_VICTIM } from '@mafia/domain/constants/event';
 
 interface PropType {
   isNight: boolean;

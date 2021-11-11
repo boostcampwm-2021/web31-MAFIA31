@@ -6,12 +6,12 @@ import useExecute from '@hooks/useExecute';
 import useVote from '@hooks/useVote';
 import useChat from '@hooks/useChat';
 import useAbility from '@src/hooks/useAbility';
-import { primaryDark } from '@constants/index';
+import { primaryDark, primaryLight, titleActive, white } from '@constants/index';
 import ChatContainer from '@containers/ChatContainer';
 import LeftSideContainer from '@containers/LeftSideContainer';
 import RightSideContainer from '@containers/RightSideContainer';
 import { useEffect, useState } from 'react';
-import { TURN_CHANGE } from 'domain/constants/event';
+import { TURN_CHANGE } from '@mafia/domain/constants/event';
 
 const Game = () => {
   const myUserName = 'user1';
@@ -33,7 +33,7 @@ const Game = () => {
   }, [socketRef.current]);
 
   return (
-    <div css={GamePageStyle}>
+    <div css={GamePageStyle(isNight)}>
       <LeftSideContainer
         playerStateList={playerStateList}
         playerList={playerList}
@@ -44,17 +44,18 @@ const Game = () => {
         isNight={isNight}
         socketRef={socketRef}
       />
-      <ChatContainer chatList={chatList} sendChat={sendChat} />
-      <RightSideContainer playerStateList={playerStateList} />
+      <ChatContainer chatList={chatList} sendChat={sendChat} isNight={isNight} />
+      <RightSideContainer playerStateList={playerStateList} isNight={isNight} />
     </div>
   );
 };
 
-const GamePageStyle = css`
+const GamePageStyle = (isNight: boolean) => css`
   display: flex;
 
   height: 100vh;
-  background-color: ${primaryDark};
+  color: ${isNight ? white : titleActive};
+  background-color: ${isNight ? primaryDark : primaryLight};
 `;
 
 export default Game;

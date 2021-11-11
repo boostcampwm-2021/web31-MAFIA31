@@ -1,5 +1,5 @@
-import { MAFIA_ABILITY } from 'domain/constants/event';
-import { MafiaPick } from 'domain/types/game';
+import { MAFIA_ABILITY } from '@mafia/domain/constants/event';
+import { MafiaPick } from '@mafia/domain/types/game';
 import { useEffect, useState } from 'react';
 
 const jobAbility: Record<string, string> = {

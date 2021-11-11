@@ -11,11 +11,11 @@ import { primaryLight, primaryDark, white, titleActive } from '@constants/index'
 interface PropType {
   chatList: ChatMsgType[];
   sendChat: any;
+  isNight: boolean;
 }
 
-const ChatContainer: FC<PropType> = ({ chatList, sendChat }) => {
+const ChatContainer: FC<PropType> = ({ chatList, sendChat, isNight }) => {
   const myName = 'user1';
-  const isDark = true;
   const [inputValue, setInputValue] = useState('');
   const chatMsgsRef = useRef<HTMLDivElement>(null);
 
@@ -36,9 +36,9 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat }) => {
           <ChatMsg key={chat.id} chat={chat} isMyMsg={myName === chat.userName} />
         ))}
       </div>
-      <form css={inputFormStyle(isDark)}>
+      <form css={inputFormStyle(isNight)}>
         <input
-          css={inputStyle(isDark)}
+          css={inputStyle(isNight)}
           placeholder="메세지를 입력하세요"
           value={inputValue}
           onChange={({ target }) => setInputValue(target.value)}
@@ -46,7 +46,7 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat }) => {
         <IconButton
           icon={SendIcon}
           size={ButtonSizeList.MEDIUM}
-          theme={isDark ? ButtonThemeList.DARK : ButtonThemeList.LIGHT}
+          theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
           onClick={onClick}
         />
       </form>
@@ -84,7 +84,7 @@ const chatMsgsStyle = css`
   }
 `;
 
-const inputFormStyle = (isDark: boolean) => css`
+const inputFormStyle = (isNight: boolean) => css`
   display: flex;
   align-content: center;
 
@@ -92,23 +92,23 @@ const inputFormStyle = (isDark: boolean) => css`
   width: 100%;
   padding: 11px 16px;
   border-radius: 20px;
-  background-color: ${isDark ? primaryDark : primaryLight};
+  background-color: ${isNight ? primaryDark : primaryLight};
 `;
 
-const inputStyle = (isDark: boolean) => css`
+const inputStyle = (isNight: boolean) => css`
   width: 100%;
   font-size: 18px;
   line-height: 21px;
 
   border: none;
   background-color: transparent;
-  color: ${isDark ? white : titleActive};
+  color: ${isNight ? white : titleActive};
 
   :focus {
     outline: none;
   }
   ::placeholder {
-    color: ${isDark ? 'rgba(255, 255, 255, 0.6)' : titleActive};
+    color: ${isNight ? 'rgba(255, 255, 255, 0.6)' : titleActive};
   }
 `;
 

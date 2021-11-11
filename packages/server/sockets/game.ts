@@ -1,6 +1,7 @@
 import {
   GAME_OVER,
   GAME_START,
+  PUBLISH_JOB,
   PUBLISH_READY,
   PUBLISH_VOTE,
   READY,
@@ -90,14 +91,21 @@ const startTimer = (
   }, 1000);
 };
 
-const assignJobs = () => {
+const assignJobs = (playerList: PlayerInfo[]): PlayerInfo[] => {
   const shuffle = (arr: string[]) => arr.sort(() => Math.random() - 0.5);
 
-  const mixedArr = shuffle([]);
-  const jobs = JOB_ARR[mixedArr.length];
+  const jobs = JOB_ARR[playerList.length];
+  const mixedJobs = shuffle(jobs);
 
-  if (jobs.length <= 0) return false;
-  return mixedArr.map((username, idx) => ({ [username]: jobs[idx] }));
+  if (jobs.length <= 0) throw Error('잘못된 인원입니다.');
+  return playerList.map((player, idx) => ({ ...player, job: mixedJobs[idx] }));
+};
+
+const emitJobs = (namespace: Namespace, playerList: PlayerInfo[]): void => {
+  playerList.forEach(({ socketId, job }) => namespace.in(socketId).socketsJoin(job));
+
+  namespace.to('mafia').emit(PUBLISH_JOB, { job: 'mafia' });
+  namespace.to('citizen').emit(PUBLISH_JOB, { job: 'citizen' });
 };
 
 const gameSocketInit = (
@@ -106,13 +114,12 @@ const gameSocketInit = (
   roomId: string,
   playerList: PlayerInfo[],
 ): void => {
-  // assignJobs();
+  playerList = assignJobs(playerList);
+  emitJobs(namespace, playerList);
 
   channelVote[roomId] = {};
   channelUser[roomId] = {};
   resetChannelVote(roomId);
-  console.log(playerList);
-  assignJobs();
 
   // 직업 배정 로직으로 초기화 할 값 (dashBoard, jobAssignment)
   const dashBoard: DashBoard = { mafia: 2, citizen: 6 };

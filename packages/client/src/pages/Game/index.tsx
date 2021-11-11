@@ -5,6 +5,7 @@ import useSocket from '@hooks/useSocket';
 import useExecute from '@hooks/useExecute';
 import useVote from '@hooks/useVote';
 import useChat from '@hooks/useChat';
+import useTimer from '@hooks/useTimer';
 import { primaryDark } from '@constants/index';
 import ChatContainer from '@containers/ChatContainer';
 import LeftSideContainer from '@containers/LeftSideContainer';
@@ -15,12 +16,14 @@ const Game = () => {
   const playerStateList = useExecute(socketRef);
   const { chatList, sendChat } = useChat(socketRef);
   const { playerList, voteUser } = useVote(socketRef, 'user1');
+  const { timer } = useTimer(socketRef);
 
   return (
     <div css={GamePageStyle}>
       <LeftSideContainer
         playerStateList={playerStateList}
         playerList={playerList}
+        timer={timer}
         voteUser={voteUser}
       />
       <ChatContainer chatList={chatList} sendChat={sendChat} />

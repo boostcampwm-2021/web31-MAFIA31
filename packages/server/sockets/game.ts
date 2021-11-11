@@ -13,6 +13,7 @@ import { PlayerInfo } from '@mafia/domain/types/user';
 import { RoomVote, Vote } from '@mafia/domain/types/vote';
 import { Namespace, Socket } from 'socket.io';
 import { JOB_ARR } from '../constants/job';
+import { abilitySocketInit, publishVictim } from './ability';
 import { canVote, startVoteTime } from './vote';
 
 interface ChannelVote {
@@ -79,8 +80,10 @@ const startTimer = (
       isNight = !isNight;
       if (!isNight) {
         startVoteTime(namespace, roomId, 10000);
+        publishVictim(namespace);
       }
       namespace.emit(TURN_CHANGE, isNight);
+      publishVictim(namespace);
     }
 
     const remainSecond = interval - (counter % interval);
@@ -113,6 +116,7 @@ const gameSocketInit = (
   resetChannelVote(roomId);
   console.log(playerList);
   assignJobs();
+  abilitySocketInit(namespace, socket, playerList);
 
   // 직업 배정 로직으로 초기화 할 값 (dashBoard, jobAssignment)
   const dashBoard: DashBoard = { mafia: 2, citizen: 6 };

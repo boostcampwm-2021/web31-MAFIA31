@@ -83,7 +83,6 @@ const startTimer = (
         publishVictim(namespace);
       }
       namespace.emit(TURN_CHANGE, isNight);
-      publishVictim(namespace);
     }
 
     const remainSecond = interval - (counter % interval);

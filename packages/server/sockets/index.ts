@@ -24,7 +24,7 @@ const mockPlayers = [
     voteFrom: [],
   },
   {
-    userName: 'Kim-Hyunjo',
+    userName: 'Kim-Hyunj',
     socketId: '그냥 임의 값!',
     isReady: true,
     isHost: false,
@@ -59,8 +59,8 @@ const socketInit = (namespace: Namespace): void => {
 
     socket.on('join', (userName: string) => {
       console.log('enter join event');
-      const isHost: boolean = roomStore[roomId].length === 0;
-      const isReady: boolean = isHost;
+      // const isHost: boolean = roomStore[roomId].length === 0;
+      // const isReady: boolean = isHost;
       const newUser: PlayerInfo = {
         userName,
         socketId: socket.id,

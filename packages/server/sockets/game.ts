@@ -15,6 +15,7 @@ import { RoomVote, Vote } from '@mafia/domain/types/vote';
 import { Namespace, Socket } from 'socket.io';
 import { JOB_ARR } from '../constants/job';
 import RoomStore from '../stores/RoomStore';
+import { abilitySocketInit, publishVictim } from './ability';
 import { canVote, startVoteTime } from './vote';
 
 interface ChannelVote {
@@ -81,6 +82,7 @@ const startTimer = (
       isNight = !isNight;
       if (!isNight) {
         startVoteTime(namespace, roomId, 10000);
+        publishVictim(namespace);
       }
       namespace.emit(TURN_CHANGE, isNight);
     }
@@ -119,6 +121,7 @@ const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): v
   channelVote[roomId] = {};
   channelUser[roomId] = {};
   resetChannelVote(roomId);
+  abilitySocketInit(namespace, socket, playerList);
 
   // 직업 배정 로직으로 초기화 할 값 (dashBoard, jobAssignment)
   const dashBoard: DashBoard = { mafia: 2, citizen: 6 };
@@ -134,13 +137,13 @@ const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): v
   ];
 
   socket.on(READY, ({ userName, isReady }: WaitingInfo) => {
-    const { data } = RoomStore.getInstance();
-    let playerList = data[roomId];
-    const readyUser = playerList.find((player) => player.userName === userName);
+    const { data: currentData } = RoomStore.getInstance();
+    const currentPlayerList = currentData[roomId];
+    const readyUser = currentPlayerList.find((player) => player.userName === userName);
     if (!readyUser) return;
 
     readyUser.isReady = isReady;
-    namespace.emit(PUBLISH_READY, playerList);
+    namespace.emit(PUBLISH_READY, currentPlayerList);
   });
 
   socket.on(VOTE, ({ to, from }: Vote) => {

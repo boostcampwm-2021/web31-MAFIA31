@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { css } from '@emotion/react';
 import { citizen, mafia, primaryLight, white } from '@constants/colors';
 import { ResultCard } from '@components/Card';
+import { ButtonSizeList, ButtonThemeList, DefaultButton } from '@src/components/Button';
 
 interface PlayerResult {
   userName: string;
@@ -11,22 +12,23 @@ interface PlayerResult {
 }
 
 const MAX_USER = 12;
+const DUMMY_PLAYER_RESULT_LIST = [
+  { userName: 'user1', job: 'mafia', isWinner: true },
+  { userName: 'user2', job: 'mafia', isWinner: true },
+  { userName: 'user3', job: 'citizen', isWinner: false },
+  { userName: 'user4', job: 'citizen', isWinner: false },
+  { userName: 'user5', job: 'citizen', isWinner: false },
+  { userName: 'user6', job: 'mafia', isWinner: true },
+  { userName: 'user7', job: 'citizen', isWinner: false },
+  { userName: 'user8', job: 'mafia', isWinner: true },
+  { userName: 'user9', job: 'citizen', isWinner: false },
+  { userName: 'user10', job: 'mafia', isWinner: true },
+  { userName: 'user11', job: 'mafia', isWinner: true },
+  { userName: 'user12', job: 'citizen', isWinner: false },
+];
 
 const GameResult = () => {
-  const [playerResultList] = useState<PlayerResult[]>([
-    { userName: 'user1', job: 'mafia', isWinner: true },
-    { userName: 'user2', job: 'mafia', isWinner: true },
-    { userName: 'user3', job: 'citizen', isWinner: false },
-    { userName: 'user4', job: 'citizen', isWinner: false },
-    { userName: 'user5', job: 'citizen', isWinner: false },
-    { userName: 'user6', job: 'mafia', isWinner: true },
-    { userName: 'user7', job: 'citizen', isWinner: false },
-    { userName: 'user8', job: 'mafia', isWinner: true },
-    { userName: 'user9', job: 'citizen', isWinner: false },
-    { userName: 'user10', job: 'mafia', isWinner: true },
-    { userName: 'user11', job: 'mafia', isWinner: true },
-    { userName: 'user12', job: 'citizen', isWinner: false },
-  ]);
+  const [playerResultList] = useState<PlayerResult[]>(DUMMY_PLAYER_RESULT_LIST);
   return (
     <div css={resultPageStyle}>
       <div css={resultTitleStyle}>
@@ -40,7 +42,22 @@ const GameResult = () => {
           <ResultCard key={userName} userName={userName} job={job} isWinner={isWinner} />
         ))}
       </div>
-      <div css={buttonDivStyle} />
+      <div css={buttonDivStyle}>
+        <DefaultButton
+          size={ButtonSizeList.MEDIUM}
+          theme={ButtonThemeList.LIGHT}
+          imageSrc="/assets/icons/undo.svg"
+          text="돌아가기"
+          onClick={() => {}}
+        />
+        <DefaultButton
+          size={ButtonSizeList.MEDIUM}
+          theme={ButtonThemeList.LIGHT}
+          imageSrc="/assets/icons/exit.svg"
+          text="방 나가기"
+          onClick={() => {}}
+        />
+      </div>
     </div>
   );
 };
@@ -49,8 +66,7 @@ const resultPageStyle = css`
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  height: 100%;
+  height: 100vh;
 
   background: ${primaryLight};
 `;

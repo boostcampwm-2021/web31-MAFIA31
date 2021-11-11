@@ -17,7 +17,6 @@ interface PropType {
 }
 
 const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNight }) => {
-  const isDark = true;
   const [inputValue, setInputValue] = useState('');
   const chatMsgsRef = useRef<HTMLDivElement>(null);
   const { userInfo } = useUserInfo();
@@ -72,9 +71,9 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNigh
           <ChatMsg key={chat.id} chat={chat} isMyMsg={userInfo?.userName === chat.userName} />
         ))}
       </div>
-      <form css={inputFormStyle(isDark)}>
+      <form css={inputFormStyle(isNight)}>
         <input
-          css={inputStyle(isDark)}
+          css={inputStyle(isNight)}
           placeholder="메세지를 입력하세요"
           value={inputValue}
           onChange={({ target }) => setInputValue(target.value)}
@@ -83,7 +82,7 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNigh
         <IconButton
           icon={SendIcon}
           size={ButtonSizeList.MEDIUM}
-          theme={isDark ? ButtonThemeList.DARK : ButtonThemeList.LIGHT}
+          theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
           onClick={handleClick}
         />
       </form>
@@ -121,7 +120,7 @@ const chatMsgsStyle = css`
   }
 `;
 
-const inputFormStyle = (isDark: boolean) => css`
+const inputFormStyle = (isNight: boolean) => css`
   display: flex;
   align-content: center;
 
@@ -129,23 +128,23 @@ const inputFormStyle = (isDark: boolean) => css`
   width: 100%;
   padding: 11px 16px;
   border-radius: 20px;
-  background-color: ${isDark ? primaryDark : primaryLight};
+  background-color: ${isNight ? primaryDark : primaryLight};
 `;
 
-const inputStyle = (isDark: boolean) => css`
+const inputStyle = (isNight: boolean) => css`
   width: 100%;
   font-size: 18px;
   line-height: 21px;
 
   border: none;
   background-color: transparent;
-  color: ${isDark ? white : titleActive};
+  color: ${isNight ? white : titleActive};
 
   :focus {
     outline: none;
   }
   ::placeholder {
-    color: ${isDark ? 'rgba(255, 255, 255, 0.6)' : titleActive};
+    color: ${isNight ? 'rgba(255, 255, 255, 0.6)' : titleActive};
   }
 `;
 

@@ -3,7 +3,6 @@ import { css } from '@emotion/react';
 import { Link, useLocation, useHistory } from 'react-router-dom';
 import Header from '@src/templates/Header';
 import { RoomInfo } from '@src/types';
-import { white } from '@src/constants';
 import WaitingListContainer from '@src/containers/WaitingListContainer';
 import useSocket from '@hooks/useSocket';
 import useRoom from '@hooks/useRoom';
@@ -38,14 +37,10 @@ const Waiting = () => {
   // TODO: socket을 useContext로 관리, 여기서 할당해주기!
 
   return (
-    <>
+    <div css={pageStyle}>
       <Header />
-      <div css={pageStyle}>
-        <div css={scrollStyle}>
-          <div css={marginStyle}>
-            <WaitingListContainer userList={waitingUserList} />
-          </div>
-        </div>
+      <div css={pageBodyStyle}>
+        <WaitingListContainer userList={waitingUserList} />
         <div css={bottomBarStyle}>
           {isHost ? (
             <div css={gameStartStyle(!waitingUserList.some(({ isReady }) => isReady === false))}>
@@ -53,7 +48,7 @@ const Waiting = () => {
                 <DefaultButton
                   text="START"
                   size={ButtonSizeList.MEDIUM}
-                  theme={ButtonThemeList.LIGHT}
+                  theme={ButtonThemeList.DARK}
                   onClick={sendGameStart}
                 />
               </Link>
@@ -62,49 +57,34 @@ const Waiting = () => {
             <DefaultButton
               text="READY"
               size={ButtonSizeList.MEDIUM}
-              theme={ButtonThemeList.LIGHT}
+              theme={ButtonThemeList.DARK}
               onClick={getReady}
             />
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
 const pageStyle = css`
+  height: 100vh;
+`;
+
+const pageBodyStyle = css`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
 
-const scrollStyle = css`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  width: 90%;
-  height: 600px;
-
-  overflow: scroll;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const marginStyle = css`
-  margin-top: 40px;
-  margin-bottom: 40px;
+  padding: 40px;
+  gap: 40px;
+  height: calc(100vh - 100px);
 `;
 
 const bottomBarStyle = css`
   display: flex;
+  justify-content: flex-end;
   width: 100%;
-  height: 140px;
-  background-color: ${white};
-  padding-top: 30px;
-  padding-bottom: 30px;
-  padding-left: 70%;
 `;
 
 const gameStartStyle = (isAllReady: boolean) =>

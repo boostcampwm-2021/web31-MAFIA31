@@ -44,8 +44,9 @@ const imageSizeStyle: themeOptions = {
     padding: 7px;
   `,
   SMALL_MEDIUM: css`
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
+    padding: 8px;
   `,
   MEDIUM: css`
     width: 120px;
@@ -53,8 +54,8 @@ const imageSizeStyle: themeOptions = {
     padding: 8px;
   `,
   LARGE: css`
-    width: 300px;
-    height: 300px;
+    width: 250px;
+    height: 250px;
     padding: 20px;
   `,
 };

@@ -33,11 +33,24 @@ const RoomContainer = () => {
 };
 
 const roomContainerStyle = css`
-  margin-top: 20vh;
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: flex-start;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+
+  padding: 40px;
+  height: 100%;
   gap: 30px 30px;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  a {
+    height: min-content;
+  }
 `;
 
 export default RoomContainer;

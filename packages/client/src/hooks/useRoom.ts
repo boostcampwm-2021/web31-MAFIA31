@@ -3,20 +3,7 @@ import { WaitingInfo } from '@mafia/domain/types/user';
 import { useEffect, useState } from 'react';
 
 const useRoom = (socketRef: any) => {
-  const [waitingUserList, setWaitingUserList] = useState<WaitingInfo[]>([
-    { userName: 'user1', isHost: false, isReady: true },
-    { userName: 'user2', isHost: false, isReady: true },
-    { userName: 'user3', isHost: false, isReady: true },
-    { userName: 'user4', isHost: false, isReady: true },
-    { userName: 'user5', isHost: false, isReady: true },
-    { userName: 'binimini', isHost: true, isReady: true },
-    { userName: 'user7', isHost: false, isReady: true },
-    { userName: 'user8', isHost: false, isReady: true },
-    { userName: 'user9', isHost: false, isReady: true },
-    { userName: 'user10', isHost: false, isReady: true },
-    { userName: 'user11', isHost: false, isReady: true },
-    { userName: 'user12', isHost: false, isReady: true },
-  ]);
+  const [waitingUserList, setWaitingUserList] = useState<WaitingInfo[]>([]);
 
   useEffect(() => {
     socketRef.current?.on(PUBLISH_READY, updateWaitingUserList);
@@ -39,7 +26,7 @@ const useRoom = (socketRef: any) => {
 
   const sendGameStart = () => socketRef.current?.emit(GAME_START);
 
-  return { waitingUserList, sendReady, sendGameStart };
+  return { waitingUserList, setWaitingUserList, sendReady, sendGameStart };
 };
 
 export default useRoom;

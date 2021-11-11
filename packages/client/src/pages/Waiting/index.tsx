@@ -9,6 +9,8 @@ import useSocket from '@hooks/useSocket';
 import useRoom from '@hooks/useRoom';
 import { useUserInfo } from '@src/contexts/userInfo';
 import { DefaultButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
+import { useEffect } from 'react';
+import { WaitingInfo } from '@mafia/domain/types/user';
 
 interface locationType {
   roomInfo: RoomInfo;
@@ -18,7 +20,7 @@ const Waiting = () => {
   const location = useLocation<locationType>();
   const { roomId } = location.state.roomInfo;
   const { socketRef } = useSocket(roomId);
-  const { waitingUserList, sendReady, sendGameStart } = useRoom(socketRef);
+  const { waitingUserList, setWaitingUserList, sendReady, sendGameStart } = useRoom(socketRef);
   const { userInfo } = useUserInfo();
   const isHost =
     waitingUserList.filter(({ userName }) => userName === userInfo?.userName)[0]?.isHost ?? false;
@@ -28,6 +30,11 @@ const Waiting = () => {
 
     sendReady({ userName: me.userName, isReady: !me.isReady, isHost: me.isHost });
   };
+  useEffect(() => {
+    socketRef.current?.on('join', (data: WaitingInfo[]) => {
+      setWaitingUserList(data);
+    });
+  }, [socketRef]);
   // TODO: socket을 useContext로 관리, 여기서 할당해주기!
 
   return (

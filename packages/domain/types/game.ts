@@ -1,15 +1,23 @@
-export interface GameResult {
+export interface GameInfo {
+  socketId: string;
   userName: string;
   job: string;
-  result: boolean;
+  isDead: boolean;
+  voteFrom: string[];
 }
 
-export interface Job {
+export interface PlayerState {
   userName: string;
-  job: string;
+  isDead: boolean;
 }
 
 export interface MafiaPick {
   mafia: string;
   victim: string;
+}
+
+export interface GameResult {
+  userName: string;
+  job: string;
+  result: boolean;
 }

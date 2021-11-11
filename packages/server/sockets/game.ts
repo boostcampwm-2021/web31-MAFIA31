@@ -1,6 +1,7 @@
 import {
   GAME_OVER,
   GAME_START,
+  PUBLISH_JOB,
   PUBLISH_READY,
   PUBLISH_VOTE,
   READY,
@@ -9,10 +10,11 @@ import {
   VOTE,
 } from '@mafia/domain/constants/event';
 import { GameResult, Job } from '@mafia/domain/types/game';
-import { PlayerInfo } from '@mafia/domain/types/user';
+import { PlayerInfo, WaitingInfo } from '@mafia/domain/types/user';
 import { RoomVote, Vote } from '@mafia/domain/types/vote';
 import { Namespace, Socket } from 'socket.io';
 import { JOB_ARR } from '../constants/job';
+import RoomStore from '../stores/RoomStore';
 import { canVote, startVoteTime } from './vote';
 
 interface ChannelVote {
@@ -90,29 +92,33 @@ const startTimer = (
   }, 1000);
 };
 
-const assignJobs = () => {
+const assignJobs = (playerList: PlayerInfo[]): PlayerInfo[] => {
   const shuffle = (arr: string[]) => arr.sort(() => Math.random() - 0.5);
 
-  const mixedArr = shuffle([]);
-  const jobs = JOB_ARR[mixedArr.length];
+  const jobs = JOB_ARR[playerList.length];
+  const mixedJobs = shuffle(jobs);
 
-  if (jobs.length <= 0) return false;
-  return mixedArr.map((username, idx) => ({ [username]: jobs[idx] }));
+  if (jobs.length <= 0) throw Error('잘못된 인원입니다.');
+  return playerList.map((player, idx) => ({ ...player, job: mixedJobs[idx] }));
 };
 
-const gameSocketInit = (
-  namespace: Namespace,
-  socket: Socket,
-  roomId: string,
-  playerList: PlayerInfo[],
-): void => {
-  // assignJobs();
+const emitJobs = (namespace: Namespace, playerList: PlayerInfo[]): void => {
+  playerList.forEach(({ socketId, job }) => namespace.in(socketId).socketsJoin(job));
+
+  namespace.to('mafia').emit(PUBLISH_JOB, { job: 'mafia' });
+  namespace.to('citizen').emit(PUBLISH_JOB, { job: 'citizen' });
+};
+
+const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): void => {
+  const { data } = RoomStore.getInstance();
+  let playerList = data[roomId];
+
+  playerList = assignJobs(playerList);
+  emitJobs(namespace, playerList);
 
   channelVote[roomId] = {};
   channelUser[roomId] = {};
   resetChannelVote(roomId);
-  console.log(playerList);
-  assignJobs();
 
   // 직업 배정 로직으로 초기화 할 값 (dashBoard, jobAssignment)
   const dashBoard: DashBoard = { mafia: 2, citizen: 6 };
@@ -127,8 +133,14 @@ const gameSocketInit = (
     { userName: 'h', job: 'citizen' },
   ];
 
-  socket.on(READY, (userInfo: { userName: string; isReady: boolean; isHost: boolean }) => {
-    namespace.emit(PUBLISH_READY, userInfo);
+  socket.on(READY, ({ userName, isReady }: WaitingInfo) => {
+    const { data } = RoomStore.getInstance();
+    let playerList = data[roomId];
+    const readyUser = playerList.find((player) => player.userName === userName);
+    if (!readyUser) return;
+
+    readyUser.isReady = isReady;
+    namespace.emit(PUBLISH_READY, playerList);
   });
 
   socket.on(VOTE, ({ to, from }: Vote) => {

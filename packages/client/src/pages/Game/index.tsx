@@ -1,22 +1,28 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-
+import { useEffect } from 'react';
+import useTimer from '@src/hooks/useTimer';
 import useSocket from '@hooks/useSocket';
 import useExecute from '@hooks/useExecute';
 import useVote from '@hooks/useVote';
 import useChat from '@hooks/useChat';
-import useTimer from '@hooks/useTimer';
 import { primaryDark } from '@constants/index';
 import ChatContainer from '@containers/ChatContainer';
 import LeftSideContainer from '@containers/LeftSideContainer';
 import RightSideContainer from '@containers/RightSideContainer';
+import useGame from '@src/hooks/useGame';
 
 const Game = () => {
   const { socketRef } = useSocket('123e4567-e89b-12d3-a456-426614174000');
   const playerStateList = useExecute(socketRef);
-  const { chatList, sendChat } = useChat(socketRef);
+  const { chatList, sendChat, sendNightChat } = useChat(socketRef);
   const { playerList, voteUser } = useVote(socketRef, 'user1');
-  const { timer } = useTimer(socketRef);
+  const { timer, isNight } = useTimer(socketRef);
+  const { myJob } = useGame(socketRef);
+
+  useEffect(() => {
+    console.log('night', isNight);
+  }, [isNight]);
 
   return (
     <div css={GamePageStyle}>
@@ -26,8 +32,13 @@ const Game = () => {
         timer={timer}
         voteUser={voteUser}
       />
-      <ChatContainer chatList={chatList} sendChat={sendChat} />
-      <RightSideContainer playerStateList={playerStateList} />
+      <ChatContainer
+        chatList={chatList}
+        sendChat={sendChat}
+        sendNightChat={sendNightChat}
+        isNight={isNight}
+      />
+      <RightSideContainer playerStateList={playerStateList} myJob={myJob} />
     </div>
   );
 };

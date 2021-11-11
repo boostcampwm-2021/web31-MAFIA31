@@ -9,3 +9,5 @@ export const TURN_CHANGE = 'turn change';
 export const EXECUTION = 'execution';
 export const READY = 'ready';
 export const PUBLISH_READY = 'publish ready';
+export const PUBLISH_JOB = 'publish job';
+export const NIGHT_MESSAGE = 'send night msg';

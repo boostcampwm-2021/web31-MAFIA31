@@ -6,6 +6,9 @@ const useRoom = (socketRef: any) => {
   const [waitingUserList, setWaitingUserList] = useState<WaitingInfo[]>([]);
 
   useEffect(() => {
+    socketRef.current?.on('join', (data: WaitingInfo[]) => {
+      setWaitingUserList(data);
+    });
     socketRef.current?.on(PUBLISH_READY, updateWaitingUserList);
 
     return () => {
@@ -26,7 +29,7 @@ const useRoom = (socketRef: any) => {
 
   const sendGameStart = () => socketRef.current?.emit(GAME_START);
 
-  return { waitingUserList, setWaitingUserList, sendReady, sendGameStart };
+  return { waitingUserList, sendReady, sendGameStart };
 };
 
 export default useRoom;

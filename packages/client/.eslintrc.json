@@ -30,7 +30,8 @@
     "no-use-before-define": "off",
     "no-shadow": "off",
     "react/require-default-props": "off",
-    "import/no-unresolved": "off"
+    "import/no-unresolved": "off",
+    "import/prefer-default-export": "off"
   },
   "settings": {
     "import/resolver": {

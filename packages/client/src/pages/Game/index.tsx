@@ -10,12 +10,14 @@ import { primaryDark } from '@constants/index';
 import ChatContainer from '@containers/ChatContainer';
 import LeftSideContainer from '@containers/LeftSideContainer';
 import RightSideContainer from '@containers/RightSideContainer';
+import useGame from '@src/hooks/useGame';
 
 const Game = () => {
   const { socketRef } = useSocket('123e4567-e89b-12d3-a456-426614174000');
   const playerStateList = useExecute(socketRef);
   const { chatList, sendChat, sendNightChat } = useChat(socketRef);
   const { playerList, voteUser } = useVote(socketRef, 'user1');
+  const { myJob } = useGame(socketRef);
   const { isNight } = useTimer(socketRef);
 
   useEffect(() => {
@@ -35,7 +37,7 @@ const Game = () => {
         sendNightChat={sendNightChat}
         isNight={isNight}
       />
-      <RightSideContainer playerStateList={playerStateList} />
+      <RightSideContainer playerStateList={playerStateList} myJob={myJob} />
     </div>
   );
 };

@@ -8,3 +8,8 @@ export interface Job {
   userName: string;
   job: string;
 }
+
+export interface MafiaPick {
+  mafia: string;
+  victim: string;
+}

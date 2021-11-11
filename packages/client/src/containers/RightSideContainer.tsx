@@ -3,13 +3,14 @@ import { FC, useState } from 'react';
 import { css } from '@emotion/react';
 
 import { PlayerState } from '@mafia/domain/types/user';
-import { JOB_DICT, grey1, white } from '@constants/index';
+import { grey1, titleActive, white, JOB_DICT } from '@constants/index';
 import { SearchIcon } from '@components/Icon';
 import { MemoButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { ImageSizeList, Image } from '@components/Image';
 
 type PropType = {
   playerStateList: PlayerState[];
+  isNight: boolean;
   myJob: string;
 };
 
@@ -18,7 +19,7 @@ interface Memo {
   guessJob: string;
 }
 
-const RightSideContainer: FC<PropType> = ({ playerStateList, myJob }) => {
+const RightSideContainer: FC<PropType> = ({ playerStateList, isNight, myJob }) => {
   const [memoList] = useState<Memo[]>([
     { userName: 'user1', guessJob: 'mafia' },
     { userName: 'user2', guessJob: 'citizen' },
@@ -27,8 +28,8 @@ const RightSideContainer: FC<PropType> = ({ playerStateList, myJob }) => {
   ]);
 
   return (
-    <div css={rightSideContainerStyle}>
-      <div css={myJobStyle}>
+    <div css={rightSideContainerStyle(isNight)}>
+      <div css={myJobStyle(isNight)}>
         <Image size={ImageSizeList.MEDIUM} src={`/assets/images/${myJob}.png`} />
         <div className="jobInfo">
           <span className="job">{JOB_DICT[myJob].title}</span>
@@ -38,7 +39,7 @@ const RightSideContainer: FC<PropType> = ({ playerStateList, myJob }) => {
       <hr css={hrStyle} />
       <div css={memoListStyle}>
         {memoList.map(({ userName, guessJob }) => (
-          <div css={memoInfoStyle} key={userName}>
+          <div css={memoInfoStyle(isNight)} key={userName}>
             <MemoButton
               userName={userName}
               guessJob={guessJob}
@@ -61,19 +62,21 @@ const RightSideContainer: FC<PropType> = ({ playerStateList, myJob }) => {
   );
 };
 
-const rightSideContainerStyle = css`
+const rightSideContainerStyle = (isNight: boolean) => css`
   position: relative;
 
   width: 23%;
   height: 100%;
   padding: 40px;
+
+  color: ${isNight ? white : titleActive};
 `;
 
-const myJobStyle = css`
+const myJobStyle = (isNight: boolean) => css`
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: ${white};
+  color: ${isNight ? white : titleActive};
   gap: 14px;
 
   .jobInfo {
@@ -106,16 +109,15 @@ const memoListStyle = css`
   gap: 8px 5%;
 `;
 
-const memoInfoStyle = css`
+const memoInfoStyle = (isNight: boolean) => css`
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: ${white};
 
   gap: 5px;
   width: 30%;
   font-size: 12px;
-  color: ${white};
+  color: ${isNight ? white : titleActive};
 `;
 
 const searchButtonStyle = css`

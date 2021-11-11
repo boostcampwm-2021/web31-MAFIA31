@@ -14,7 +14,7 @@ interface Props {
 
 const DefaultButton: FC<Props> = ({ text, size, theme, imageSrc, onClick }) => (
   <button type="button" onClick={() => onClick!()} css={buttonStyle(size, theme)}>
-    {imageSrc ? <img src={imageSrc} alt="button" /> : ''}
+    {imageSrc ? <img src={imageSrc} alt="button" css={imageStyle} /> : ''}
     <p>{text}</p>
   </button>
 );
@@ -80,5 +80,10 @@ const buttonThemeStyle = {
     background-color: ${primaryLight};
   `,
 };
+
+const imageStyle = css`
+  width: 40px;
+  height: 40px;
+`;
 
 export default DefaultButton;

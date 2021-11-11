@@ -53,7 +53,7 @@ const buttonThemeStyle: themeOptions = {
     }
   `,
   DARK: css`
-    svg {
+    svg path {
       fill: ${titleActive};
     }
   `,

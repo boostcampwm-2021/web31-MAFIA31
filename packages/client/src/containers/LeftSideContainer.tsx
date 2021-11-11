@@ -7,31 +7,50 @@ import { PlayerInfo } from '@src/types';
 import { titleActive, white, grey1 } from '@constants/index';
 import { AbilityButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { SettingIcon, RoomOutIcon } from '@components/Icon';
+import { MafiaPick } from '@mafia/domain/types/game';
 
 type PropType = {
   playerStateList: PlayerState[];
   playerList: PlayerInfo[];
   timer: number;
   voteUser: any;
+  myUserName: string;
+  emitAbility: any;
+  mafiaPickList: MafiaPick[];
+  isNight: boolean;
+  socketRef: any;
 };
 
-const LeftSideContainer: FC<PropType> = ({ playerStateList, playerList, timer, voteUser }) => (
+const LeftSideContainer: FC<PropType> = ({
+  playerStateList,
+  playerList,
+  voteUser,
+  myUserName,
+  emitAbility,
+  isNight,
+  mafiaPickList,
+  socketRef,
+  timer,
+}) => (
   <div css={leftSideContainerStyle}>
     <div css={Style}>
-      <img src="/assets/images/moon.png" alt="day-night-state" />
-      <div css={roomActionStyle}>
+      <img
+        src={isNight ? '/assets/images/moon.png' : '/assets/images/sun.png'}
+        alt="day-night-state"
+      />
+      <div css={roomActionStyle(isNight)}>
         <span>ROOM NAME</span>
-        <div css={roomIconButtonsStyle}>
+        <div css={roomIconButtonsStyle(isNight)}>
           <IconButton
             icon={SettingIcon}
             size={ButtonSizeList.LARGE}
-            theme={ButtonThemeList.LIGHT}
+            theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
             onClick={() => {}}
           />
           <IconButton
             icon={RoomOutIcon}
             size={ButtonSizeList.LARGE}
-            theme={ButtonThemeList.LIGHT}
+            theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
             onClick={() => {}}
           />
         </div>
@@ -46,17 +65,24 @@ const LeftSideContainer: FC<PropType> = ({ playerStateList, playerList, timer, v
       {playerList.map(({ userImg, userName, voteFrom }) => (
         <AbilityButton
           key={userName}
+          socketRef={socketRef}
+          isNight={isNight}
           userImg={userImg}
           userName={userName}
           voteFrom={voteFrom}
+          selectedByMe={mafiaPickList.some(
+            (pick) => pick.mafia === myUserName && pick.victim === userName,
+          )}
+          selectedByOthers={mafiaPickList.some(
+            (pick) => pick.mafia !== myUserName && pick.victim === userName,
+          )}
           isDead={playerStateList.find((player) => player.userName === userName)?.isDead || false}
-          onClick={voteUser}
+          onClick={isNight ? emitAbility : voteUser}
         />
       ))}
     </div>
   </div>
 );
-
 const leftSideContainerStyle = css`
   width: 27%;
   height: 100%;
@@ -74,24 +100,24 @@ const Style = css`
   }
 `;
 
-const roomActionStyle = css`
+const roomActionStyle = (isNight: boolean) => css`
   display: flex;
   flex-direction: column;
   font-weight: bold;
   text-align: end;
-  color: ${white};
+  color: ${isNight ? white : titleActive};
 
   gap: 16px;
   font-size: 30px;
 `;
 
-const roomIconButtonsStyle = css`
+const roomIconButtonsStyle = (isNight: boolean) => css`
   display: flex;
   justify-content: flex-end;
   gap: 16px;
 
   button {
-    border: 2px solid ${white};
+    border: 2px solid ${isNight ? white : titleActive};
     border-radius: 15px;
   }
 `;

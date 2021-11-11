@@ -28,6 +28,7 @@ const Waiting = () => {
 
     sendReady({ userName: me.userName, isReady: !me.isReady, isHost: me.isHost });
   };
+
   // TODO: socket을 useContext로 관리, 여기서 할당해주기!
 
   return (

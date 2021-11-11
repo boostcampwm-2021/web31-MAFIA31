@@ -8,7 +8,7 @@ export interface PlayerInfo {
   isReady: boolean; // false (방장은 true)
   isHost: boolean; // false (방장만 true)
   isDead: boolean; // false
-  job?: string;
+  job: string;
   voteFrom: string[];
 }
 

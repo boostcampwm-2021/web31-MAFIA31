@@ -13,10 +13,16 @@ const socketInit = (namespace: Namespace): void => {
   namespace.on('connection', (socket: Socket): void => {
     const { nsp } = socket;
     const { name: roomId } = nsp;
-    if (!roomId) return;
+
+    if (!roomId) {
+      return;
+    }
+    if (!roomStore[roomId]) {
+      roomStore[roomId] = [];
+    }
 
     socket.on('join', (userName: string) => {
-      const isHost: boolean = !roomStore[roomId] || roomStore[roomId].length === 1;
+      const isHost: boolean = roomStore[roomId].length === 0;
       const isReady: boolean = isHost;
       const newUser: PlayerInfo = {
         userName,
@@ -27,7 +33,7 @@ const socketInit = (namespace: Namespace): void => {
         voteFrom: [],
         job: '',
       };
-      roomStore[roomId] = roomStore[roomId] ?? [];
+
       roomStore[roomId].push(newUser);
 
       socket.emit('join', roomStore[roomId]);
@@ -38,6 +44,7 @@ const socketInit = (namespace: Namespace): void => {
     });
 
     chatSocketInit(nsp, socket);
+
     gameSocketInit(nsp, socket, roomId, roomStore[roomId]);
   });
 };

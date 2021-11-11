@@ -7,14 +7,29 @@ import { PlayerInfo } from '@src/types';
 import { titleActive, white, grey1 } from '@constants/index';
 import { AbilityButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { SettingIcon, RoomOutIcon } from '@components/Icon';
+import { MafiaPick } from 'domain/types/game';
 
 type PropType = {
   playerStateList: PlayerState[];
   playerList: PlayerInfo[];
   voteUser: any;
+  myUserName: string;
+  emitAbility: any;
+  mafiaPickList: MafiaPick[];
+  isNight: boolean;
+  socketRef: any;
 };
 
-const LeftSideContainer: FC<PropType> = ({ playerStateList, playerList, voteUser }) => (
+const LeftSideContainer: FC<PropType> = ({
+  playerStateList,
+  playerList,
+  voteUser,
+  myUserName,
+  emitAbility,
+  isNight,
+  mafiaPickList,
+  socketRef,
+}) => (
   <div css={leftSideContainerStyle}>
     <div css={Style}>
       <img src="/assets/images/moon.png" alt="day-night-state" />
@@ -45,11 +60,19 @@ const LeftSideContainer: FC<PropType> = ({ playerStateList, playerList, voteUser
       {playerList.map(({ userImg, userName, voteFrom }) => (
         <AbilityButton
           key={userName}
+          socketRef={socketRef}
+          isNight={isNight}
           userImg={userImg}
           userName={userName}
           voteFrom={voteFrom}
+          selectedByMe={mafiaPickList.some(
+            (pick) => pick.mafia === myUserName && pick.victim === userName,
+          )}
+          selectedByOthers={mafiaPickList.some(
+            (pick) => pick.mafia !== myUserName && pick.victim === userName,
+          )}
           isDead={playerStateList.find((player) => player.userName === userName)?.isDead || false}
-          onClick={voteUser}
+          onClick={isNight ? emitAbility : voteUser}
         />
       ))}
     </div>

@@ -21,6 +21,11 @@ jobs:
           script: |
             export repo=${{ secrets.REPOS }}
             export socket=${{ secrets.SOCKET_URL }}
+            export github_client_id=${{ secrets.CLIENT_ID }}
+            export github_client_secret=${{ secrets.CLIENT_SECRET }}
+            export api_url=${{ secrets.API_URL }}            
+            export client_url=${{ secrets.CLIENT_URL }}            
+            export mongo_uri=${{ secrets.MONGO_URI }}            
             sh deploy.sh
         
         

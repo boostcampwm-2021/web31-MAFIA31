@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-
+import { useEffect } from 'react';
+import useTimer from '@src/hooks/useTimer';
 import useSocket from '@hooks/useSocket';
 import useExecute from '@hooks/useExecute';
 import useVote from '@hooks/useVote';
@@ -15,6 +16,11 @@ const Game = () => {
   const playerStateList = useExecute(socketRef);
   const { chatList, sendChat } = useChat(socketRef);
   const { playerList, voteUser } = useVote(socketRef, 'user1');
+  const { isNight } = useTimer(socketRef);
+
+  useEffect(() => {
+    console.log('night', isNight);
+  }, [isNight]);
 
   return (
     <div css={GamePageStyle}>

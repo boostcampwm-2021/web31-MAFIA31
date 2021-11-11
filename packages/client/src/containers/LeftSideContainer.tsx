@@ -11,10 +11,11 @@ import { SettingIcon, RoomOutIcon } from '@components/Icon';
 type PropType = {
   playerStateList: PlayerState[];
   playerList: PlayerInfo[];
+  timer: number;
   voteUser: any;
 };
 
-const LeftSideContainer: FC<PropType> = ({ playerStateList, playerList, voteUser }) => (
+const LeftSideContainer: FC<PropType> = ({ playerStateList, playerList, timer, voteUser }) => (
   <div css={leftSideContainerStyle}>
     <div css={Style}>
       <img src="/assets/images/moon.png" alt="day-night-state" />
@@ -38,7 +39,7 @@ const LeftSideContainer: FC<PropType> = ({ playerStateList, playerList, voteUser
     </div>
 
     <div css={timerStyle}>
-      <span>00:00</span>
+      <span>00:{timer}</span>
     </div>
     <hr css={hrStyle} />
     <div css={abilityListStyle}>

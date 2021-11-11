@@ -25,6 +25,7 @@ const socketInit = (namespace: Namespace): void => {
         isHost,
         isDead: false,
         voteFrom: [],
+        job: '',
       };
       roomStore[roomId] = roomStore[roomId] ?? [];
       roomStore[roomId].push(newUser);

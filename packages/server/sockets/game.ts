@@ -9,7 +9,7 @@ import {
   VOTE,
 } from '@mafia/domain/constants/event';
 import { GameResult, Job } from '@mafia/domain/types/game';
-import { PlayerInfo } from '@mafia/domain/types/user';
+import { PlayerInfo, WaitingInfo } from '@mafia/domain/types/user';
 import { RoomVote, Vote } from '@mafia/domain/types/vote';
 import { Namespace, Socket } from 'socket.io';
 import { JOB_ARR } from '../constants/job';
@@ -106,12 +106,11 @@ const gameSocketInit = (
   roomId: string,
   playerList: PlayerInfo[],
 ): void => {
-  // assignJobs();
+  // assignJobs(    );
 
   channelVote[roomId] = {};
   channelUser[roomId] = {};
   resetChannelVote(roomId);
-  console.log(playerList);
   assignJobs();
 
   // 직업 배정 로직으로 초기화 할 값 (dashBoard, jobAssignment)
@@ -127,8 +126,12 @@ const gameSocketInit = (
     { userName: 'h', job: 'citizen' },
   ];
 
-  socket.on(READY, (userInfo: { userName: string; isReady: boolean; isHost: boolean }) => {
-    namespace.emit(PUBLISH_READY, userInfo);
+  socket.on(READY, ({ userName, isReady }: WaitingInfo) => {
+    const readyUser = playerList.find((player) => player.userName === userName);
+    if (!readyUser) return;
+
+    readyUser.isReady = isReady;
+    namespace.emit(PUBLISH_READY, playerList);
   });
 
   socket.on(VOTE, ({ to, from }: Vote) => {

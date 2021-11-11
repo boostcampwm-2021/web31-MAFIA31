@@ -32,8 +32,10 @@ const AbilityButton: FC<PropType> = ({
 
   useEffect(() => {
     socketRef.current?.on(PUBLISH_VICTIM, (v: string) => {
-      // 죽은 사람 누군지 표시하고 공지
       setVictim(v);
+      setTimeout(() => {
+        setVictim('');
+      }, 1000);
     });
     return () => {
       socketRef.current.off(PUBLISH_VICTIM);
@@ -146,6 +148,26 @@ const voteInfoStyle = css`
 const skullImageStyle = css`
   width: 10px;
   height: 10px;
+
+  animation-name: pulse;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+
+  @keyframes pulse {
+    0% {
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.5;
+      transform-origin: 50% 50%;
+      transform: rotate(0.2turn) scale(5);
+      transition: all 0.3s ease-out;
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 `;
 
 export default AbilityButton;

@@ -15,8 +15,10 @@ const getRandomInt = (min: number, max: number) => {
 const publishVictim = (namespace: Namespace) => {
   if (mafiaPickList.length > 0) {
     const randNum = getRandomInt(0, mafiaPickList.length);
-    const { victim } = mafiaPickList[randNum];
+    let { victim } = mafiaPickList[randNum];
     namespace.emit(PUBLISH_VICTIM, victim);
+    mafiaPickList.length = 0;
+    victim = '';
   }
 };
 const abilitySocketInit = (namespace: Namespace, socket: Socket, playerList: PlayerInfo[]) => {

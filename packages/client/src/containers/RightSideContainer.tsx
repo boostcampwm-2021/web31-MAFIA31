@@ -3,13 +3,14 @@ import { FC, useState } from 'react';
 import { css } from '@emotion/react';
 
 import { PlayerState } from '@mafia/domain/types/user';
-import { grey1, white } from '@constants/index';
+import { JOB_DICT, grey1, white } from '@constants/index';
 import { SearchIcon } from '@components/Icon';
 import { MemoButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { ImageSizeList, Image } from '@components/Image';
 
 type PropType = {
   playerStateList: PlayerState[];
+  myJob: string;
 };
 
 interface Memo {
@@ -17,7 +18,7 @@ interface Memo {
   guessJob: string;
 }
 
-const RightSideContainer: FC<PropType> = ({ playerStateList }) => {
+const RightSideContainer: FC<PropType> = ({ playerStateList, myJob }) => {
   const [memoList] = useState<Memo[]>([
     { userName: 'user1', guessJob: 'mafia' },
     { userName: 'user2', guessJob: 'citizen' },
@@ -28,18 +29,17 @@ const RightSideContainer: FC<PropType> = ({ playerStateList }) => {
   return (
     <div css={rightSideContainerStyle}>
       <div css={myJobStyle}>
-        <Image size={ImageSizeList.MEDIUM} src="/assets/images/mafia.png" />
+        <Image size={ImageSizeList.MEDIUM} src={`/assets/images/${myJob}.png`} />
         <div className="jobInfo">
-          <span className="job">마피아</span>
-          <p className="jobDescript">밤에 시민을 한 명 죽일 수 있습니다.</p>
+          <span className="job">{JOB_DICT[myJob].title}</span>
+          <p className="jobDescript">{JOB_DICT[myJob].description}</p>
         </div>
       </div>
       <hr css={hrStyle} />
       <div css={memoListStyle}>
         {memoList.map(({ userName, guessJob }) => (
-          <div css={memoInfoStyle}>
+          <div css={memoInfoStyle} key={userName}>
             <MemoButton
-              key={userName}
               userName={userName}
               guessJob={guessJob}
               isDead={playerStateList.filter((player) => player.userName === userName)[0].isDead}

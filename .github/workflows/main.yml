@@ -25,7 +25,7 @@ jobs:
             export github_client_secret=${{ secrets.CLIENT_SECRET }}
             export api_url=${{ secrets.API_URL }}            
             export client_url=${{ secrets.CLIENT_URL }}            
-            export mongo_uri=${{ secrets.MONGO_URI }}            
+            export mongo_url=${{ secrets.MONGO_URL }}            
             sh deploy.sh
         
         

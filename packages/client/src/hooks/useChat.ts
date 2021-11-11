@@ -1,10 +1,10 @@
 import { MESSAGE, PUBLISH_MESSAGE } from '@mafia/domain/constants/event';
-import { ChatMsgType } from '@mafia/domain/types/chat';
+import { Message } from '@mafia/domain/types/chat';
 import { useEffect, useState } from 'react';
 
 const useChat = (socketRef: any) => {
-  const [chatList, setChatList] = useState<ChatMsgType[]>([]);
-  const updateChatList = (msg: ChatMsgType): void => {
+  const [chatList, setChatList] = useState<Message[]>([]);
+  const updateChatList = (msg: Message): void => {
     setChatList((prev) => [...prev, msg]);
   };
 
@@ -16,7 +16,7 @@ const useChat = (socketRef: any) => {
     };
   }, [socketRef.current]);
 
-  const sendChat = (msg: ChatMsgType): void => {
+  const sendChat = (msg: Message): void => {
     if (msg.msg === '') return;
     socketRef.current?.emit(MESSAGE, msg);
   };

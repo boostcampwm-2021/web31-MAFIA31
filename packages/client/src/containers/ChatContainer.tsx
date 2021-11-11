@@ -2,14 +2,14 @@ import { FC, useCallback, useState, useRef, useEffect } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-import { ChatMsgType } from '@mafia/domain/types/chat';
+import { Message } from '@mafia/domain/types/chat';
 import { ChatMsg } from '@components/Message';
 import { SendIcon } from '@components/Icon';
 import { IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { primaryLight, primaryDark, white, titleActive } from '@constants/index';
 
 interface PropType {
-  chatList: ChatMsgType[];
+  chatList: Message[];
   sendChat: any;
 }
 

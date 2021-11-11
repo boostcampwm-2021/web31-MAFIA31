@@ -17,8 +17,8 @@ const Game = () => {
   const playerStateList = useExecute(socketRef);
   const { chatList, sendChat, sendNightChat } = useChat(socketRef);
   const { playerList, voteUser } = useVote(socketRef, 'user1');
+  const { timer, isNight } = useTimer(socketRef);
   const { myJob } = useGame(socketRef);
-  const { isNight } = useTimer(socketRef);
 
   useEffect(() => {
     console.log('night', isNight);
@@ -29,6 +29,7 @@ const Game = () => {
       <LeftSideContainer
         playerStateList={playerStateList}
         playerList={playerList}
+        timer={timer}
         voteUser={voteUser}
       />
       <ChatContainer

@@ -1,4 +1,4 @@
-import { FC, useCallback, useState, useRef, useEffect } from 'react';
+import React, { FC, useCallback, useState, useRef, useEffect } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
@@ -19,7 +19,14 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat }) => {
   const [inputValue, setInputValue] = useState('');
   const chatMsgsRef = useRef<HTMLDivElement>(null);
 
-  const onClick = useCallback(() => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+    if (event.key !== 'Enter') return;
+    sendChat({ id: Date.now() + myName, userName: myName, msg: inputValue, profileImg: '' });
+    setInputValue('');
+    event.preventDefault();
+  };
+
+  const handleClick = useCallback(() => {
     sendChat({ id: Date.now() + myName, userName: myName, msg: inputValue, profileImg: '' });
     setInputValue('');
   }, [inputValue]);
@@ -42,12 +49,13 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat }) => {
           placeholder="메세지를 입력하세요"
           value={inputValue}
           onChange={({ target }) => setInputValue(target.value)}
+          onKeyDown={handleKeyDown}
         />
         <IconButton
           icon={SendIcon}
           size={ButtonSizeList.MEDIUM}
           theme={isDark ? ButtonThemeList.DARK : ButtonThemeList.LIGHT}
-          onClick={onClick}
+          onClick={handleClick}
         />
       </form>
     </div>

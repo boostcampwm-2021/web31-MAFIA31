@@ -1,4 +1,4 @@
-import { EXECUTION } from 'domain/constants/event';
+import { EXECUTION } from '@mafia/domain/constants/event';
 import { Namespace } from 'socket.io';
 import { getChannelUser, getChannelVote, resetChannelVote } from './game';
 

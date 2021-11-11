@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { Achievement } from 'domain/types/achievement';
+import { Achievement } from '@mafia/domain/types/achievement';
 import { grey1 } from '@src/constants/colors';
 import { Image, ImageSizeList } from '../Image';
 

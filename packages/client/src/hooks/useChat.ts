@@ -1,5 +1,5 @@
-import { MESSAGE, PUBLISH_MESSAGE } from 'domain/constants/event';
-import { ChatMsgType } from 'domain/types/chat';
+import { MESSAGE, PUBLISH_MESSAGE } from '@mafia/domain/constants/event';
+import { ChatMsgType } from '@mafia/domain/types/chat';
 import { useEffect, useState } from 'react';
 
 const useChat = (socketRef: any) => {

@@ -1,4 +1,4 @@
-import { PlayerInfo } from 'domain/types/user';
+import { PlayerInfo } from '@mafia/domain/types/user';
 import { Namespace, Socket } from 'socket.io';
 import chatSocketInit from './chat';
 import gameSocketInit from './game';
@@ -14,6 +14,7 @@ const socketInit = (namespace: Namespace): void => {
     const { nsp } = socket;
     const { name: roomId } = nsp;
     if (!roomId) return;
+    roomStore[roomId] = [];
 
     chatSocketInit(nsp, socket);
     // const gameInfo[roomId]  = jobAssign(roomStore[roomId])

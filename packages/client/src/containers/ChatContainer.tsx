@@ -2,7 +2,7 @@ import { FC, useCallback, useState, useRef, useEffect } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-import { ChatMsgType } from 'domain/types/chat';
+import { ChatMsgType } from '@mafia/domain/types/chat';
 import { ChatMsg } from '@components/Message';
 import { SendIcon } from '@components/Icon';
 import { IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';

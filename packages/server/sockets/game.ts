@@ -7,10 +7,10 @@ import {
   TIMER,
   TURN_CHANGE,
   VOTE,
-} from 'domain/constants/event';
-import { GameResult, Job } from 'domain/types/game';
-import { PlayerInfo } from 'domain/types/user';
-import { RoomVote, Vote } from 'domain/types/vote';
+} from '@mafia/domain/constants/event';
+import { GameResult, Job } from '@mafia/domain/types/game';
+import { PlayerInfo } from '@mafia/domain/types/user';
+import { RoomVote, Vote } from '@mafia/domain/types/vote';
 import { Namespace, Socket } from 'socket.io';
 import { JOB_ARR } from '../constants/job';
 import { canVote, startVoteTime } from './vote';

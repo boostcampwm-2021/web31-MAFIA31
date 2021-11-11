@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-import { PlayerState } from 'domain/types/user';
+import { PlayerState } from '@mafia/domain/types/user';
 import { grey1, white } from '@constants/index';
 import { SearchIcon } from '@components/Icon';
 import { MemoButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';

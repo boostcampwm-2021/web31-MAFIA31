@@ -1,7 +1,10 @@
 {
-  "name": "domain",
+  "name": "@mafia/domain",
   "version": "1.0.0",
   "main": "index.js",
   "private": true,
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc"
+  }
 }

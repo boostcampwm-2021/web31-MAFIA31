@@ -1,4 +1,4 @@
-import { User } from 'domain/types/user';
+import { User } from '@mafia/domain/types/user';
 
 export interface RoomInfo {
   roomId: string;

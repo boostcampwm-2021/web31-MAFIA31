@@ -1,4 +1,4 @@
-import { MESSAGE, PUBLISH_MESSAGE } from '@mafia/domain/constants/event';
+import { MESSAGE, NIGHT_MESSAGE, PUBLISH_MESSAGE } from '@mafia/domain/constants/event';
 import { Message } from '@mafia/domain/types/chat';
 import { useEffect, useState } from 'react';
 
@@ -17,11 +17,16 @@ const useChat = (socketRef: any) => {
   }, [socketRef.current]);
 
   const sendChat = (msg: Message): void => {
-    if (msg.msg === '') return;
+    if (!msg.msg) return;
     socketRef.current?.emit(MESSAGE, msg);
   };
 
-  return { chatList, sendChat };
+  const sendNightChat = (msg: Message, roomName: string): void => {
+    if (!msg.msg) return;
+    socketRef.current.emit(NIGHT_MESSAGE, { msg, roomName });
+  };
+
+  return { chatList, sendChat, sendNightChat };
 };
 
 export default useChat;

@@ -14,7 +14,7 @@ import RightSideContainer from '@containers/RightSideContainer';
 const Game = () => {
   const { socketRef } = useSocket('123e4567-e89b-12d3-a456-426614174000');
   const playerStateList = useExecute(socketRef);
-  const { chatList, sendChat } = useChat(socketRef);
+  const { chatList, sendChat, sendNightChat } = useChat(socketRef);
   const { playerList, voteUser } = useVote(socketRef, 'user1');
   const { isNight } = useTimer(socketRef);
 
@@ -29,7 +29,12 @@ const Game = () => {
         playerList={playerList}
         voteUser={voteUser}
       />
-      <ChatContainer chatList={chatList} sendChat={sendChat} />
+      <ChatContainer
+        chatList={chatList}
+        sendChat={sendChat}
+        sendNightChat={sendNightChat}
+        isNight={isNight}
+      />
       <RightSideContainer playerStateList={playerStateList} />
     </div>
   );

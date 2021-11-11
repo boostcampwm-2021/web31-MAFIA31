@@ -9,3 +9,5 @@ export const TURN_CHANGE = 'turn change';
 export const EXECUTION = 'execution';
 export const READY = 'ready';
 export const PUBLISH_READY = 'publish ready';
+export const MAFIA_ABILITY = 'mafia ability';
+export const PUBLISH_VICTIM = 'publish victim';

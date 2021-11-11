@@ -3,7 +3,7 @@ import { FC, useState } from 'react';
 import { css } from '@emotion/react';
 
 import { PlayerState } from '@mafia/domain/types/user';
-import { grey1, white } from '@constants/index';
+import { JOB_DICT, grey1, white } from '@constants/index';
 import { SearchIcon } from '@components/Icon';
 import { MemoButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { ImageSizeList, Image } from '@components/Image';
@@ -18,36 +18,7 @@ interface Memo {
   guessJob: string;
 }
 
-interface JobDictionary {
-  [job: string]: {
-    title: string;
-    description: string;
-  };
-}
-
 const RightSideContainer: FC<PropType> = ({ playerStateList, myJob }) => {
-  const JOB_DICT: JobDictionary = {
-    '': {
-      title: 'loading',
-      description: 'loading',
-    },
-    'mafia': {
-      title: '마피아',
-      description: '밤에 사람을 한 명 죽일 수 있습니다.',
-    },
-    'citizen': {
-      title: '시민',
-      description: '아무것도 아닌 선량한 시민입니다.',
-    },
-    'doctor': {
-      title: '의사',
-      description: '밤에 사람을 한 명 살릴 수 있습니다.',
-    },
-    'police': {
-      title: '경찰',
-      description: '밤에 임의의 한 명을 선택해 마피아인지 확인할 수 있습니다.',
-    },
-  };
   const [memoList] = useState<Memo[]>([
     { userName: 'user1', guessJob: 'mafia' },
     { userName: 'user2', guessJob: 'citizen' },

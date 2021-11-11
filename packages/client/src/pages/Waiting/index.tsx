@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import Header from '@src/templates/Header';
 import { RoomInfo } from '@src/types';
 import { white } from '@src/constants';
@@ -16,18 +16,25 @@ interface locationType {
 
 const Waiting = () => {
   const location = useLocation<locationType>();
+  const history = useHistory();
   const { roomId } = location.state.roomInfo;
+  const { userInfo } = useUserInfo();
+  if (!userInfo?.userName) {
+    history.push('/');
+  }
+
   const { socketRef } = useSocket(roomId);
   const { waitingUserList, sendReady, sendGameStart } = useRoom(socketRef);
-  const { userInfo } = useUserInfo();
   const isHost =
-    waitingUserList.filter(({ userName }) => userName === userInfo?.userName)[0]?.isHost ?? false;
+    waitingUserList.find(({ userName }) => userName === userInfo?.userName)?.isHost ?? false;
+
   const getReady = () => {
-    const me = waitingUserList.filter((user) => userInfo?.userName === user.userName)[0];
+    const me = waitingUserList.find((user) => userInfo?.userName === user.userName);
     if (!me) return;
 
     sendReady({ userName: me.userName, isReady: !me.isReady, isHost: me.isHost });
   };
+
   // TODO: socket을 useContext로 관리, 여기서 할당해주기!
 
   return (
@@ -41,11 +48,7 @@ const Waiting = () => {
         </div>
         <div css={bottomBarStyle}>
           {isHost ? (
-            <div
-              css={gameStartStyle(
-                waitingUserList.filter(({ isReady }) => isReady === false).length === 0,
-              )}
-            >
+            <div css={gameStartStyle(!waitingUserList.some(({ isReady }) => isReady === false))}>
               <Link to="/game">
                 <DefaultButton
                   text="START"

@@ -3,7 +3,7 @@ import { FC, useState } from 'react';
 import { css } from '@emotion/react';
 
 import { PlayerState } from '@mafia/domain/types/user';
-import { grey1, titleActive, white } from '@constants/index';
+import { grey1, titleActive, white, JOB_DICT } from '@constants/index';
 import { SearchIcon } from '@components/Icon';
 import { MemoButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { ImageSizeList, Image } from '@components/Image';
@@ -11,6 +11,7 @@ import { ImageSizeList, Image } from '@components/Image';
 type PropType = {
   playerStateList: PlayerState[];
   isNight: boolean;
+  myJob: string;
 };
 
 interface Memo {
@@ -18,7 +19,7 @@ interface Memo {
   guessJob: string;
 }
 
-const RightSideContainer: FC<PropType> = ({ playerStateList, isNight }) => {
+const RightSideContainer: FC<PropType> = ({ playerStateList, isNight, myJob }) => {
   const [memoList] = useState<Memo[]>([
     { userName: 'user1', guessJob: 'mafia' },
     { userName: 'user2', guessJob: 'citizen' },
@@ -29,18 +30,17 @@ const RightSideContainer: FC<PropType> = ({ playerStateList, isNight }) => {
   return (
     <div css={rightSideContainerStyle(isNight)}>
       <div css={myJobStyle(isNight)}>
-        <Image size={ImageSizeList.MEDIUM} src="/assets/images/mafia.png" />
+        <Image size={ImageSizeList.MEDIUM} src={`/assets/images/${myJob}.png`} />
         <div className="jobInfo">
-          <span className="job">마피아</span>
-          <p className="jobDescript">밤에 시민을 한 명 죽일 수 있습니다.</p>
+          <span className="job">{JOB_DICT[myJob].title}</span>
+          <p className="jobDescript">{JOB_DICT[myJob].description}</p>
         </div>
       </div>
       <hr css={hrStyle} />
       <div css={memoListStyle}>
         {memoList.map(({ userName, guessJob }) => (
-          <div css={memoInfoStyle(isNight)}>
+          <div css={memoInfoStyle(isNight)} key={userName}>
             <MemoButton
-              key={userName}
               userName={userName}
               guessJob={guessJob}
               isDead={playerStateList.filter((player) => player.userName === userName)[0].isDead}

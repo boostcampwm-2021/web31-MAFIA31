@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-
+import useTimer from '@src/hooks/useTimer';
 import useSocket from '@hooks/useSocket';
 import useExecute from '@hooks/useExecute';
 import useVote from '@hooks/useVote';
@@ -10,27 +10,22 @@ import { primaryDark, primaryLight, titleActive, white } from '@constants/index'
 import ChatContainer from '@containers/ChatContainer';
 import LeftSideContainer from '@containers/LeftSideContainer';
 import RightSideContainer from '@containers/RightSideContainer';
-import { useEffect, useState } from 'react';
-import { TURN_CHANGE } from '@mafia/domain/constants/event';
+import { useEffect } from 'react';
+import useGame from '@src/hooks/useGame';
 
 const Game = () => {
   const myUserName = 'user1';
-  const [isNight, setIsNight] = useState(false);
   const { socketRef, socketId } = useSocket('123e4567-e89b-12d3-a456-426614174000');
   const playerStateList = useExecute(socketRef);
-  const { chatList, sendChat } = useChat(socketRef);
+  const { chatList, sendChat, sendNightChat } = useChat(socketRef);
   const { playerList, voteUser } = useVote(socketRef, myUserName);
+  const { timer, isNight } = useTimer(socketRef);
   const { emitAbility, mafiaPickList } = useAbility(socketRef, socketId!, 'user1', 'mafia');
+  const { myJob } = useGame(socketRef);
 
   useEffect(() => {
-    socketRef.current?.on(TURN_CHANGE, (isNight) => {
-      setIsNight(isNight);
-    });
-
-    return () => {
-      socketRef.current?.off(TURN_CHANGE);
-    };
-  }, [socketRef.current]);
+    console.log('night', isNight);
+  }, [isNight]);
 
   return (
     <div css={GamePageStyle(isNight)}>
@@ -38,14 +33,20 @@ const Game = () => {
         playerStateList={playerStateList}
         playerList={playerList}
         myUserName={myUserName}
+        timer={timer}
         voteUser={voteUser}
         emitAbility={emitAbility}
         mafiaPickList={mafiaPickList}
         isNight={isNight}
         socketRef={socketRef}
       />
-      <ChatContainer chatList={chatList} sendChat={sendChat} isNight={isNight} />
-      <RightSideContainer playerStateList={playerStateList} isNight={isNight} />
+      <ChatContainer
+        chatList={chatList}
+        sendChat={sendChat}
+        sendNightChat={sendNightChat}
+        isNight={isNight}
+      />
+      <RightSideContainer playerStateList={playerStateList} myJob={myJob} isNight={isNight} />
     </div>
   );
 };

@@ -22,7 +22,6 @@ const publishVictim = (namespace: Namespace) => {
   }
 };
 const abilitySocketInit = (namespace: Namespace, socket: Socket, playerList: PlayerInfo[]) => {
-  socket.join('mafia'); // 일단 다 마피아라고 가정
   socket.on(MAFIA_ABILITY, (mafiaPick: MafiaPick) => {
     if (mafiaPickList.every((e) => e.mafia !== mafiaPick.mafia)) {
       mafiaPickList.push(mafiaPick);

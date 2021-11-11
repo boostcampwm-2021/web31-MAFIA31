@@ -12,6 +12,7 @@ import { MafiaPick } from '@mafia/domain/types/game';
 type PropType = {
   playerStateList: PlayerState[];
   playerList: PlayerInfo[];
+  timer: number;
   voteUser: any;
   myUserName: string;
   emitAbility: any;
@@ -29,6 +30,7 @@ const LeftSideContainer: FC<PropType> = ({
   isNight,
   mafiaPickList,
   socketRef,
+  timer,
 }) => (
   <div css={leftSideContainerStyle}>
     <div css={Style}>
@@ -56,7 +58,7 @@ const LeftSideContainer: FC<PropType> = ({
     </div>
 
     <div css={timerStyle}>
-      <span>00:00</span>
+      <span>00:{timer}</span>
     </div>
     <hr css={hrStyle} />
     <div css={abilityListStyle}>

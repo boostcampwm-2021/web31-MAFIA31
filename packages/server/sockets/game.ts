@@ -9,6 +9,7 @@ import {
   VOTE,
 } from 'domain/constants/event';
 import { GameResult, Job } from 'domain/types/game';
+import { PlayerInfo } from 'domain/types/user';
 import { RoomVote, Vote } from 'domain/types/vote';
 import { Namespace, Socket } from 'socket.io';
 import { JOB_ARR } from '../constants/job';
@@ -99,10 +100,19 @@ const assignJobs = () => {
   return mixedArr.map((username, idx) => ({ [username]: jobs[idx] }));
 };
 
-const gameSocketInit = (namespace: Namespace, socket: Socket, roomId: string): void => {
+const gameSocketInit = (
+  namespace: Namespace,
+  socket: Socket,
+  roomId: string,
+  playerList: PlayerInfo[],
+): void => {
+  // assignJobs();
+
   channelVote[roomId] = {};
   channelUser[roomId] = {};
   resetChannelVote(roomId);
+  console.log(playerList);
+  assignJobs();
 
   // 직업 배정 로직으로 초기화 할 값 (dashBoard, jobAssignment)
   const dashBoard: DashBoard = { mafia: 2, citizen: 6 };

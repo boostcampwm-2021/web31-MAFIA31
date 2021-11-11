@@ -1,7 +1,6 @@
 import { PlayerInfo } from '@mafia/domain/types/user';
 import { Namespace, Socket } from 'socket.io';
 import chatSocketInit from './chat';
-import dummy from './dummy';
 import gameSocketInit from './game';
 
 interface RoomStore {
@@ -14,11 +13,38 @@ const socketInit = (namespace: Namespace): void => {
   namespace.on('connection', (socket: Socket): void => {
     const { nsp } = socket;
     const { name: roomId } = nsp;
-    if (!roomId) return;
-    roomStore[roomId] = dummy;
+
+    if (!roomId) {
+      return;
+    }
+    if (!roomStore[roomId]) {
+      roomStore[roomId] = [];
+    }
+
+    socket.on('join', (userName: string) => {
+      const isHost: boolean = roomStore[roomId].length === 0;
+      const isReady: boolean = isHost;
+      const newUser: PlayerInfo = {
+        userName,
+        socketId: socket.id,
+        isReady,
+        isHost,
+        isDead: false,
+        voteFrom: [],
+        job: '',
+      };
+
+      roomStore[roomId].push(newUser);
+
+      socket.emit('join', roomStore[roomId]);
+    });
+
+    socket.on('disconnect', () => {
+      roomStore[roomId] = roomStore[roomId]?.filter((user) => user.socketId !== socket.id);
+    });
 
     chatSocketInit(nsp, socket);
-    // const gameInfo[roomId]  = jobAssign(roomStore[roomId])
+
     gameSocketInit(nsp, socket, roomId, roomStore[roomId]);
   });
 };

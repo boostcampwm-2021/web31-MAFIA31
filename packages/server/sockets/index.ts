@@ -39,8 +39,6 @@ const socketInit = (namespace: Namespace): void => {
 
     chatSocketInit(nsp, socket);
     gameSocketInit(nsp, socket, roomId, roomStore[roomId]);
-
-    socket.on('disconnect', (): void => {});
   });
 };
 

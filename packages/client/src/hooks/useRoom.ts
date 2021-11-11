@@ -13,6 +13,7 @@ const useRoom = (socketRef: any) => {
 
     return () => {
       socketRef.current?.off(PUBLISH_READY);
+      socketRef.current?.off('join');
     };
   }, [socketRef.current]);
 

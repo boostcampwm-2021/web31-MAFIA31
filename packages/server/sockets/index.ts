@@ -35,6 +35,10 @@ const socketInit = (namespace: Namespace): void => {
       socket.emit('join', roomStore[roomId]);
     });
 
+    socket.on('disconnect', () => {
+      roomStore[roomId] = roomStore[roomId]?.filter((user) => user.socketId !== socket.id);
+    });
+
     chatSocketInit(nsp, socket);
     gameSocketInit(nsp, socket, roomId, roomStore[roomId]);
 

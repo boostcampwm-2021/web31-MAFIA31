@@ -1,12 +1,13 @@
+import { PlayerInfo } from 'domain/types/user';
 import { Namespace, Socket } from 'socket.io';
 import chatSocketInit from './chat';
 import gameSocketInit from './game';
 
-// export interface RoomInfo {
-//   roomId: string;
-//   title: string;
-//   host: string;
-// }
+interface RoomStore {
+  [roomId: string]: PlayerInfo[];
+}
+
+const roomStore: RoomStore = {};
 
 const socketInit = (namespace: Namespace): void => {
   namespace.on('connection', (socket: Socket): void => {
@@ -15,7 +16,8 @@ const socketInit = (namespace: Namespace): void => {
     if (!roomId) return;
 
     chatSocketInit(nsp, socket);
-    gameSocketInit(nsp, socket, roomId);
+    // const gameInfo[roomId]  = jobAssign(roomStore[roomId])
+    gameSocketInit(nsp, socket, roomId, roomStore[roomId]);
 
     socket.on('disconnect', (): void => {});
   });

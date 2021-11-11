@@ -1,6 +1,6 @@
-import { MAFIA_ABILITY, PUBLISH_VICTIM } from 'domain/constants/event';
-import { MafiaPick } from 'domain/types/game';
-import { PlayerInfo } from 'domain/types/user';
+import { MAFIA_ABILITY, PUBLISH_VICTIM } from '@mafia/domain/constants/event';
+import { MafiaPick } from '@mafia/domain/types/game';
+import { PlayerInfo } from '@mafia/domain/types/user';
 import { Namespace, Socket } from 'socket.io';
 
 const mafiaPickList: MafiaPick[] = [];

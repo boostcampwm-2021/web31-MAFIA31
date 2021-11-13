@@ -1,11 +1,16 @@
 import { TIMER, TURN_CHANGE } from '@mafia/domain/constants/event';
-import { useEffect, useState } from 'react';
+import timeDisplayer from '@utils/time-displayer';
+import { useEffect, useRef, useState } from 'react';
 
 const useTimer = (socketRef: any) => {
   const [isNight, setIsNight] = useState<boolean>(false);
-  const [timer, setTimer] = useState<number>(60);
+  const seconds = useRef<number>();
+  const [timer, setTimer] = useState<string>('00:00');
+
   const updateTimer = (remainTime: number): void => {
-    setTimer(() => remainTime);
+    seconds.current = remainTime;
+    const { 분, 초 } = timeDisplayer(seconds.current);
+    setTimer(() => `${분}:${초}`);
   };
 
   useEffect(() => {

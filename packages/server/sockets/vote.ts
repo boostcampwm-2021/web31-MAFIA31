@@ -1,27 +1,30 @@
 import { EXECUTION } from '@mafia/domain/constants/event';
 import { Namespace } from 'socket.io';
-import { getChannelUser, getChannelVote, resetChannelVote } from './game';
+import GameStore from '../stores/GameStore';
+import RoomStore from '../stores/RoomStore';
 
 let flag: boolean = false;
+const canVote = (): boolean => flag;
 
-const publish = (namespace: Namespace, roomId: string) => {
-  const userInfo = getChannelUser(roomId);
-  const voteInfo = getChannelVote(roomId);
-  let maxCnt = 0;
-  let maxName = Object.keys(userInfo)[0];
-  let sameCnt = 0;
+const publishExecution = (namespace: Namespace, roomId: string) => {
+  const playerList = RoomStore.get(roomId);
+  const voteInfos = GameStore.getVoteInfos(roomId);
+  let isSame = false;
+  let maxPlayer = '';
+  let maxCount = 0;
 
-  Object.keys(userInfo).forEach((userName) => {
-    if (voteInfo[userName].length >= maxCnt) {
-      if (voteInfo[userName].length === maxCnt) sameCnt += 1;
-      else {
-        maxCnt = voteInfo[userName].length;
-        maxName = userName;
-        sameCnt = 0;
-      }
+  playerList.forEach(({ userName }) => {
+    const voteCount = voteInfos[userName].length;
+    if (voteCount === maxCount) {
+      isSame = true;
+    } else if (voteCount > maxCount) {
+      isSame = false;
+      maxPlayer = userName;
+      maxCount = voteCount;
     }
   });
-  namespace.emit(EXECUTION, { userName: maxCnt === 0 || sameCnt > 0 ? undefined : maxName });
+  const excutedPlayer = { userName: maxCount === 0 || isSame ? undefined : maxPlayer };
+  namespace.emit(EXECUTION, excutedPlayer);
 };
 
 const startVoteTime = (namespace: Namespace, roomId: string, time: number) => {
@@ -29,11 +32,9 @@ const startVoteTime = (namespace: Namespace, roomId: string, time: number) => {
 
   setTimeout(() => {
     flag = false;
-    publish(namespace, roomId);
-    resetChannelVote(roomId);
+    publishExecution(namespace, roomId);
+    GameStore.resetVote(roomId);
   }, time);
 };
-
-const canVote = (): boolean => flag;
 
 export { startVoteTime, canVote };

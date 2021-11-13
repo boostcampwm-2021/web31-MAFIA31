@@ -1,6 +1,5 @@
 import { MAFIA_ABILITY, PUBLISH_VICTIM } from '@mafia/domain/constants/event';
 import { MafiaPick } from '@mafia/domain/types/game';
-import { PlayerInfo } from '@mafia/domain/types/user';
 import { Namespace, Socket } from 'socket.io';
 
 const mafiaPickList: MafiaPick[] = [];
@@ -21,7 +20,10 @@ const publishVictim = (namespace: Namespace) => {
     victim = '';
   }
 };
-const abilitySocketInit = (namespace: Namespace, socket: Socket, playerList: PlayerInfo[]) => {
+
+const abilitySocketInit = (socket: Socket) => {
+  const { nsp: namespace } = socket;
+
   socket.on(MAFIA_ABILITY, (mafiaPick: MafiaPick) => {
     if (mafiaPickList.every((e) => e.mafia !== mafiaPick.mafia)) {
       mafiaPickList.push(mafiaPick);

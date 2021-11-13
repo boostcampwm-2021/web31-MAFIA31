@@ -23,15 +23,15 @@ const Waiting = () => {
   }
 
   const { socketRef } = useSocket(roomId);
-  const { waitingUserList, sendReady, sendGameStart } = useRoom(socketRef);
+  const { playerList, sendReady, sendGameStart } = useRoom(socketRef);
   const isHost =
-    waitingUserList.find(({ userName }) => userName === userInfo?.userName)?.isHost ?? false;
+    playerList.find(({ userName }) => userName === userInfo?.userName)?.isHost ?? false;
 
   const getReady = () => {
-    const me = waitingUserList.find((user) => userInfo?.userName === user.userName);
-    if (!me) return;
+    const me = playerList.find((user) => userInfo?.userName === user.userName);
 
-    sendReady({ userName: me.userName, isReady: !me.isReady, isHost: me.isHost });
+    if (!me) return;
+    sendReady({ userName: me.userName });
   };
 
   // TODO: socket을 useContext로 관리, 여기서 할당해주기!
@@ -40,10 +40,10 @@ const Waiting = () => {
     <div css={pageStyle}>
       <Header />
       <div css={pageBodyStyle}>
-        <WaitingListContainer userList={waitingUserList} />
+        <WaitingListContainer userList={playerList} />
         <div css={bottomBarStyle}>
           {isHost ? (
-            <div css={gameStartStyle(!waitingUserList.some(({ isReady }) => isReady === false))}>
+            <div css={gameStartStyle(!playerList.some(({ isReady }) => isReady === false))}>
               <Link to="/game">
                 <DefaultButton
                   text="START"

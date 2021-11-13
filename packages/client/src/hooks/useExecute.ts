@@ -1,5 +1,6 @@
 import { EXECUTION } from '@mafia/domain/constants/event';
-import { PlayerState, User } from '@mafia/domain/types/user';
+import { PlayerState } from '@mafia/domain/types/game';
+import { User } from '@mafia/domain/types/user';
 import { useEffect, useState } from 'react';
 
 const useExecute = (socketRef: any) => {

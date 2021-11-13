@@ -2,10 +2,10 @@ import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { ProfileCard } from '@src/components/Card';
-import { WaitingInfo } from '@mafia/domain/types/user';
+import { PlayerInfo } from '@mafia/domain/types/user';
 
 interface Prop {
-  userList: WaitingInfo[];
+  userList: PlayerInfo[];
 }
 
 const WaitingListContainer: FC<Prop> = ({ userList }) => (

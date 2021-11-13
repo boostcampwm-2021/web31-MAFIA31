@@ -47,6 +47,7 @@ class RoomStore {
   }
 
   static get(roomId: string) {
+    RoomStore.initRoom(roomId);
     return RoomStore.instance[roomId];
   }
 }

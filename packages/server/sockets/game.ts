@@ -20,30 +20,28 @@ const checkEnd = (roomId: string) => {
 };
 
 const startTimer = (namespace: Namespace, roomId: string) => {
+  const TURN_TIME = 60;
   let counter = 0;
-  const interval = 60;
-  let isNight: boolean = true;
+  let isNight: boolean = false;
 
-  const gameInterval = setInterval(() => {
-    if (counter % interval === 0) {
-      if (checkEnd(roomId)) {
-        namespace.emit(EVENT.GAME_OVER, getGameResult(roomId));
-        clearInterval(gameInterval);
-        return;
-      }
+  const gameTimer = setInterval(() => {
+    const remainTime = TURN_TIME - counter;
+    namespace.emit(EVENT.TIMER, remainTime);
+    counter = (counter + 1) % TURN_TIME;
 
-      isNight = !isNight;
-      if (!isNight) {
-        startVoteTime(namespace, roomId, 10000);
-        publishVictim(namespace);
-      }
-      namespace.emit(EVENT.TURN_CHANGE, isNight);
+    if (counter !== TURN_TIME) return;
+    if (checkEnd(roomId)) {
+      namespace.emit(EVENT.GAME_OVER, getGameResult(roomId));
+      clearInterval(gameTimer);
+      return;
     }
 
-    const remainSecond = interval - (counter % interval);
-    namespace.emit(EVENT.TIMER, remainSecond);
+    isNight = !isNight;
+    namespace.emit(EVENT.TURN_CHANGE, isNight);
 
-    counter += 1;
+    if (isNight) return;
+    startVoteTime(namespace, roomId, 10000);
+    publishVictim(namespace);
   }, 1000);
 };
 
@@ -74,10 +72,10 @@ const assignJobs = (roomId: string) => {
 };
 
 const emitJobs = (namespace: Namespace, roomId: string): void => {
-  GameStore.get(roomId).forEach(({ socketId, job }) => namespace.in(socketId).socketsJoin(job));
-
-  namespace.to('mafia').emit(EVENT.PUBLISH_JOB, { job: 'mafia' });
-  namespace.to('citizen').emit(EVENT.PUBLISH_JOB, { job: 'citizen' });
+  GameStore.get(roomId).forEach(({ socketId, job }) => {
+    namespace.in(socketId).socketsJoin(job);
+    namespace.to(socketId).emit(EVENT.PUBLISH_JOB, { job });
+  });
 };
 
 const startGame = (namespace: Namespace, roomId: string) => {

@@ -3,13 +3,13 @@ import { PlayerInfo } from '@mafia/domain/types/user';
 import { useEffect, useState } from 'react';
 
 const useRoom = (socketRef: any) => {
-  const [playerList, setWaitingUserList] = useState<PlayerInfo[]>([]);
+  const [playerList, setPlayerList] = useState<PlayerInfo[]>([]);
 
   useEffect(() => {
     socketRef.current?.on('join', (playerList: PlayerInfo[]) => {
-      setWaitingUserList(playerList);
+      setPlayerList(playerList);
     });
-    socketRef.current?.on(PUBLISH_READY, updateWaitingUserList);
+    socketRef.current?.on(PUBLISH_READY, updatePlayerList);
 
     return () => {
       socketRef.current?.off(PUBLISH_READY);
@@ -17,7 +17,7 @@ const useRoom = (socketRef: any) => {
     };
   }, [socketRef.current]);
 
-  const updateWaitingUserList = (playerList: PlayerInfo[]) => setWaitingUserList(playerList);
+  const updatePlayerList = (playerList: PlayerInfo[]) => setPlayerList(playerList);
   const sendReady = ({ userName }: { userName: string }) =>
     socketRef.current?.emit(READY, userName);
   const sendGameStart = () => socketRef.current?.emit(GAME_START);

@@ -5,21 +5,25 @@ import RoomContainer from '@src/containers/RoomContainer';
 import Header from '@src/templates/Header';
 
 const Rooms: FC = () => (
-  <div>
+  <div css={roomsPageStyle}>
     <Header />
-    <div css={roomPageStyle}>
-      <div css={padding}>
-        <RoomContainer />
-      </div>
+    <div css={roomsPageBodyStyle}>
+      <RoomContainer />
     </div>
   </div>
 );
 
-const roomPageStyle = css`
+const roomsPageStyle = css`
+  height: 100vh;
+`;
+
+const roomsPageBodyStyle = css`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  padding: 40px;
+  height: calc(100vh - 100px);
 `;
-const padding = css``;
 
 export default Rooms;

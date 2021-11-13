@@ -16,13 +16,13 @@ const Header: FC = () => (
       <DefaultButton
         text={CREATE_ROOM_BUTTON}
         size={ButtonSizeList.SMALL}
-        theme={ButtonThemeList.DARK}
+        theme={ButtonThemeList.LIGHT}
       />
       <Link to={{ pathname: '/profile' }}>
         <DefaultButton
           text={MY_PAGE_BUTTON}
           size={ButtonSizeList.SMALL}
-          theme={ButtonThemeList.DARK}
+          theme={ButtonThemeList.LIGHT}
         />
       </Link>
     </div>
@@ -35,7 +35,7 @@ const headerStyle = css`
   justify-content: space-between;
   padding: 40px;
 
-  height: 140px;
+  height: 100px;
 
   font-weight: bold;
   font-size: 50px;

@@ -28,7 +28,7 @@ const Game = () => {
   }, [isNight]);
 
   return (
-    <div css={GamePageStyle(isNight)}>
+    <div css={gamePageStyle(isNight)}>
       <LeftSideContainer
         playerStateList={playerStateList}
         playerList={playerList}
@@ -51,7 +51,7 @@ const Game = () => {
   );
 };
 
-const GamePageStyle = (isNight: boolean) => css`
+const gamePageStyle = (isNight: boolean) => css`
   display: flex;
 
   height: 100vh;

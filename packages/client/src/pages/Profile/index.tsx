@@ -17,34 +17,34 @@ const TROPHY_IMG_SRC = 'assets/images/trophy.png';
 const Profile: FC = () => {
   const nickname = '닉네임';
   const profileImgSrc = 'assets/images/mafia.png';
-  const achievementPercentage = 45;
+  const achievementPercent = 45;
   const [achievementList] = useState<Achievement[]>(dummmyAchievementList);
 
   return (
-    <>
+    <div css={profilePageStyle}>
       <Header />
-      <div css={pageStyle}>
+      <div css={profilePageBodyStyle}>
         <div css={leftSideStyle}>
           <div css={profileStyle}>
             <Image size={ImageSizeList.LARGE} src={profileImgSrc} />
-            <div>{nickname}</div>
+            <span>{nickname}</span>
           </div>
-          <div css={achievementPercentStyle}>
-            <div css={achiementLabelStyle}>
+          <div css={achievementStyle}>
+            <div css={achievementLabelStyle}>
               <span>{ACHIEVEMENT_PERCENTAGE_LABEL}</span>
-              <span>{achievementPercentage}%</span>
+              <span>{achievementPercent}%</span>
             </div>
-            <div css={totalPercentageDivStyle}>
-              <div css={myPercentageDivStyle(achievementPercentage)} />
+            <div css={achievementPercentStyle}>
+              <div css={percentStyle(achievementPercent)} />
             </div>
           </div>
         </div>
+
         <div css={rightSideStyle}>
           <div css={titleStyle}>
             <img src={TROPHY_IMG_SRC} alt="profile" />
-            <h1 css={titleTextStyle}>{TITLE}</h1>
+            <h2>{TITLE}</h2>
           </div>
-
           <div css={achievementListStyle}>
             {achievementList.map((e) => (
               <AchievementCard
@@ -58,84 +58,94 @@ const Profile: FC = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
-const pageStyle = css`
+const profilePageStyle = css`
+  height: 100vh;
+
+  @media (max-width: 1024px) {
+    height: auto;
+  }
+`;
+
+const profilePageBodyStyle = css`
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
+
+  padding: 80px 40px;
+  height: calc(100vh - 100px);
   gap: 80px;
-  padding: 120px;
-  @media (max-width: 1220px) {
-    flex-direction: column;
+
+  @media (max-width: 1024px) {
+    flex-wrap: wrap;
+    height: auto;
   }
 `;
 
 const leftSideStyle = css`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 80px;
+  justify-content: center;
+
+  gap: 50px;
 `;
 
 const rightSideStyle = css`
   display: flex;
   flex-direction: column;
   align-items: center;
+
   gap: 40px;
+  width: 60%;
+
+  @media (max-width: 1024px) {
+    width: 90%;
+  }
 `;
 
 const profileStyle = css`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-
-  font-family: Noto Sans KR;
-  font-style: normal;
   font-weight: bold;
+
   font-size: 24px;
-  line-height: 35px;
+  gap: 16px;
 `;
 
-const achiementLabelStyle = css`
-  display: flex;
-  gap: 8px;
-`;
-
-const achievementPercentStyle = css`
+const achievementStyle = css`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
 
-  font-family: Noto Sans KR;
-  font-style: normal;
-  font-weight: 500;
+  gap: 24px;
   font-size: 20px;
-  line-height: 29px;
+  font-weight: 500;
 `;
 
-const totalPercentageDivStyle = css`
-  position: relative;
+const achievementLabelStyle = css`
+  span + span {
+    margin-left: 8px;
+  }
+`;
+
+const achievementPercentStyle = css`
   width: ${TOTAL_PERCENTAGE * PERCENTAGE_MULTIPLE}px;
   height: 22px;
-  background-color: ${grey4};
   border-radius: 30px;
+  background-color: ${grey4};
+  filter: drop-shadow(0px 4px 4px rgba(78, 65, 109, 0.25));
 `;
 
-const myPercentageDivStyle = (achievementPercentage: number) => css`
-  position: absolute;
+const percentStyle = (achievementPercentage: number) => css`
   width: ${achievementPercentage * PERCENTAGE_MULTIPLE}px;
   height: 100%;
-  background-color: ${primaryDark};
   border-radius: 30px 0px 0px 30px;
-  z-index: 1;
+  background-color: ${primaryDark};
 
-  animation-name: movingRow;
-  animation-duration: 0.5s;
-
+  animation: movingRow 0.5s ease-in;
   @keyframes movingRow {
     0% {
       width: 0px;
@@ -148,37 +158,41 @@ const myPercentageDivStyle = (achievementPercentage: number) => css`
 
 const titleStyle = css`
   display: flex;
+  align-items: center;
   gap: 8px;
-`;
 
-const titleTextStyle = css`
-  font-family: Noto Sans KR;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 50px;
-  line-height: 72px;
+  h2 {
+    font-weight: bold;
+    font-size: 50px;
 
-  text-shadow: ${white} -3px -3px, ${white} 3px -3px, ${white} -3px 3px, ${white} 3px 3px,
-    ${titleActive} 4px 4px 5px;
+    text-shadow: ${white} -3px -3px, ${white} 3px -3px, ${white} -3px 3px, ${white} 3px 3px,
+      ${titleActive} 4px 4px 5px;
+  }
 `;
 
 const achievementListStyle = css`
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: auto;
-  align-items: center;
-  justify-items: center;
-  gap: 35px;
-
-  min-width: 680px;
-  max-height: 612px;
-
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   overflow-y: scroll;
+  -ms-overflow-style: none;
 
-  padding: 40px;
-
-  background-color: ${primaryLight};
+  gap: 35px;
+  padding: 40px 27px;
+  max-width: 820px;
+  max-height: 600px;
+  width: 100%;
+  height: 100%;
   border-radius: 20px;
+  background-color: ${primaryLight};
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* @media (max-width: 1024px) {
+    height: 600px;
+  } */
 `;
 
 export default Profile;

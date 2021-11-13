@@ -17,31 +17,33 @@ const RoomCard: FC<Prop> = ({ roomInfo }) => {
       <div css={leftSide}>
         <div className="room__title">{title}</div>
         <div>
-          <span className="room__user-count">{`${userCount}/12`}</span>
+          <span className="room__user-count">{`${userCount} / 12`}</span>
         </div>
       </div>
       <div css={rightSide}>
         <img src="/assets/icons/person.svg" alt="person" />
-        <span className="room__user-count">{`${userCount}/12`}</span>
+        <span className="room__user-count">{`${userCount} / 12`}</span>
       </div>
     </section>
   );
 };
 
 const roomCardStyle = css`
-  width: 565px;
+  display: flex;
+
+  max-width: 565px;
   height: 220px;
   border-radius: 20px;
-  box-shadow: 2px 2px 8px rgba(78, 65, 109, 0.25);
-  display: flex;
   color: ${primaryDark};
+  box-shadow: 2px 2px 8px rgba(78, 65, 109, 0.25);
+
+  :hover {
+    opacity: 0.8;
+  }
+
   .room__user-count {
     font-weight: 500;
     font-size: 16px;
-    line-height: 19px;
-  }
-  &:hover {
-    opacity: 0.7;
   }
 `;
 
@@ -51,6 +53,7 @@ const leftSide = css`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
   .room__title {
     font-weight: bold;
     font-size: 30px;
@@ -59,14 +62,15 @@ const leftSide = css`
 `;
 
 const rightSide = css`
-  background-color: ${primaryDark};
-  color: ${white};
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom-right-radius: 20px;
-  border-top-right-radius: 20px;
+
   width: 125px;
+  color: ${white};
+  background-color: ${primaryDark};
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
 `;
 
 export default RoomCard;

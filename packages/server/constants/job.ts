@@ -7,9 +7,9 @@ const createJobCountArr = ({ mafia = 0, citizen = 0, police = 0, doctor = 0 }): 
 
 const JOB_COUNT: object[] = [
   {},
-  {},
-  {},
-  {},
+  { mafia: 1 },
+  { mafia: 1, citizen: 1 },
+  { mafia: 1, citizen: 2 },
   { mafia: 1, citizen: 3 },
   { mafia: 1, citizen: 4 },
   { mafia: 2, citizen: 4 },

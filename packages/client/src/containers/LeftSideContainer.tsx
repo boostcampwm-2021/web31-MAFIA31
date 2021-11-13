@@ -2,12 +2,11 @@ import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-import { PlayerState } from '@mafia/domain/types/user';
+import { PlayerState, MafiaPick } from '@mafia/domain/types/game';
 import { PlayerInfo } from '@src/types';
 import { titleActive, white, grey1 } from '@constants/index';
 import { AbilityButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { SettingIcon, RoomOutIcon } from '@components/Icon';
-import { MafiaPick } from '@mafia/domain/types/game';
 
 type PropType = {
   playerStateList: PlayerState[];

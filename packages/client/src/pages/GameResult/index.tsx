@@ -45,14 +45,14 @@ const GameResult = () => {
       <div css={buttonDivStyle}>
         <DefaultButton
           size={ButtonSizeList.MEDIUM}
-          theme={ButtonThemeList.LIGHT}
+          theme={ButtonThemeList.DARK}
           imageSrc="/assets/icons/undo.svg"
           text="돌아가기"
           onClick={() => {}}
         />
         <DefaultButton
           size={ButtonSizeList.MEDIUM}
-          theme={ButtonThemeList.LIGHT}
+          theme={ButtonThemeList.DARK}
           imageSrc="/assets/icons/exit.svg"
           text="방 나가기"
           onClick={() => {}}

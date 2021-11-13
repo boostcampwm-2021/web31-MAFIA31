@@ -42,6 +42,7 @@
         "map": [
           ["@src", "./src"],
           ["@styles", "./src/styles"],
+          ["@utils", "./src/utils"],
           ["@hooks", "./src/hooks"],
           ["@pages", "./src/pages"],
           ["@constants", "./src/constants"],

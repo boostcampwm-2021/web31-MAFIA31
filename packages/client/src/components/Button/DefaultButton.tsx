@@ -25,13 +25,12 @@ DefaultButton.defaultProps = {
 
 const buttonStyle = (size: ButtonSizeList, theme: ButtonThemeList) => css`
   display: flex;
-  flex-direction: row;
-  justify-content: center;
   align-items: center;
-  padding: 0px;
+  justify-content: center;
+  cursor: pointer;
+
   gap: 15px;
   box-shadow: 4px 4px 4px rgba(78, 65, 109, 0.25);
-  cursor: pointer;
 
   ${buttonSizeStyle[size]}
   ${buttonThemeStyle[theme]}
@@ -42,7 +41,6 @@ const buttonSizeStyle = {
     width: 150px;
     height: 60px;
     border-radius: 10px;
-    font-family: Noto Sans KR;
     font-style: normal;
     font-weight: bold;
     font-size: 24px;
@@ -52,7 +50,6 @@ const buttonSizeStyle = {
     width: 300px;
     height: 80px;
     border-radius: 20px;
-    font-family: Noto Sans KR;
     font-style: normal;
     font-weight: bold;
     font-size: 32px;
@@ -62,7 +59,6 @@ const buttonSizeStyle = {
     width: 500px;
     height: 100px;
     border-radius: 20px;
-    font-family: Noto Sans KR;
     font-style: normal;
     font-weight: bold;
     font-size: 40px;
@@ -72,12 +68,12 @@ const buttonSizeStyle = {
 
 const buttonThemeStyle = {
   LIGHT: css`
-    color: ${white};
-    background-color: ${primaryDark};
-  `,
-  DARK: css`
     color: ${titleActive};
     background-color: ${primaryLight};
+  `,
+  DARK: css`
+    color: ${white};
+    background-color: ${primaryDark};
   `,
 };
 

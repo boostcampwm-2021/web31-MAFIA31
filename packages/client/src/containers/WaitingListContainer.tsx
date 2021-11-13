@@ -25,11 +25,20 @@ const WaitingListContainer: FC<Prop> = ({ userList }) => (
 );
 
 const containerStyle = css`
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  row-gap: 55px;
-  column-gap: 40px;
-  width: 920px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  overflow-y: scroll;
+
+  gap: 55px 40px;
+  padding: 40px 0;
+  max-width: 930px;
+  width: 75%;
+  height: 100%;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const wrapperStyle = css`
@@ -40,8 +49,8 @@ const decoStyle = (isHost: boolean) => (isHost ? iconStyle : iconNone);
 
 const iconStyle = css`
   position: absolute;
-  right: -30px;
-  top: -30px;
+  right: -25px;
+  top: -35px;
 `;
 const iconNone = css`
   display: none;

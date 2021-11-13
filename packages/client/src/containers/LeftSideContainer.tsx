@@ -11,7 +11,7 @@ import { SettingIcon, RoomOutIcon } from '@components/Icon';
 type PropType = {
   playerStateList: PlayerState[];
   playerList: PlayerInfo[];
-  timer: number;
+  timer: string;
   voteUser: any;
   myUserName: string;
   emitAbility: any;
@@ -57,7 +57,7 @@ const LeftSideContainer: FC<PropType> = ({
     </div>
 
     <div css={timerStyle}>
-      <span>00:{timer}</span>
+      <span>{timer}</span>
     </div>
     <hr css={hrStyle} />
     <div css={abilityListStyle}>

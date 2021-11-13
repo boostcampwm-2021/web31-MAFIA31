@@ -106,11 +106,10 @@ const chatContainerStyle = css`
 const chatMsgsStyle = css`
   display: flex;
   flex-direction: column;
-  overflow: scroll;
+  overflow-y: scroll;
   -ms-overflow-style: none;
 
   width: 100%;
-  /* height: 100%; */
   gap: 16px;
   font-size: 16px;
   line-height: 23px;

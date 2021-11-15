@@ -10,3 +10,8 @@ export interface PlayerInfo extends User {
   userImg: string;
   voteFrom: string[];
 }
+
+export interface Story {
+  msg: string;
+  imgSrc: string;
+}

@@ -1,11 +1,9 @@
-import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-
-dotenv.config();
+import { mongoDBURI } from '../config/db.config.json';
 
 const dbLoader = async () => {
   const connect = () => {
-    mongoose.connect(process.env.MONGO_DB_URI!, (err) => {
+    mongoose.connect(mongoDBURI!, (err) => {
       if (err) {
         console.log(err);
       } else {

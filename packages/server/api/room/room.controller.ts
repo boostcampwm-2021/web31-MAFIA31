@@ -1,8 +1,5 @@
-import dotenv from 'dotenv';
 import express from 'express';
 import Room, { IRoom } from '../../models/Room';
-
-dotenv.config();
 
 const RoomController = {
   async getRoomList(req: express.Request, res: express.Response) {

@@ -45,14 +45,6 @@ const startTimer = (namespace: Namespace, roomId: string) => {
   }, 1000);
 };
 
-const readyPlayer = (namespace: Namespace, roomId: string, readyUserName: string) => {
-  const readyUser = RoomStore.get(roomId).find(({ userName }) => userName === readyUserName);
-
-  if (!readyUser) return;
-  readyUser.isReady = !readyUser.isReady;
-  namespace.emit(EVENT.PUBLISH_READY, RoomStore.get(roomId));
-};
-
 const shuffle = (arr: string[]) => arr.sort(() => Math.random() - 0.5);
 const assignJobs = (roomId: string) => {
   const jobs = JOB_ARR[RoomStore.get(roomId).length];
@@ -96,7 +88,6 @@ const gameSocketInit = (socket: Socket): void => {
   const { nsp: namespace } = socket;
   const { name: roomId } = namespace;
 
-  socket.on(EVENT.READY, ({ userName }) => readyPlayer(namespace, roomId, userName));
   socket.on(EVENT.GAME_START, () => startGame(namespace, roomId));
   socket.on(EVENT.VOTE, ({ to, from }: Vote) => votePlayer(namespace, roomId, to, from));
 };

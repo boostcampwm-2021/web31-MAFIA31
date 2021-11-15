@@ -13,3 +13,4 @@ export const MAFIA_ABILITY = 'mafia ability';
 export const PUBLISH_VICTIM = 'publish victim';
 export const PUBLISH_JOB = 'publish job';
 export const NIGHT_MESSAGE = 'send night msg';
+export const JOIN = 'join';

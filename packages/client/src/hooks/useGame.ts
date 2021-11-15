@@ -20,7 +20,7 @@ const useGame = (socketRef: any) => {
       }),
     );
     return () => {
-      socketRef.current.off(EVENT.PUBLISH_JOB);
+      socketRef.current.off(EVENT.PUBLISH_JOB, updateMyJob);
       socketRef.current.off(EVENT.GAME_OVER);
     };
   }, [socketRef.current]);

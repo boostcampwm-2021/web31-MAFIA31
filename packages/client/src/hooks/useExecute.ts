@@ -1,4 +1,4 @@
-import { EXECUTION } from '@mafia/domain/constants/event';
+import * as EVENT from '@mafia/domain/constants/event';
 import { PlayerState } from '@mafia/domain/types/game';
 import { User } from '@mafia/domain/types/user';
 import { useEffect, useState } from 'react';
@@ -19,10 +19,10 @@ const useExecute = (socketRef: any) => {
   };
 
   useEffect(() => {
-    socketRef.current?.on(EXECUTION, updatePlayerState);
+    socketRef.current?.on(EVENT.EXECUTION, updatePlayerState);
 
     return () => {
-      socketRef.current.off(EXECUTION, updatePlayerState);
+      socketRef.current.off(EVENT.EXECUTION, updatePlayerState);
     };
   }, [socketRef.current]);
 

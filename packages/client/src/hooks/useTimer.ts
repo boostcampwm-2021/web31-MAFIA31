@@ -1,4 +1,4 @@
-import { TIMER, TURN_CHANGE } from '@mafia/domain/constants/event';
+import * as EVENT from '@mafia/domain/constants/event';
 import timeDisplayer from '@utils/time-displayer';
 import { useEffect, useRef, useState } from 'react';
 
@@ -14,12 +14,12 @@ const useTimer = (socketRef: any) => {
   };
 
   useEffect(() => {
-    socketRef.current?.on(TIMER, updateTimer);
-    socketRef.current?.on(TURN_CHANGE, (isNight: boolean) => setIsNight(isNight));
+    socketRef.current?.on(EVENT.TIMER, updateTimer);
+    socketRef.current?.on(EVENT.TURN_CHANGE, (isNight: boolean) => setIsNight(isNight));
 
     return () => {
-      socketRef.current.off(TIMER, updateTimer);
-      socketRef.current.off(TURN_CHANGE);
+      socketRef.current.off(EVENT.TIMER, updateTimer);
+      socketRef.current.off(EVENT.TURN_CHANGE);
     };
   }, [socketRef.current]);
 

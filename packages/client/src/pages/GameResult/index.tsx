@@ -1,36 +1,34 @@
-import { useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { citizen, mafia, primaryLight, white } from '@constants/colors';
 import { ResultCard } from '@components/Card';
 import { ButtonSizeList, ButtonThemeList, DefaultButton } from '@src/components/Button';
 import { PlayerResult } from '@mafia/domain/types/game';
+import { useLocation } from 'react-router-dom';
+import { useUserInfo } from '@src/contexts/userInfo';
 
 const MAX_USER = 12;
-const DUMMY_PLAYER_RESULT_LIST: PlayerResult[] = [
-  { userName: 'user1', job: 'mafia', result: true },
-  { userName: 'user2', job: 'mafia', result: true },
-  { userName: 'user3', job: 'citizen', result: false },
-  { userName: 'user4', job: 'citizen', result: false },
-  { userName: 'user5', job: 'citizen', result: false },
-  { userName: 'user6', job: 'mafia', result: true },
-  { userName: 'user7', job: 'citizen', result: false },
-  { userName: 'user8', job: 'mafia', result: true },
-  { userName: 'user9', job: 'citizen', result: false },
-  { userName: 'user10', job: 'mafia', result: true },
-  { userName: 'user11', job: 'mafia', result: true },
-  { userName: 'user12', job: 'citizen', result: false },
-];
+
+interface LocationState {
+  playerResultList: PlayerResult[];
+}
 
 const GameResult = () => {
-  const [playerResultList] = useState<PlayerResult[]>(DUMMY_PLAYER_RESULT_LIST);
+  const location = useLocation<LocationState>();
+  const { playerResultList } = location.state;
+  const { userInfo } = useUserInfo();
+  const myJob = playerResultList.find(
+    (playerResult) => playerResult.userName === userInfo?.userName,
+  )?.job;
+  const winnerJob = playerResultList.find((playerResult) => playerResult.result === true)?.job;
+
   return (
     <div css={resultPageStyle}>
       <div css={resultTitleStyle}>
         <div css={teamResultTitleStyle}>
-          <span css={teamResultTitleColorStyle('mafia')}>MAFIA</span> WIN!
+          <span css={teamResultTitleColorStyle(winnerJob!)}>{winnerJob!.toUpperCase()}</span> WIN!
         </div>
-        <div css={personalResultTitleStyle}>YOU LOSE</div>
+        <div css={personalResultTitleStyle}>YOU {myJob === winnerJob ? 'WIN' : 'LOSE'}</div>
       </div>
       <div css={resultCardListStyle(playerResultList.length)}>
         {playerResultList.map(({ userName, job, result }) => (

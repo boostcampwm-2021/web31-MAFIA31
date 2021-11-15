@@ -1,5 +1,5 @@
 import * as EVENT from '@mafia/domain/constants/event';
-import { GameInfo } from '@mafia/domain/types/game';
+import { GameInfo, PlayerResult } from '@mafia/domain/types/game';
 import { Vote } from '@mafia/domain/types/vote';
 import { Namespace, Socket } from 'socket.io';
 import { JOB_ARR } from '../constants/job';
@@ -8,7 +8,7 @@ import RoomStore from '../stores/RoomStore';
 import { publishVictim } from './ability';
 import { canVote, startVoteTime } from './vote';
 
-const getGameResult = (roomId: string) => {
+const getGameResult = (roomId: string): PlayerResult[] => {
   const { mafia } = GameStore.getDashBoard(roomId);
   const win = mafia === 0 ? 'citizen' : 'mafia';
   return GameStore.getGameResult(roomId, win);
@@ -16,12 +16,13 @@ const getGameResult = (roomId: string) => {
 
 const checkEnd = (roomId: string) => {
   const { mafia, citizen } = GameStore.getDashBoard(roomId);
+  console.log('mafia:citizen', mafia, citizen);
   return mafia >= citizen || mafia === 0;
 };
 
 const startTimer = (namespace: Namespace, roomId: string) => {
   const TURN_TIME = 60;
-  let counter = 0;
+  let counter = -1;
   let isNight: boolean = false;
 
   const gameTimer = setInterval(() => {
@@ -29,7 +30,7 @@ const startTimer = (namespace: Namespace, roomId: string) => {
     namespace.emit(EVENT.TIMER, remainTime);
     counter = (counter + 1) % TURN_TIME;
 
-    if (counter !== TURN_TIME) return;
+    if (counter !== 0) return;
     if (checkEnd(roomId)) {
       namespace.emit(EVENT.GAME_OVER, getGameResult(roomId));
       clearInterval(gameTimer);

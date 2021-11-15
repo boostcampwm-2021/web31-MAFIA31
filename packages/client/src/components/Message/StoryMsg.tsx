@@ -23,9 +23,7 @@ const StoryMsgStyle = css`
   align-items: center;
   align-self: center;
   padding: 33px 60px;
-
   width: 80%;
-
   background: ${primaryDark};
   border-radius: 20px;
 `;
@@ -34,13 +32,17 @@ const StoryTextStyle = css`
   padding-bottom: 16px;
 
   font-family: Noto Sans KR;
+  padding: 33px 60px;
+  width: 494px;
+  height: 325px;
+  background: ${primaryDark};
+  color: ${white};
   font-style: normal;
   font-weight: bold;
   font-size: 24px;
   line-height: 35px;
   text-align: center;
-
-  color: ${white};
+  border-radius: 20px;
 `;
 
 export default StoryMsg;

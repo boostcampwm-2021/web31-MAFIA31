@@ -12,15 +12,15 @@ export interface PlayerInfo extends User {
   voteFrom: string[];
 }
 
-export interface Story {
-  id: string;
-  msg: string;
-  imgSrc: string;
-}
-
 export interface StoryDictionary {
   [story: string]: {
     msg: (name: string) => string;
     imgSrc: string;
   };
+}
+
+export interface Story {
+  id: string;
+  msg: string;
+  imgSrc: string;
 }

@@ -1,9 +1,11 @@
 import * as EVENT from '@mafia/domain/constants/event';
 import { PlayerInfo } from '@mafia/domain/types/user';
+import { useSocketContext } from '@src/contexts/socket';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-const useRoom = (socketRef: any) => {
+const useRoom = () => {
+  const { socketRef } = useSocketContext();
   const [playerList, setPlayerList] = useState<PlayerInfo[]>([]);
   const history = useHistory();
 

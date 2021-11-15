@@ -1,9 +1,11 @@
 import * as EVENT from '@mafia/domain/constants/event';
 import { PlayerState } from '@mafia/domain/types/game';
 import { User } from '@mafia/domain/types/user';
+import { useSocketContext } from '@src/contexts/socket';
 import { useEffect, useState } from 'react';
 
-const useExecute = (socketRef: any) => {
+const useExecute = () => {
+  const { socketRef } = useSocketContext();
   const [playerState, setPlayerList] = useState<PlayerState[]>([
     { userName: 'user1', isDead: true },
     { userName: 'user2', isDead: false },
@@ -22,7 +24,7 @@ const useExecute = (socketRef: any) => {
     socketRef.current?.on(EVENT.EXECUTION, updatePlayerState);
 
     return () => {
-      socketRef.current.off(EVENT.EXECUTION, updatePlayerState);
+      socketRef.current?.off(EVENT.EXECUTION, updatePlayerState);
     };
   }, [socketRef.current]);
 

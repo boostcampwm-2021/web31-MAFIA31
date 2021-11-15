@@ -1,9 +1,7 @@
 import { User } from '@mafia/domain/types/user';
 import axios from 'axios';
-import dotenv from 'dotenv';
 import express from 'express';
-
-dotenv.config();
+import { githubClientId, githubClientSecret } from '../../config/github.config.json';
 
 const getAccessToken = async (code: string) => {
   const {
@@ -12,8 +10,8 @@ const getAccessToken = async (code: string) => {
     method: 'POST',
     url: `https://github.com/login/oauth/access_token`,
     data: {
-      client_id: process.env.GITHUB_CLIENT_ID,
-      client_secret: process.env.GITHUB_CLIENT_SECRET,
+      client_id: githubClientId,
+      client_secret: githubClientSecret,
       code,
     },
     headers: { Accept: 'application/json' },

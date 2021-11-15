@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { Link, useLocation, useHistory } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import Header from '@src/templates/Header';
 import { RoomInfo } from '@src/types';
 import WaitingListContainer from '@src/containers/WaitingListContainer';
@@ -28,7 +28,7 @@ const Waiting = () => {
   const { userName: myName } = userInfo;
   const { socketRef } = useSocket(roomId);
   const [isHost, setIsHost] = useState<boolean>();
-  const { playerList, sendReady, sendGameStart } = useRoom(socketRef);
+  const { playerList, sendReady, sendGameStart, isAllReady } = useRoom(socketRef);
 
   const updateHost = () => {
     if (!playerList[0]) {
@@ -51,16 +51,13 @@ const Waiting = () => {
         <WaitingListContainer userList={playerList} />
         <div css={bottomBarStyle}>
           {isHost ? (
-            <div css={gameStartStyle(!playerList.some(({ isReady }) => isReady === false))}>
-              <Link to="/game">
-                <DefaultButton
-                  text="START"
-                  size={ButtonSizeList.MEDIUM}
-                  theme={ButtonThemeList.DARK}
-                  onClick={sendGameStart}
-                />
-              </Link>
-            </div>
+            <DefaultButton
+              text="START"
+              size={ButtonSizeList.MEDIUM}
+              theme={ButtonThemeList.DARK}
+              onClick={sendGameStart}
+              isDisabled={!isAllReady()}
+            />
           ) : (
             <DefaultButton
               text="READY"
@@ -94,14 +91,5 @@ const bottomBarStyle = css`
   justify-content: flex-end;
   width: 100%;
 `;
-
-const gameStartStyle = (isAllReady: boolean) =>
-  isAllReady
-    ? css`
-        cursor: pointer;
-      `
-    : css`
-        pointer-events: none;
-      `;
 
 export default Waiting;

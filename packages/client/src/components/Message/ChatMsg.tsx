@@ -2,18 +2,17 @@ import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-import { Message } from '@mafia/domain/types/chat';
 import { primaryLight, primaryDark, white, titleActive } from '@constants/index';
 
 interface PropType {
-  chat: Message;
+  msg: string;
   isMyMsg: boolean;
 }
 
-const ChatMsg: FC<PropType> = ({ chat, isMyMsg }) => (
+const ChatMsg: FC<PropType> = ({ msg, isMyMsg }) => (
   <div css={msgContainerStyle(isMyMsg)}>
     <img css={profileImgStyle(isMyMsg)} src="/assets/icons/profile.svg" alt="profile" />
-    <div css={msgStyle(isMyMsg)}>{chat.msg}</div>
+    <div css={msgStyle(isMyMsg)}>{msg}</div>
   </div>
 );
 

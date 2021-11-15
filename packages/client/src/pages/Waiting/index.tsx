@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { Link, useLocation, useHistory } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import Header from '@src/templates/Header';
 import { RoomInfo } from '@src/types';
 import WaitingListContainer from '@src/containers/WaitingListContainer';
@@ -43,14 +43,12 @@ const Waiting = () => {
         <div css={bottomBarStyle}>
           {isHost ? (
             <div css={gameStartStyle(!playerList.some(({ isReady }) => isReady === false))}>
-              <Link to="/game">
-                <DefaultButton
-                  text="START"
-                  size={ButtonSizeList.MEDIUM}
-                  theme={ButtonThemeList.DARK}
-                  onClick={sendGameStart}
-                />
-              </Link>
+              <DefaultButton
+                text="START"
+                size={ButtonSizeList.MEDIUM}
+                theme={ButtonThemeList.DARK}
+                onClick={sendGameStart}
+              />
             </div>
           ) : (
             <DefaultButton

@@ -1,28 +1,32 @@
-import { GAME_START, PUBLISH_READY, READY } from '@mafia/domain/constants/event';
+import * as EVENT from '@mafia/domain/constants/event';
 import { PlayerInfo } from '@mafia/domain/types/user';
 import { useSocketContext } from '@src/contexts/socket';
 import { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const useRoom = () => {
   const { socketRef } = useSocketContext();
   const [playerList, setPlayerList] = useState<PlayerInfo[]>([]);
+  const history = useHistory();
 
   useEffect(() => {
-    socketRef.current?.on('join', (playerList: PlayerInfo[]) => {
+    socketRef.current?.on(EVENT.JOIN, (playerList: PlayerInfo[]) => {
       setPlayerList(playerList);
     });
-    socketRef.current?.on(PUBLISH_READY, updatePlayerList);
+    socketRef.current?.on(EVENT.PUBLISH_READY, updatePlayerList);
+    socketRef.current?.on(EVENT.PUBLISH_GAME_START, () => history.push('/game'));
 
     return () => {
-      socketRef.current?.off(PUBLISH_READY);
-      socketRef.current?.off('join');
+      socketRef.current?.off(EVENT.JOIN);
+      socketRef.current?.off(EVENT.PUBLISH_READY);
+      socketRef.current?.off(EVENT.PUBLISH_GAME_START);
     };
   }, [socketRef.current]);
 
   const updatePlayerList = (playerList: PlayerInfo[]) => setPlayerList(playerList);
   const sendReady = ({ userName }: { userName: string }) =>
-    socketRef.current?.emit(READY, userName);
-  const sendGameStart = () => socketRef.current?.emit(GAME_START);
+    socketRef.current?.emit(EVENT.READY, userName);
+  const sendGameStart = () => socketRef.current?.emit(EVENT.GAME_START);
 
   return { playerList, sendReady, sendGameStart };
 };

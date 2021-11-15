@@ -7,14 +7,13 @@ const useSocket = (roomId: string) => {
   const { socketRef } = useSocketContext();
   const { userInfo } = useUserInfo();
   const SOCKET_URL: string = process.env.REACT_APP_SOCKET_URL || 'localhost:5001/';
-  const socketId = socketRef.current?.id;
 
   useEffect(() => {
     socketRef.current = io(SOCKET_URL + roomId);
     socketRef.current?.emit('join', userInfo?.userName);
   }, [roomId]);
 
-  return { socketRef, socketId };
+  return { socketRef };
 };
 
 export default useSocket;

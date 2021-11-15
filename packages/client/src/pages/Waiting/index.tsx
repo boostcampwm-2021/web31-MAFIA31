@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { Link, useLocation, useHistory } from 'react-router-dom';
@@ -14,25 +15,32 @@ interface locationType {
 }
 
 const Waiting = () => {
-  const location = useLocation<locationType>();
-  const history = useHistory();
-  const { roomId } = location.state.roomInfo;
+  const { state } = useLocation<locationType>();
   const { userInfo } = useUserInfo();
-  if (!userInfo?.userName) {
+  const history = useHistory();
+
+  if (!state?.roomInfo || !userInfo?.userName) {
     history.push('/');
+    return <></>;
   }
 
+  const { roomId } = state.roomInfo;
+  const { userName: myName } = userInfo;
   const { socketRef } = useSocket(roomId);
+  const [isHost, setIsHost] = useState<boolean>();
   const { playerList, sendReady, sendGameStart } = useRoom(socketRef);
-  const isHost =
-    playerList.find(({ userName }) => userName === userInfo?.userName)?.isHost ?? false;
 
-  const getReady = () => {
-    const me = playerList.find((user) => userInfo?.userName === user.userName);
-
-    if (!me) return;
-    sendReady({ userName: me.userName });
+  const updateHost = () => {
+    if (!playerList[0]) {
+      setIsHost(false);
+      return;
+    }
+    setIsHost(playerList[0].isHost && myName === playerList[0].userName);
   };
+
+  useEffect(() => {
+    updateHost();
+  }, [playerList]);
 
   // TODO: socket을 useContext로 관리, 여기서 할당해주기!
 
@@ -58,7 +66,7 @@ const Waiting = () => {
               text="READY"
               size={ButtonSizeList.MEDIUM}
               theme={ButtonThemeList.DARK}
-              onClick={getReady}
+              onClick={sendReady}
             />
           )}
         </div>

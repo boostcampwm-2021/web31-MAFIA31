@@ -7,13 +7,18 @@ import { SendIcon } from '@components/Icon';
 import { IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { primaryLight, primaryDark, white, titleActive } from '@constants/index';
 import { useUserInfo } from '@src/contexts/userInfo';
-import { MessageClient, Story } from '@src/types';
+import { Story } from '@src/types';
+import { Message } from '@mafia/domain/types/chat';
 
 interface PropType {
-  chatList: (MessageClient | Story)[];
+  chatList: (Message | Story)[];
   sendChat: any;
   sendNightChat: any;
   isNight: boolean;
+}
+
+function isStory(data: Message | Story): data is Story {
+  return (data as Story).imgSrc !== undefined;
 }
 
 const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNight }) => {
@@ -68,10 +73,10 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNigh
     <div css={chatContainerStyle}>
       <div css={chatMsgsStyle} ref={chatMsgsRef}>
         {chatList.map((el) =>
-          !el.isStory ? (
-            <ChatMsg key={el.id} msg={el.msg} isMyMsg={userInfo?.userName === el.userName} />
-          ) : (
+          isStory(el) ? (
             <StoryMsg key={el.id} msg={el.msg} imgSrc={el.imgSrc} />
+          ) : (
+            <ChatMsg key={el.id} msg={el.msg} isMyMsg={userInfo?.userName === el.userName} />
           ),
         )}
       </div>

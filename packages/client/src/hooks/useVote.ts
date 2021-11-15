@@ -1,9 +1,11 @@
 import { PUBLISH_VOTE, VOTE } from '@mafia/domain/constants/event';
 import { RoomVote } from '@mafia/domain/types/vote';
+import { useSocketContext } from '@src/contexts/socket';
 import { PlayerInfo } from '@src/types';
 import { useEffect, useState } from 'react';
 
-const useVote = (socketRef: any, myUserName: string) => {
+const useVote = (myUserName: string) => {
+  const { socketRef } = useSocketContext();
   const [playerList, setPlayerList] = useState<PlayerInfo[]>([
     {
       userImg: '/assets/icons/profile.png',
@@ -31,7 +33,7 @@ const useVote = (socketRef: any, myUserName: string) => {
     socketRef.current?.on(PUBLISH_VOTE, updatePlayerList);
 
     return () => {
-      socketRef.current.off(PUBLISH_VOTE, updatePlayerList);
+      socketRef.current?.off(PUBLISH_VOTE, updatePlayerList);
     };
   }, [socketRef.current]);
 

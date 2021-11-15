@@ -22,8 +22,9 @@ const Waiting = () => {
     history.push('/');
   }
 
-  const { socketRef } = useSocket(roomId);
-  const { playerList, sendReady, sendGameStart } = useRoom(socketRef);
+  useSocket(roomId);
+
+  const { playerList, sendReady, sendGameStart } = useRoom();
   const isHost =
     playerList.find(({ userName }) => userName === userInfo?.userName)?.isHost ?? false;
 
@@ -33,8 +34,6 @@ const Waiting = () => {
     if (!me) return;
     sendReady({ userName: me.userName });
   };
-
-  // TODO: socket을 useContext로 관리, 여기서 할당해주기!
 
   return (
     <div css={pageStyle}>

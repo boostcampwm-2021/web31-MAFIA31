@@ -2,10 +2,13 @@
 import { css } from '@emotion/react';
 import { RoomCard } from '@src/components/Card';
 import { RoomInfo } from '@src/types';
+import disconnectSocket from '@src/utils/disconnectSocket';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const RoomContainer = () => {
+  disconnectSocket();
+
   const [roomList, setRoomList] = useState<RoomInfo[]>([]);
 
   const updateRoomList = async () => {

@@ -46,7 +46,7 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNigh
     setInputValue('');
   }, [inputValue, isNight]);
 
-  const handleKeyDown = useCallback(
+  const handleKeyPress = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
       if (event.key !== 'Enter') return;
       sendMessage();
@@ -77,7 +77,7 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNigh
           placeholder="메세지를 입력하세요"
           value={inputValue}
           onChange={({ target }) => setInputValue(target.value)}
-          onKeyDown={handleKeyDown}
+          onKeyPress={handleKeyPress}
         />
         <IconButton
           icon={SendIcon}

@@ -3,17 +3,22 @@ import React, { FC, useCallback, useState, useRef, useEffect } from 'react';
 import { css } from '@emotion/react';
 
 import { Message } from '@mafia/domain/types/chat';
-import { ChatMsg } from '@components/Message';
+import { ChatMsg, StoryMsg } from '@components/Message';
 import { SendIcon } from '@components/Icon';
 import { IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { primaryLight, primaryDark, white, titleActive } from '@constants/index';
 import { useUserInfo } from '@src/contexts/userInfo';
+import { Story } from '@src/types';
 
 interface PropType {
-  chatList: Message[];
+  chatList: (Message | Story)[];
   sendChat: any;
   sendNightChat: any;
   isNight: boolean;
+}
+
+function isStory(data: Message | Story): data is Story {
+  return (data as Story).imgSrc !== undefined;
 }
 
 const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNight }) => {
@@ -67,9 +72,13 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNigh
   return (
     <div css={chatContainerStyle}>
       <div css={chatMsgsStyle} ref={chatMsgsRef}>
-        {chatList.map((chat) => (
-          <ChatMsg key={chat.id} chat={chat} isMyMsg={userInfo?.userName === chat.userName} />
-        ))}
+        {chatList.map((chat: Message | Story) =>
+          isStory(chat) ? (
+            <StoryMsg msg={chat.msg} imgSrc={chat.imgSrc} />
+          ) : (
+            <ChatMsg key={chat.id} chat={chat} isMyMsg={userInfo?.userName === chat.userName} />
+          ),
+        )}
       </div>
       <form css={inputFormStyle(isNight)}>
         <input

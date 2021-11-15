@@ -1,9 +1,11 @@
-// import { User } from 'domain/types/user';
 import { useUserInfo } from '@src/contexts/userInfo';
-import React, { useEffect } from 'react';
+import disconnectSocket from '@src/utils/disconnectSocket';
+import { useEffect } from 'react';
 import { Redirect, useLocation } from 'react-router-dom';
 
 const Callback = () => {
+  disconnectSocket();
+
   const { setUserInfo } = useUserInfo();
 
   const getUserData = async (code: string) => {

@@ -11,11 +11,7 @@ const useSocket = (roomId: string) => {
 
   useEffect(() => {
     socketRef.current = io(SOCKET_URL + roomId);
-    socketRef.current.emit('join', userInfo?.userName);
-
-    return () => {
-      socketRef.current!.disconnect();
-    };
+    socketRef.current?.emit('join', userInfo?.userName);
   }, [roomId]);
 
   return { socketRef, socketId };

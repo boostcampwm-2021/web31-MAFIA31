@@ -7,7 +7,7 @@ import { ImageSizeList, Image } from '../Image';
 interface PropType {
   userName: string;
   job: string;
-  isWinner: boolean;
+  win: boolean;
 }
 
 interface JobTable {
@@ -25,12 +25,12 @@ const jobTable: JobTable = {
   },
 };
 
-const ResultCard: FC<PropType> = ({ userName, job, isWinner }) => {
+const ResultCard: FC<PropType> = ({ userName, job, win }) => {
   const WINNER_STAMP_SRC = '/assets/icons/stamp-winner.png';
   return (
     <div css={resultCardStyle}>
       <div css={margin}>{jobTable[job].koreanName}</div>
-      <img css={winnerStampStyle(isWinner)} src={WINNER_STAMP_SRC} alt="winner stamp" />
+      <img css={winnerStampStyle(win)} src={WINNER_STAMP_SRC} alt="winner stamp" />
       <Image size={ImageSizeList.SMALL} src={jobTable[job].imgSrc} />
       <div css={margin}>{userName}</div>
     </div>

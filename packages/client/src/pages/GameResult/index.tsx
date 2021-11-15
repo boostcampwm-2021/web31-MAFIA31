@@ -4,27 +4,22 @@ import { css } from '@emotion/react';
 import { citizen, mafia, primaryLight, white } from '@constants/colors';
 import { ResultCard } from '@components/Card';
 import { ButtonSizeList, ButtonThemeList, DefaultButton } from '@src/components/Button';
-
-interface PlayerResult {
-  userName: string;
-  job: string;
-  isWinner: boolean;
-}
+import { PlayerResult } from '@mafia/domain/types/game';
 
 const MAX_USER = 12;
-const DUMMY_PLAYER_RESULT_LIST = [
-  { userName: 'user1', job: 'mafia', isWinner: true },
-  { userName: 'user2', job: 'mafia', isWinner: true },
-  { userName: 'user3', job: 'citizen', isWinner: false },
-  { userName: 'user4', job: 'citizen', isWinner: false },
-  { userName: 'user5', job: 'citizen', isWinner: false },
-  { userName: 'user6', job: 'mafia', isWinner: true },
-  { userName: 'user7', job: 'citizen', isWinner: false },
-  { userName: 'user8', job: 'mafia', isWinner: true },
-  { userName: 'user9', job: 'citizen', isWinner: false },
-  { userName: 'user10', job: 'mafia', isWinner: true },
-  { userName: 'user11', job: 'mafia', isWinner: true },
-  { userName: 'user12', job: 'citizen', isWinner: false },
+const DUMMY_PLAYER_RESULT_LIST: PlayerResult[] = [
+  { userName: 'user1', job: 'mafia', result: true },
+  { userName: 'user2', job: 'mafia', result: true },
+  { userName: 'user3', job: 'citizen', result: false },
+  { userName: 'user4', job: 'citizen', result: false },
+  { userName: 'user5', job: 'citizen', result: false },
+  { userName: 'user6', job: 'mafia', result: true },
+  { userName: 'user7', job: 'citizen', result: false },
+  { userName: 'user8', job: 'mafia', result: true },
+  { userName: 'user9', job: 'citizen', result: false },
+  { userName: 'user10', job: 'mafia', result: true },
+  { userName: 'user11', job: 'mafia', result: true },
+  { userName: 'user12', job: 'citizen', result: false },
 ];
 
 const GameResult = () => {
@@ -38,8 +33,8 @@ const GameResult = () => {
         <div css={personalResultTitleStyle}>YOU LOSE</div>
       </div>
       <div css={resultCardListStyle(playerResultList.length)}>
-        {playerResultList.map(({ userName, job, isWinner }) => (
-          <ResultCard key={userName} userName={userName} job={job} isWinner={isWinner} />
+        {playerResultList.map(({ userName, job, result }) => (
+          <ResultCard key={userName} userName={userName} job={job} win={result} />
         ))}
       </div>
       <div css={buttonDivStyle}>

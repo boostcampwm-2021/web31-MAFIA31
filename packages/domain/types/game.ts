@@ -16,7 +16,7 @@ export interface MafiaPick {
   victim: string;
 }
 
-export interface GameResult {
+export interface PlayerResult {
   userName: string;
   job: string;
   result: boolean;

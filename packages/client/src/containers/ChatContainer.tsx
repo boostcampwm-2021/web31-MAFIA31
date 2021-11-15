@@ -1,7 +1,6 @@
 import React, { FC, useCallback, useState, useRef, useEffect } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-
 import { Message } from '@mafia/domain/types/chat';
 import { ChatMsg, StoryMsg } from '@components/Message';
 import { SendIcon } from '@components/Icon';
@@ -51,7 +50,7 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNigh
     setInputValue('');
   }, [inputValue, isNight]);
 
-  const handleKeyDown = useCallback(
+  const handleKeyPress = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
       if (event.key !== 'Enter') return;
       sendMessage();
@@ -72,11 +71,11 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNigh
   return (
     <div css={chatContainerStyle}>
       <div css={chatMsgsStyle} ref={chatMsgsRef}>
-        {chatList.map((chat: Message | Story) =>
-          isStory(chat) ? (
-            <StoryMsg msg={chat.msg} imgSrc={chat.imgSrc} />
+        {chatList.map((el) =>
+          isStory(el) ? (
+            <StoryMsg key={el.id} msg={el.msg} imgSrc={el.imgSrc} />
           ) : (
-            <ChatMsg key={chat.id} chat={chat} isMyMsg={userInfo?.userName === chat.userName} />
+            <ChatMsg key={el.id} msg={el.msg} isMyMsg={userInfo?.userName === el.userName} />
           ),
         )}
       </div>
@@ -86,7 +85,7 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNigh
           placeholder="메세지를 입력하세요"
           value={inputValue}
           onChange={({ target }) => setInputValue(target.value)}
-          onKeyDown={handleKeyDown}
+          onKeyPress={handleKeyPress}
         />
         <IconButton
           icon={SendIcon}

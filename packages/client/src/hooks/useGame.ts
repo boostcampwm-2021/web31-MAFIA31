@@ -1,4 +1,4 @@
-import { PUBLISH_JOB } from '@mafia/domain/constants/event';
+import * as EVENT from '@mafia/domain/constants/event';
 import { useEffect, useState } from 'react';
 
 const useGame = (socketRef: any) => {
@@ -9,10 +9,10 @@ const useGame = (socketRef: any) => {
   };
 
   useEffect(() => {
-    socketRef.current?.on(PUBLISH_JOB, updateMyJob);
+    socketRef.current?.on(EVENT.PUBLISH_JOB, updateMyJob);
 
     return () => {
-      socketRef.current.off(PUBLISH_JOB, updateMyJob);
+      socketRef.current.off(EVENT.PUBLISH_JOB, updateMyJob);
     };
   }, [socketRef.current]);
 

@@ -11,7 +11,7 @@ interface PropType {
 
 const StoryMsg: FC<PropType> = ({ msg, imgSrc }) => (
   <div css={StoryMsgStyle}>
-    <div>{msg}</div>
+    <div css={StoryTextStyle}>{msg}</div>
     <Image size={ImageSizeList.STORY} src={imgSrc} />
   </div>
 );
@@ -21,6 +21,17 @@ const StoryMsgStyle = css`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  align-self: center;
+  padding: 33px 60px;
+  width: 80%;
+  background: ${primaryDark};
+  border-radius: 20px;
+`;
+
+const StoryTextStyle = css`
+  padding-bottom: 16px;
+
+  font-family: Noto Sans KR;
   padding: 33px 60px;
   width: 494px;
   height: 325px;
@@ -30,6 +41,7 @@ const StoryMsgStyle = css`
   font-weight: bold;
   font-size: 24px;
   line-height: 35px;
+  text-align: center;
   border-radius: 20px;
 `;
 

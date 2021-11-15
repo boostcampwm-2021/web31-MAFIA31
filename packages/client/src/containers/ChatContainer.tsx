@@ -46,7 +46,7 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNigh
     setInputValue('');
   }, [inputValue, isNight]);
 
-  const handleKeyDown = useCallback(
+  const handleKeyPress = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
       if (event.key !== 'Enter') return;
       sendMessage();
@@ -67,14 +67,13 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNigh
   return (
     <div css={chatContainerStyle}>
       <div css={chatMsgsStyle} ref={chatMsgsRef}>
-        {chatList.map((el) => {
-          if (!el.isStory) {
-            return (
-              <ChatMsg key={el.id} msg={el.msg} isMyMsg={userInfo?.userName === el.userName} />
-            );
-          }
-          return <StoryMsg key={el.id} msg={el.msg} imgSrc={el.imgSrc} />;
-        })}
+        {chatList.map((el) =>
+          !el.isStory ? (
+            <ChatMsg key={el.id} msg={el.msg} isMyMsg={userInfo?.userName === el.userName} />
+          ) : (
+            <StoryMsg key={el.id} msg={el.msg} imgSrc={el.imgSrc} />
+          ),
+        )}
       </div>
       <form css={inputFormStyle(isNight)}>
         <input
@@ -82,7 +81,7 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNigh
           placeholder="메세지를 입력하세요"
           value={inputValue}
           onChange={({ target }) => setInputValue(target.value)}
-          onKeyDown={handleKeyDown}
+          onKeyPress={handleKeyPress}
         />
         <IconButton
           icon={SendIcon}

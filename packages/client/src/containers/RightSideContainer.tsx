@@ -20,12 +20,7 @@ interface Memo {
 }
 
 const RightSideContainer: FC<PropType> = ({ playerStateList, isNight, myJob }) => {
-  const [memoList] = useState<Memo[]>([
-    { userName: 'user1', guessJob: 'mafia' },
-    { userName: 'user2', guessJob: 'citizen' },
-    { userName: 'user3', guessJob: 'doctor' },
-    { userName: 'user4', guessJob: 'police' },
-  ]);
+  const [memoList] = useState<Memo[]>([]);
 
   return (
     <div css={rightSideContainerStyle(isNight)}>

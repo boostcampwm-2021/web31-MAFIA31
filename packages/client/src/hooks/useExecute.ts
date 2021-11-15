@@ -4,12 +4,7 @@ import { User } from '@mafia/domain/types/user';
 import { useEffect, useState } from 'react';
 
 const useExecute = (socketRef: any) => {
-  const [playerState, setPlayerList] = useState<PlayerState[]>([
-    { userName: 'user1', isDead: true },
-    { userName: 'user2', isDead: false },
-    { userName: 'user3', isDead: true },
-    { userName: 'user4', isDead: false },
-  ]);
+  const [playerState, setPlayerList] = useState<PlayerState[]>([]);
   const updatePlayerState = (user: User) => {
     setPlayerList((prev) =>
       prev.map((player) =>

@@ -18,9 +18,9 @@ const Game = () => {
   const { socketRef, socketId } = useSocket('123e4567-e89b-12d3-a456-426614174000');
   const playerStateList = useExecute(socketRef);
   const { chatList, sendChat, sendNightChat } = useChat(socketRef);
-  const { playerList, voteUser } = useVote(socketRef, myUserName);
+  const { voteList, voteUser } = useVote(socketRef, myUserName);
   const { timer, isNight } = useTimer(socketRef);
-  const { emitAbility, mafiaPickList } = useAbility(socketRef, socketId!, 'user1', 'mafia');
+  const { emitAbility, mafiaPickList } = useAbility(socketRef, socketId!, myUserName, 'mafia');
   const { myJob } = useGame(socketRef);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const Game = () => {
     <div css={gamePageStyle(isNight)}>
       <LeftSideContainer
         playerStateList={playerStateList}
-        playerList={playerList}
+        playerList={voteList}
         myUserName={myUserName}
         timer={timer}
         voteUser={voteUser}

@@ -14,12 +14,13 @@ const App = () => (
     <SocketProvider>
       <UserInfoProvider>
         <Switch>
-          <Route exact path="/callback" component={Callback} />
-          <Route exact path="/profile" component={Profile} />
-          <Route exact path="/rooms" component={Rooms} />
-          <Route exact path="/waiting" component={Waiting} />
-          <Route exact path="/game" component={Game} />
-          <Route exact path="/game-result" component={GameResult} />
+          <Route exact path="/" component={Login} />
+          <Route path="/callback" component={Callback} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/rooms" component={Rooms} />
+          <Route path="/waiting" component={Waiting} />
+          <Route path="/game" component={Game} />
+          <Route path="/game-result" component={GameResult} />
           <Route component={Login} />
         </Switch>
       </UserInfoProvider>

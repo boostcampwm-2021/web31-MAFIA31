@@ -82,6 +82,7 @@ const emitJobs = (namespace: Namespace, roomId: string): void => {
 const startGame = (namespace: Namespace, roomId: string) => {
   assignJobs(roomId);
   emitJobs(namespace, roomId);
+  namespace.emit(EVENT.GAME_START);
   startTimer(namespace, roomId);
 };
 

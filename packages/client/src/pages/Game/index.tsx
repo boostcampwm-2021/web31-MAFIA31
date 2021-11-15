@@ -16,7 +16,7 @@ import { PlayerState } from '@mafia/domain/types/game';
 
 const Game = () => {
   const myUserName = 'user1';
-  const { socketRef, socketId } = useSocket('123e4567-e89b-12d3-a456-426614174000');
+  const { socketRef } = useSocket('123e4567-e89b-12d3-a456-426614174000');
   const [playerStateList, setPlayerStateList] = useState<PlayerState[]>([
     { userName: 'user1', isDead: true },
     { userName: 'user2', isDead: false },
@@ -29,7 +29,6 @@ const Game = () => {
   const { timer, isNight } = useTimer(socketRef);
   const { emitAbility, mafiaPickList } = useAbility(
     socketRef,
-    socketId!,
     'user1',
     'mafia',
     setPlayerStateList,

@@ -69,7 +69,13 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNigh
           isStory(el) ? (
             <StoryMsg key={el.id} msg={el.msg} imgSrc={el.imgSrc} />
           ) : (
-            <ChatMsg key={el.id} msg={el.msg} isMyMsg={userInfo?.userName === el.userName} />
+            <ChatMsg
+              key={el.id}
+              userName={el.userName}
+              profileImg={el.profileImg}
+              msg={el.msg}
+              isMyMsg={userInfo?.userName === el.userName}
+            />
           ),
         )}
       </div>

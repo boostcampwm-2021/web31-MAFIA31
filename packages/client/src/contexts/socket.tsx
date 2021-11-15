@@ -13,7 +13,7 @@ interface Props {
   children: ReactNode;
 }
 
-const UserInfoProvider: FC<Props> = ({ children }) => {
+const SocketProvider: FC<Props> = ({ children }) => {
   const socketRef = useRef<Socket>();
 
   return (
@@ -23,4 +23,4 @@ const UserInfoProvider: FC<Props> = ({ children }) => {
   );
 };
 
-export default UserInfoProvider;
+export default SocketProvider;

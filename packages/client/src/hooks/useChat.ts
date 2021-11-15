@@ -1,17 +1,13 @@
-import {
-  MESSAGE,
-  NIGHT_MESSAGE,
-  PUBLISH_MESSAGE,
-  PUBLISH_VICTIM,
-} from '@mafia/domain/constants/event';
+import * as EVENT from '@mafia/domain/constants/event';
+import { Message } from '@mafia/domain/types/chat';
 import { STORY_DICTIONARY } from '@src/constants/story';
-import { MessageClient, Story } from '@src/types';
+import { Story } from '@src/types';
 import { useEffect, useState } from 'react';
 
 const useChat = (socketRef: any) => {
-  const [chatList, setChatList] = useState<(MessageClient | Story)[]>([]);
+  const [chatList, setChatList] = useState<(Message | Story)[]>([]);
 
-  const updateChatList = (msg: MessageClient): void => {
+  const updateChatList = (msg: Message): void => {
     setChatList((prev) => [...prev, msg]);
   };
   const updateVictimStory = (victim: string): void => {
@@ -23,29 +19,29 @@ const useChat = (socketRef: any) => {
   };
 
   useEffect(() => {
-    socketRef.current?.on(PUBLISH_MESSAGE, updateChatList);
+    socketRef.current?.on(EVENT.PUBLISH_MESSAGE, updateChatList);
 
     return () => {
-      socketRef.current.off(PUBLISH_MESSAGE, updateChatList);
+      socketRef.current.off(EVENT.PUBLISH_MESSAGE, updateChatList);
     };
   }, [socketRef.current]);
 
   useEffect(() => {
-    socketRef.current?.on(PUBLISH_VICTIM, updateVictimStory);
+    socketRef.current?.on(EVENT.PUBLISH_VICTIM, updateVictimStory);
 
     return () => {
-      socketRef.current.off(PUBLISH_VICTIM, updateVictimStory);
+      socketRef.current.off(EVENT.PUBLISH_VICTIM, updateVictimStory);
     };
   }, [socketRef.current]);
 
-  const sendChat = (msg: MessageClient): void => {
+  const sendChat = (msg: Message): void => {
     if (!msg.msg) return;
-    socketRef.current?.emit(MESSAGE, msg);
+    socketRef.current?.emit(EVENT.MESSAGE, msg);
   };
 
-  const sendNightChat = (msg: MessageClient, roomName: string): void => {
+  const sendNightChat = (msg: Message, roomName: string): void => {
     if (!msg.msg) return;
-    socketRef.current.emit(NIGHT_MESSAGE, { msg, roomName });
+    socketRef.current.emit(EVENT.NIGHT_MESSAGE, { msg, roomName });
   };
 
   return { chatList, sendChat, sendNightChat };

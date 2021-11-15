@@ -1,4 +1,4 @@
-import { MAFIA_ABILITY } from '@mafia/domain/constants/event';
+import { MAFIA_ABILITY, PUBLISH_VICTIM } from '@mafia/domain/constants/event';
 import { MafiaPick } from '@mafia/domain/types/game';
 import { useEffect, useState } from 'react';
 
@@ -11,8 +11,18 @@ const useAbility = (
   socketId: string | undefined,
   myUserName: string,
   job: string,
+  setPlayerStateList: any,
 ) => {
   const [mafiaPickList, setMafiaPickList] = useState<MafiaPick[]>([]);
+
+  useEffect(() => {
+    socketRef.current?.on(PUBLISH_VICTIM, (v: string) => {
+      setPlayerStateList((prev: any) => [...prev, { userName: v, isDead: true }]);
+    });
+    return () => {
+      socketRef.current.off(PUBLISH_VICTIM);
+    };
+  }, [socketRef.current]);
 
   useEffect(() => {
     socketRef.current?.on(jobAbility[job], (newList: MafiaPick[]) => {
@@ -25,9 +35,7 @@ const useAbility = (
   }, [socketRef.current]);
 
   const emitAbility = (victim: string) => {
-    if (socketId) {
-      socketRef.current?.emit(jobAbility[job], { mafia: myUserName, victim, socketId });
-    }
+    socketRef.current?.emit(jobAbility[job], { mafia: myUserName, victim });
   };
 
   return { emitAbility, mafiaPickList };

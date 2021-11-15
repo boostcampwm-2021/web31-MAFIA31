@@ -2,6 +2,7 @@ import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { primaryDark, white } from '@src/constants';
+import { Image, ImageSizeList } from '@components/Image';
 
 interface PropType {
   msg: string;
@@ -11,7 +12,7 @@ interface PropType {
 const StoryMsg: FC<PropType> = ({ msg, imgSrc }) => (
   <div css={StoryMsgStyle}>
     <div css={StoryTextStyle}>{msg}</div>
-    <img src={imgSrc} alt="story" css={StoryImgStyle} />
+    <Image size={ImageSizeList.STORY} src={imgSrc} />
   </div>
 );
 
@@ -42,10 +43,4 @@ const StoryTextStyle = css`
   color: ${white};
 `;
 
-const StoryImgStyle = css`
-  width: 100%;
-  padding: 16px;
-  background: ${white};
-  border-radius: 20px;
-`;
 export default StoryMsg;

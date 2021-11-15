@@ -17,7 +17,6 @@ type PropType = {
   emitAbility: any;
   mafiaPickList: MafiaPick[];
   isNight: boolean;
-  socketRef: any;
 };
 
 const LeftSideContainer: FC<PropType> = ({
@@ -28,7 +27,6 @@ const LeftSideContainer: FC<PropType> = ({
   emitAbility,
   isNight,
   mafiaPickList,
-  socketRef,
   timer,
 }) => (
   <div css={leftSideContainerStyle}>
@@ -64,7 +62,6 @@ const LeftSideContainer: FC<PropType> = ({
       {playerList.map(({ userImg, userName, voteFrom }) => (
         <AbilityButton
           key={userName}
-          socketRef={socketRef}
           isNight={isNight}
           userImg={userImg}
           userName={userName}

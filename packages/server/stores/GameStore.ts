@@ -1,4 +1,4 @@
-import { GameInfo, GameResult } from '@mafia/domain/types/game';
+import { GameInfo, PlayerResult } from '@mafia/domain/types/game';
 import { RoomVote } from '@mafia/domain/types/vote';
 
 interface GameStoreType {
@@ -45,8 +45,9 @@ class GameStore {
   }
 
   static getDashBoard(roomId: string): DashBoard {
-    const mafia = GameStore.instance[roomId].filter(({ isDead, job }) => !isDead && job === 'mafia')
-      .length;
+    const mafia = GameStore.instance[roomId].filter(
+      ({ isDead, job }) => !isDead && job === 'mafia',
+    ).length;
     const citizen = GameStore.instance[roomId].filter(
       ({ isDead, job }) => !isDead && job === 'citizen',
     ).length;
@@ -54,7 +55,7 @@ class GameStore {
     return { mafia, citizen };
   }
 
-  static getGameResult(roomId: string, win: string): GameResult[] {
+  static getGameResult(roomId: string, win: string): PlayerResult[] {
     return GameStore.instance[roomId].map(({ userName, job }) => ({
       userName,
       job,

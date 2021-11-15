@@ -44,6 +44,7 @@ class RoomStore {
       return;
     }
     RoomStore.instance[roomId][0].isHost = true;
+    RoomStore.instance[roomId][0].isReady = true;
   }
 
   static get(roomId: string) {

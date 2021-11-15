@@ -53,9 +53,10 @@ const assignJobs = (roomId: string) => {
 
   if (jobs.length <= 0) throw Error('잘못된 인원입니다.');
   const gameInfoList = RoomStore.get(roomId).map(
-    ({ userName, socketId }, idx): GameInfo => ({
+    ({ userName, socketId, profileImg }, idx): GameInfo => ({
       socketId,
       userName,
+      profileImg,
       isDead: false,
       job: mixedJobs[idx],
       voteFrom: [],

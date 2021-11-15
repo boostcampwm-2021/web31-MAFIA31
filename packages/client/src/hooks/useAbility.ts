@@ -1,13 +1,15 @@
 import * as EVENT from '@mafia/domain/constants/event';
 import { MafiaPick } from '@mafia/domain/types/game';
 import { useSocketContext } from '@src/contexts/socket';
+import { useUserInfo } from '@src/contexts/userInfo';
 import { useEffect, useState } from 'react';
 
 const jobAbility: Record<string, string> = {
   mafia: EVENT.MAFIA_ABILITY,
 };
 
-const useAbility = (myUserName: string, job: string, setPlayerStateList: any) => {
+const useAbility = (job: string, setPlayerStateList: any) => {
+  const { userInfo } = useUserInfo();
   const { socketRef } = useSocketContext();
   const [mafiaPickList, setMafiaPickList] = useState<MafiaPick[]>([]);
 
@@ -26,7 +28,7 @@ const useAbility = (myUserName: string, job: string, setPlayerStateList: any) =>
   }, [socketRef.current]);
 
   const emitAbility = (victim: string) => {
-    socketRef.current?.emit(jobAbility[job], { mafia: myUserName, victim });
+    socketRef.current?.emit(jobAbility[job], { mafia: userInfo?.userName, victim });
   };
 
   return { emitAbility, mafiaPickList };

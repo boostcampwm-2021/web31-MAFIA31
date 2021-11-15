@@ -32,7 +32,7 @@ const AuthController = {
         Authorization: `token ${accessToken}`,
       },
     });
-    const user: User = { userName: data.login };
+    const user: User = { userName: data.login, profileImg: data.avatar_url };
     res.json(user);
   },
 };

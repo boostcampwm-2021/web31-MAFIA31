@@ -14,7 +14,6 @@ import useGame from '@src/hooks/useGame';
 import { PlayerState } from '@mafia/domain/types/game';
 
 const Game = () => {
-  const myUserName = 'user1';
   const [playerStateList, setPlayerStateList] = useState<PlayerState[]>([
     { userName: 'user1', isDead: true },
     { userName: 'user2', isDead: false },
@@ -23,9 +22,9 @@ const Game = () => {
   ]);
   // const playerStateList = useExecute();
   const { chatList, sendChat, sendNightChat } = useChat();
-  const { playerList, voteUser } = useVote(myUserName);
+  const { voteList, voteUser } = useVote();
   const { timer, isNight } = useTimer();
-  const { emitAbility, mafiaPickList } = useAbility('user1', 'mafia', setPlayerStateList);
+  const { emitAbility, mafiaPickList } = useAbility('mafia', setPlayerStateList);
   const { myJob } = useGame();
 
   useEffect(() => {
@@ -36,8 +35,7 @@ const Game = () => {
     <div css={gamePageStyle(isNight)}>
       <LeftSideContainer
         playerStateList={playerStateList}
-        playerList={playerList}
-        myUserName={myUserName}
+        playerList={voteList}
         timer={timer}
         voteUser={voteUser}
         emitAbility={emitAbility}

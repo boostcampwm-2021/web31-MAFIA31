@@ -5,13 +5,18 @@ import { css } from '@emotion/react';
 import { primaryLight, primaryDark, white, titleActive } from '@constants/index';
 
 interface PropType {
+  userName: string;
+  profileImg: string;
   msg: string;
   isMyMsg: boolean;
 }
 
-const ChatMsg: FC<PropType> = ({ msg, isMyMsg }) => (
+const ChatMsg: FC<PropType> = ({ userName, profileImg, msg, isMyMsg }) => (
   <div css={msgContainerStyle(isMyMsg)}>
-    <img css={profileImgStyle(isMyMsg)} src="/assets/icons/profile.svg" alt="profile" />
+    <div className="profile">
+      <img css={profileImgStyle} src={profileImg} alt="profile" />
+      <span>{userName}</span>
+    </div>
     <div css={msgStyle(isMyMsg)}>{msg}</div>
   </div>
 );
@@ -23,11 +28,21 @@ const msgContainerStyle = (isMyMsg: boolean) => css`
 
   width: 100%;
   gap: 16px;
+
+  .profile {
+    display: ${isMyMsg ? 'none' : 'flex'};
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+
+    span {
+      font-size: 10px;
+      line-height: 10px;
+    }
+  }
 `;
 
-const profileImgStyle = (isMyMsg: boolean) => css`
-  display: ${isMyMsg ? 'none' : 'inline'};
-
+const profileImgStyle = css`
   width: 40px;
   height: 40px;
   padding: 3px;

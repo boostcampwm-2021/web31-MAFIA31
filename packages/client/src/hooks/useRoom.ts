@@ -1,8 +1,10 @@
 import { GAME_START, PUBLISH_READY, READY } from '@mafia/domain/constants/event';
 import { PlayerInfo } from '@mafia/domain/types/user';
+import { useSocketContext } from '@src/contexts/socket';
 import { useEffect, useState } from 'react';
 
-const useRoom = (socketRef: any) => {
+const useRoom = () => {
+  const { socketRef } = useSocketContext();
   const [playerList, setPlayerList] = useState<PlayerInfo[]>([]);
 
   useEffect(() => {

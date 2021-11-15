@@ -4,6 +4,7 @@ import { css } from '@emotion/react';
 import { white, titleActive, grey3, mafia } from '@constants/colors';
 import { VoteIcon } from '@components/Icon';
 import { PUBLISH_VICTIM } from '@mafia/domain/constants/event';
+import { useSocketContext } from '@src/contexts/socket';
 
 interface PropType {
   isNight: boolean;
@@ -14,7 +15,6 @@ interface PropType {
   selectedByMe: boolean;
   selectedByOthers: boolean;
   onClick: any;
-  socketRef: any;
 }
 
 const AbilityButton: FC<PropType> = ({
@@ -26,9 +26,9 @@ const AbilityButton: FC<PropType> = ({
   selectedByMe,
   selectedByOthers,
   onClick,
-  socketRef,
 }) => {
   const [victim, setVictim] = useState('');
+  const { socketRef } = useSocketContext();
 
   useEffect(() => {
     socketRef.current?.on(PUBLISH_VICTIM, (v: string) => {
@@ -38,7 +38,7 @@ const AbilityButton: FC<PropType> = ({
       }, 1000);
     });
     return () => {
-      socketRef.current.off(PUBLISH_VICTIM);
+      socketRef.current?.off(PUBLISH_VICTIM);
     };
   }, [socketRef.current]);
 

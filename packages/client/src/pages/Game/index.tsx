@@ -11,17 +11,16 @@ import LeftSideContainer from '@containers/LeftSideContainer';
 import RightSideContainer from '@containers/RightSideContainer';
 import { useEffect } from 'react';
 import useGame from '@src/hooks/useGame';
-import { useSocketContext } from '@src/contexts/socket';
 
 const Game = () => {
   const myUserName = 'user1';
-  const { socketRef } = useSocketContext();
-  const playerStateList = useExecute(socketRef);
-  const { chatList, sendChat, sendNightChat } = useChat(socketRef);
-  const { playerList, voteUser } = useVote(socketRef, myUserName);
-  const { timer, isNight } = useTimer(socketRef);
-  const { emitAbility, mafiaPickList } = useAbility(socketRef, 'user1', 'mafia');
-  const { myJob } = useGame(socketRef);
+
+  const playerStateList = useExecute();
+  const { chatList, sendChat, sendNightChat } = useChat();
+  const { playerList, voteUser } = useVote(myUserName);
+  const { timer, isNight } = useTimer();
+  const { emitAbility, mafiaPickList } = useAbility('user1', 'mafia');
+  const { myJob } = useGame();
 
   useEffect(() => {
     console.log('night', isNight);
@@ -38,7 +37,6 @@ const Game = () => {
         emitAbility={emitAbility}
         mafiaPickList={mafiaPickList}
         isNight={isNight}
-        socketRef={socketRef}
       />
       <ChatContainer
         chatList={chatList}

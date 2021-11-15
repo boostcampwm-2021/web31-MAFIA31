@@ -1,8 +1,8 @@
-import { createContext, FC, ReactNode, useContext, useRef } from 'react';
+import { createContext, FC, MutableRefObject, ReactNode, useContext, useRef } from 'react';
 import { Socket } from 'socket.io-client';
 
 interface SocketValue {
-  socket: Socket | undefined;
+  socketRef: MutableRefObject<Socket<any, any> | undefined>;
 }
 
 const SocketContext = createContext<SocketValue>({} as SocketValue);
@@ -16,11 +16,7 @@ interface Props {
 const SocketProvider: FC<Props> = ({ children }) => {
   const socketRef = useRef<Socket>();
 
-  return (
-    <SocketContext.Provider value={{ socket: socketRef.current }}>
-      {children}
-    </SocketContext.Provider>
-  );
+  return <SocketContext.Provider value={{ socketRef }}>{children}</SocketContext.Provider>;
 };
 
 export default SocketProvider;

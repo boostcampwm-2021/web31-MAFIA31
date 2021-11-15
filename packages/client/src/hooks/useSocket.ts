@@ -1,11 +1,12 @@
+import { useSocketContext } from '@src/contexts/socket';
 import { useUserInfo } from '@src/contexts/userInfo';
-import { useEffect, useRef } from 'react';
-import { io, Socket } from 'socket.io-client';
+import { useEffect } from 'react';
+import { io } from 'socket.io-client';
 
 const useSocket = (roomId: string) => {
-  const socketRef = useRef<Socket>();
-  const SOCKET_URL: string = process.env.REACT_APP_SOCKET_URL || 'localhost:5001/';
+  const { socketRef } = useSocketContext();
   const { userInfo } = useUserInfo();
+  const SOCKET_URL: string = process.env.REACT_APP_SOCKET_URL || 'localhost:5001/';
   const socketId = socketRef.current?.id;
 
   useEffect(() => {

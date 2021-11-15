@@ -1,8 +1,10 @@
 import { MESSAGE, NIGHT_MESSAGE, PUBLISH_MESSAGE } from '@mafia/domain/constants/event';
 import { Message } from '@mafia/domain/types/chat';
+import { useSocketContext } from '@src/contexts/socket';
 import { useEffect, useState } from 'react';
 
-const useChat = (socketRef: any) => {
+const useChat = () => {
+  const { socketRef } = useSocketContext();
   const [chatList, setChatList] = useState<Message[]>([]);
   const updateChatList = (msg: Message): void => {
     setChatList((prev) => [...prev, msg]);
@@ -12,7 +14,7 @@ const useChat = (socketRef: any) => {
     socketRef.current?.on(PUBLISH_MESSAGE, updateChatList);
 
     return () => {
-      socketRef.current.off(PUBLISH_MESSAGE, updateChatList);
+      socketRef.current?.off(PUBLISH_MESSAGE, updateChatList);
     };
   }, [socketRef.current]);
 
@@ -23,7 +25,7 @@ const useChat = (socketRef: any) => {
 
   const sendNightChat = (msg: Message, roomName: string): void => {
     if (!msg.msg) return;
-    socketRef.current.emit(NIGHT_MESSAGE, { msg, roomName });
+    socketRef.current?.emit(NIGHT_MESSAGE, { msg, roomName });
   };
 
   return { chatList, sendChat, sendNightChat };

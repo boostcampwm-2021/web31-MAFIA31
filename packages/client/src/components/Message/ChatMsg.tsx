@@ -12,7 +12,7 @@ interface PropType {
 
 const ChatMsg: FC<PropType> = ({ chat, isMyMsg }) => (
   <div css={msgContainerStyle(isMyMsg)}>
-    <img css={profileImgStyle(isMyMsg)} src="/assets/icons/profile.svg" alt="profile" />
+    <img css={profileImgStyle(isMyMsg)} src={chat.profileImg} alt="profile" />
     <div css={msgStyle(isMyMsg)}>{chat.msg}</div>
   </div>
 );

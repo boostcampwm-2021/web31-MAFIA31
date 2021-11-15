@@ -25,23 +25,17 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNigh
 
   const sendMessage = useCallback(() => {
     if (isNight && !canNightChat()) return;
+
+    const message = {
+      id: `${Date.now()}${userInfo?.userName}`,
+      userName: userInfo?.userName,
+      msg: inputValue,
+      profileImg: userInfo?.profileImg,
+    };
     if (isNight) {
-      sendNightChat(
-        {
-          id: `${Date.now()}${userInfo?.userName}`,
-          userName: userInfo?.userName,
-          msg: inputValue,
-          profileImg: '',
-        },
-        'mafia',
-      );
+      sendNightChat(message, 'mafia');
     } else {
-      sendChat({
-        id: `${Date.now()}${userInfo?.userName}`,
-        userName: userInfo?.userName,
-        msg: inputValue,
-        profileImg: '',
-      });
+      sendChat(message);
     }
     setInputValue('');
   }, [inputValue, isNight]);

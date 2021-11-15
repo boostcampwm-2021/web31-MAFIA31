@@ -37,11 +37,12 @@ class GameStore {
     return GameStore.instance[roomId];
   }
 
-  static getVoteInfos(roomId: string): RoomVote {
-    return GameStore.instance[roomId].reduce(
-      (prev, { userName, voteFrom }) => ({ ...prev, [userName]: voteFrom }),
-      {},
-    );
+  static getVoteInfos(roomId: string): RoomVote[] {
+    return GameStore.instance[roomId].map(({ userName, profileImg, voteFrom }) => ({
+      userName,
+      profileImg,
+      voteFrom,
+    }));
   }
 
   static getDashBoard(roomId: string): DashBoard {

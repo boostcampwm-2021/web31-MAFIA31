@@ -3,14 +3,14 @@ import { FC } from 'react';
 import { css } from '@emotion/react';
 
 import { PlayerState, MafiaPick } from '@mafia/domain/types/game';
-import { PlayerInfo } from '@src/types';
 import { titleActive, white, grey1 } from '@constants/index';
 import { AbilityButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { SettingIcon, RoomOutIcon } from '@components/Icon';
+import { RoomVote } from '@mafia/domain/types/vote';
 
 type PropType = {
   playerStateList: PlayerState[];
-  playerList: PlayerInfo[];
+  playerList: RoomVote[];
   timer: string;
   voteUser: any;
   myUserName: string;
@@ -61,12 +61,12 @@ const LeftSideContainer: FC<PropType> = ({
     </div>
     <hr css={hrStyle} />
     <div css={abilityListStyle}>
-      {playerList.map(({ userImg, userName, voteFrom }) => (
+      {playerList.map(({ profileImg, userName, voteFrom }) => (
         <AbilityButton
           key={userName}
           socketRef={socketRef}
           isNight={isNight}
-          userImg={userImg}
+          userImg={profileImg}
           userName={userName}
           voteFrom={voteFrom}
           selectedByMe={mafiaPickList.some(

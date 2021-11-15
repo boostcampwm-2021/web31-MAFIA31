@@ -12,7 +12,10 @@ interface PropType {
 
 const ChatMsg: FC<PropType> = ({ chat, isMyMsg }) => (
   <div css={msgContainerStyle(isMyMsg)}>
-    <img css={profileImgStyle(isMyMsg)} src={chat.profileImg} alt="profile" />
+    <div className="profile">
+      <img css={profileImgStyle} src={chat.profileImg} alt="profile" />
+      <span>{chat.userName}</span>
+    </div>
     <div css={msgStyle(isMyMsg)}>{chat.msg}</div>
   </div>
 );
@@ -24,11 +27,21 @@ const msgContainerStyle = (isMyMsg: boolean) => css`
 
   width: 100%;
   gap: 16px;
+
+  .profile {
+    display: ${isMyMsg ? 'none' : 'flex'};
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+
+    span {
+      font-size: 10px;
+      line-height: 10px;
+    }
+  }
 `;
 
-const profileImgStyle = (isMyMsg: boolean) => css`
-  display: ${isMyMsg ? 'none' : 'inline'};
-
+const profileImgStyle = css`
   width: 40px;
   height: 40px;
   padding: 3px;

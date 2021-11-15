@@ -23,6 +23,7 @@ const Waiting = () => {
   }
 
   const { socketRef } = useSocket(roomId);
+
   const { playerList, sendReady, sendGameStart } = useRoom(socketRef);
   const isHost =
     playerList.find(({ userName }) => userName === userInfo?.userName)?.isHost ?? false;

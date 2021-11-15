@@ -1,5 +1,5 @@
 import * as EVENT from '@mafia/domain/constants/event';
-import { PlayerInfo } from '@mafia/domain/types/user';
+import { PlayerInfo, User } from '@mafia/domain/types/user';
 import { Namespace, Socket } from 'socket.io';
 import RoomStore from '../stores/RoomStore';
 import { abilitySocketInit } from './ability';
@@ -15,11 +15,14 @@ const readyPlayer = (socket: Socket, roomId: string, readyUserName: string) => {
   socket.nsp.emit(EVENT.PUBLISH_READY, RoomStore.get(roomId));
 };
 
-const addPlayer = (socket: Socket, roomId: string, userName: string) => {
+const addPlayer = (socket: Socket, roomId: string, { userName, profileImg }: User) => {
+  if (!userName || !profileImg) return; // TODO: throw Error;
+
   const isHost: boolean = RoomStore.get(roomId).length === 0;
   const isReady: boolean = isHost;
   const newUser: PlayerInfo = {
     userName,
+    profileImg,
     socketId: socket.id,
     isReady,
     isHost,
@@ -37,11 +40,10 @@ const socketInit = (namespace: Namespace): void => {
     if (!roomId) {
       return;
     }
+
     RoomStore.initRoom(roomId);
-
-    socket.on(EVENT.JOIN, (userName: string) => addPlayer(socket, roomId, userName));
-
-    socket.on(EVENT.READY, (userName: string) => readyPlayer(socket, roomId, userName));
+    socket.on(EVENT.JOIN, (user: User) => addPlayer(socket, roomId, user));
+    socket.on(EVENT.READY, ({ userName }) => readyPlayer(socket, roomId, userName));
 
     socket.on('disconnect', () => {
       console.log(`👋 ${socket.id} exit from ${roomId}.`);

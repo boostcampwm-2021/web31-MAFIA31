@@ -1,7 +1,7 @@
 import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { Image, ImageSizeList } from '@components/Image';
+import { Image, ImageSizeList, ImageTypeList } from '@components/Image';
 import { primaryDark, white } from '@src/constants';
 
 interface Prop {
@@ -14,7 +14,7 @@ interface Prop {
 const ProfileCard: FC<Prop> = ({ userName, profileImg, status, fill }) => (
   <div css={cardStyle}>
     <div css={textStyle}>{userName}</div>
-    <Image size={ImageSizeList.SMALL_MEDIUM} src={profileImg} />
+    <Image size={ImageSizeList.SMALL_MEDIUM} type={ImageTypeList.CIRCLE} src={profileImg} />
     <div css={statusStyle(fill)}>{status}</div>
   </div>
 );

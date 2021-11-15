@@ -1,6 +1,7 @@
 export interface GameInfo {
   socketId: string;
   userName: string;
+  profileImg: string;
   job: string;
   isDead: boolean;
   voteFrom: string[];

@@ -16,13 +16,19 @@ export enum ImageSizeList {
   STORY = 'STORY',
 }
 
+export enum ImageTypeList {
+  RECTANGLE = 'RECTANGLE',
+  CIRCLE = 'CIRCLE',
+}
+
 interface Props {
   size: ImageSizeList;
+  type?: ImageTypeList;
   src: string;
 }
 
-export const Image = ({ size, src }: Props) => (
-  <div css={[imageStyle, imageSizeStyle[size]]}>
+export const Image = ({ size, type = ImageTypeList.RECTANGLE, src }: Props) => (
+  <div css={[imageStyle, imageSizeStyle[size], imageTypeStyle[type]]}>
     <img src={src} alt="" />
   </div>
 );
@@ -30,7 +36,6 @@ export const Image = ({ size, src }: Props) => (
 const imageStyle = css`
   background-color: ${white};
   box-shadow: 2px 2px 10px rgba(78, 65, 109, 0.25);
-  border-radius: 15px;
 
   img {
     width: 100%;
@@ -65,6 +70,21 @@ const imageSizeStyle: themeOptions = {
     padding: 16px;
     img {
       object-fit: contain;
+    }
+  `,
+};
+
+const imageTypeStyle: themeOptions = {
+  RECTANGLE: css`
+    border-radius: 15px;
+    img {
+      border-radius: 15px;
+    }
+  `,
+  CIRCLE: css`
+    border-radius: 50%;
+    img {
+      border-radius: 50%;
     }
   `,
 };

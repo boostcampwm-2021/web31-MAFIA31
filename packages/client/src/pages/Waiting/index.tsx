@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { useLocation, useHistory } from 'react-router-dom';
@@ -14,26 +15,31 @@ interface locationType {
 }
 
 const Waiting = () => {
-  const location = useLocation<locationType>();
-  const history = useHistory();
-  const { roomId } = location.state.roomInfo;
+  const { state } = useLocation<locationType>();
   const { userInfo } = useUserInfo();
-  if (!userInfo?.userName) {
+  const history = useHistory();
+
+  if (!state?.roomInfo || !userInfo?.userName) {
     history.push('/');
+    return <></>;
   }
 
-  useSocket(roomId);
+  useSocket(state.roomInfo.roomId);
+  const { userName: myName } = userInfo;
+  const [isHost, setIsHost] = useState<boolean>();
+  const { playerList, sendReady, sendGameStart, isAllReady } = useRoom();
 
-  const { playerList, sendReady, sendGameStart } = useRoom();
-  const isHost =
-    playerList.find(({ userName }) => userName === userInfo?.userName)?.isHost ?? false;
-
-  const getReady = () => {
-    const me = playerList.find((user) => userInfo?.userName === user.userName);
-
-    if (!me) return;
-    sendReady({ userName: me.userName });
+  const updateHost = () => {
+    if (!playerList[0]) {
+      setIsHost(false);
+      return;
+    }
+    setIsHost(playerList[0].isHost && myName === playerList[0].userName);
   };
+
+  useEffect(() => {
+    updateHost();
+  }, [playerList]);
 
   return (
     <div css={pageStyle}>
@@ -42,20 +48,19 @@ const Waiting = () => {
         <WaitingListContainer userList={playerList} />
         <div css={bottomBarStyle}>
           {isHost ? (
-            <div css={gameStartStyle(!playerList.some(({ isReady }) => isReady === false))}>
-              <DefaultButton
-                text="START"
-                size={ButtonSizeList.MEDIUM}
-                theme={ButtonThemeList.DARK}
-                onClick={sendGameStart}
-              />
-            </div>
+            <DefaultButton
+              text="START"
+              size={ButtonSizeList.MEDIUM}
+              theme={ButtonThemeList.DARK}
+              onClick={sendGameStart}
+              isDisabled={!isAllReady()}
+            />
           ) : (
             <DefaultButton
               text="READY"
               size={ButtonSizeList.MEDIUM}
               theme={ButtonThemeList.DARK}
-              onClick={getReady}
+              onClick={sendReady}
             />
           )}
         </div>
@@ -83,14 +88,5 @@ const bottomBarStyle = css`
   justify-content: flex-end;
   width: 100%;
 `;
-
-const gameStartStyle = (isAllReady: boolean) =>
-  isAllReady
-    ? css`
-        cursor: pointer;
-      `
-    : css`
-        pointer-events: none;
-      `;
 
 export default Waiting;

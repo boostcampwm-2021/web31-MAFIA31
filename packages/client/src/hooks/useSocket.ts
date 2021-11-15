@@ -1,3 +1,5 @@
+import * as EVENT from '@mafia/domain/constants/event';
+import { User } from '@mafia/domain/types/user';
 import { useSocketContext } from '@src/contexts/socket';
 import { useUserInfo } from '@src/contexts/userInfo';
 import { useEffect } from 'react';
@@ -8,12 +10,17 @@ const useSocket = (roomId: string) => {
   const { userInfo } = useUserInfo();
   const SOCKET_URL: string = process.env.REACT_APP_SOCKET_URL || 'localhost:5001/';
 
+  const joinRoom = (): object | User => {
+    if (!userInfo) return {};
+
+    const { userName, profileImg } = userInfo;
+    return { userName, profileImg };
+  };
+
   useEffect(() => {
     socketRef.current = io(SOCKET_URL + roomId);
-    socketRef.current?.emit('join', userInfo?.userName);
+    socketRef.current?.emit(EVENT.JOIN, joinRoom());
   }, [roomId]);
-
-  return { socketRef };
 };
 
 export default useSocket;

@@ -1,7 +1,16 @@
 import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { primaryDark, primaryLight, titleActive, white } from '@src/constants';
+import {
+  primaryDarkHover,
+  primaryLightHover,
+  primaryLightDisable,
+  primaryDarkDisable,
+  primaryDark,
+  primaryLight,
+  titleActive,
+  white,
+} from '@src/constants';
 import { ButtonSizeList, ButtonThemeList } from './Button.st';
 
 interface Props {
@@ -10,10 +19,16 @@ interface Props {
   theme: ButtonThemeList;
   imageSrc?: string;
   onClick?: any;
+  isDisabled?: boolean;
 }
 
-const DefaultButton: FC<Props> = ({ text, size, theme, imageSrc, onClick }) => (
-  <button type="button" onClick={() => onClick!()} css={buttonStyle(size, theme)}>
+const DefaultButton: FC<Props> = ({ text, size, theme, imageSrc, onClick, isDisabled = false }) => (
+  <button
+    type="button"
+    onClick={() => onClick!()}
+    css={buttonStyle(size, theme)}
+    disabled={isDisabled}
+  >
     {imageSrc ? <img src={imageSrc} alt="button" css={imageStyle} /> : ''}
     <p>{text}</p>
   </button>
@@ -27,10 +42,15 @@ const buttonStyle = (size: ButtonSizeList, theme: ButtonThemeList) => css`
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: bold;
   cursor: pointer;
 
   gap: 15px;
   box-shadow: 4px 4px 4px rgba(78, 65, 109, 0.25);
+
+  :disabled {
+    cursor: default;
+  }
 
   ${buttonSizeStyle[size]}
   ${buttonThemeStyle[theme]}
@@ -41,8 +61,6 @@ const buttonSizeStyle = {
     width: 150px;
     height: 60px;
     border-radius: 10px;
-    font-style: normal;
-    font-weight: bold;
     font-size: 24px;
     line-height: 35px;
   `,
@@ -50,8 +68,6 @@ const buttonSizeStyle = {
     width: 300px;
     height: 80px;
     border-radius: 20px;
-    font-style: normal;
-    font-weight: bold;
     font-size: 32px;
     line-height: 46px;
   `,
@@ -59,8 +75,6 @@ const buttonSizeStyle = {
     width: 500px;
     height: 100px;
     border-radius: 20px;
-    font-style: normal;
-    font-weight: bold;
     font-size: 40px;
     line-height: 58px;
   `,
@@ -70,10 +84,24 @@ const buttonThemeStyle = {
   LIGHT: css`
     color: ${titleActive};
     background-color: ${primaryLight};
+
+    :disabled {
+      background-color: ${primaryLightDisable};
+    }
+    :hover:not([disabled]) {
+      background-color: ${primaryLightHover};
+    }
   `,
   DARK: css`
     color: ${white};
     background-color: ${primaryDark};
+
+    :disabled {
+      background-color: ${primaryDarkDisable};
+    }
+    :hover:not([disabled]) {
+      background-color: ${primaryDarkHover};
+    }
   `,
 };
 

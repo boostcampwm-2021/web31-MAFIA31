@@ -1,5 +1,6 @@
 import * as EVENT from '@mafia/domain/constants/event';
 import { Message } from '@mafia/domain/types/chat';
+import { STORY_DICTIONARY } from '@src/constants/story';
 import { User } from '@mafia/domain/types/user';
 import { Story } from '@src/types';
 import { useEffect, useState } from 'react';
@@ -9,6 +10,14 @@ const useChat = (socketRef: any) => {
   const updateChatList = (msg: Message): void => {
     setChatList((prev) => [...prev, msg]);
   };
+ const updateVictimStory = (victim: string): void => {
+    const story = STORY_DICTIONARY.KILLED;
+    setChatList((prev) => [
+      ...prev,
+      { id: Date.now().toString(), msg: story?.msg(victim), imgSrc: story?.imgSrc, isStory: true },
+    ]);
+  };
+
   const updateStoryToChatList = ({ userName }: User) => {
     const story: Story = { msg: `${userName}이 죽었어요!`, imgSrc: '/assets/images/die-vote.png' };
     setChatList((prev) => [...prev, story]);
@@ -17,10 +26,12 @@ const useChat = (socketRef: any) => {
   useEffect(() => {
     socketRef.current?.on(EVENT.PUBLISH_MESSAGE, updateChatList);
     socketRef.current?.on(EVENT.EXECUTION, updateStoryToChatList);
-
+    socketRef.current?.on(EVENT.PUBLISH_VICTIM, updateVictimStory);
+    
     return () => {
       socketRef.current.off(EVENT.PUBLISH_MESSAGE);
       socketRef.current.off(EVENT.EXECUTION);
+      socketRef.current.off(EVENT.PUBLISH_VICTIM, updateVictimStory);
     };
   }, [socketRef.current]);
 

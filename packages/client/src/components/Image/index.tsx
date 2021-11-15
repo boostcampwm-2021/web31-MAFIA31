@@ -13,6 +13,7 @@ export enum ImageSizeList {
   SMALL_MEDIUM = 'SMALL_MEDIUM',
   MEDIUM = 'MEDIUM',
   LARGE = 'LARGE',
+  STORY = 'STORY',
 }
 
 export enum ImageTypeList {
@@ -62,6 +63,14 @@ const imageSizeStyle: themeOptions = {
     width: 250px;
     height: 250px;
     padding: 20px;
+  `,
+  STORY: css`
+    width: 342px;
+    height: 167px;
+    padding: 16px;
+    img {
+      object-fit: contain;
+    }
   `,
 };
 

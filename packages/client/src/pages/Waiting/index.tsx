@@ -24,11 +24,10 @@ const Waiting = () => {
     return <></>;
   }
 
-  const { roomId } = state.roomInfo;
+  useSocket(state.roomInfo.roomId);
   const { userName: myName } = userInfo;
-  const { socketRef } = useSocket(roomId);
   const [isHost, setIsHost] = useState<boolean>();
-  const { playerList, sendReady, sendGameStart, isAllReady } = useRoom(socketRef);
+  const { playerList, sendReady, sendGameStart, isAllReady } = useRoom();
 
   const updateHost = () => {
     if (!playerList[0]) {
@@ -41,8 +40,6 @@ const Waiting = () => {
   useEffect(() => {
     updateHost();
   }, [playerList]);
-
-  // TODO: socket을 useContext로 관리, 여기서 할당해주기!
 
   return (
     <div css={pageStyle}>

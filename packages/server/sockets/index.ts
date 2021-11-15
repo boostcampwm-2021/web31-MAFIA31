@@ -1,10 +1,37 @@
-import { JOIN, PUBLISH_JOIN, PUBLISH_LEAVE } from '@mafia/domain/constants/event';
+import * as EVENT from '@mafia/domain/constants/event';
 import { PlayerInfo, User } from '@mafia/domain/types/user';
 import { Namespace, Socket } from 'socket.io';
 import RoomStore from '../stores/RoomStore';
 import { abilitySocketInit } from './ability';
 import chatSocketInit from './chat';
 import gameSocketInit from './game';
+
+const readyPlayer = (socket: Socket, roomId: string, readyUserName: string) => {
+  console.log(readyUserName);
+  const readyUser = RoomStore.get(roomId).find(({ userName }) => userName === readyUserName);
+  console.log(readyUser);
+  if (!readyUser) return;
+  readyUser.isReady = !readyUser.isReady;
+  socket.nsp.emit(EVENT.PUBLISH_READY, RoomStore.get(roomId));
+};
+
+const addPlayer = (socket: Socket, roomId: string, { userName, profileImg }: User) => {
+  if (!userName || !profileImg) return; // TODO: throw Error;
+
+  const isHost: boolean = RoomStore.get(roomId).length === 0;
+  const isReady: boolean = isHost;
+  const newUser: PlayerInfo = {
+    userName,
+    profileImg,
+    socketId: socket.id,
+    isReady,
+    isHost,
+  };
+
+  RoomStore.pushPlayer(roomId, newUser);
+  console.log(`👋 ${userName} joined ${roomId}.`, RoomStore.get(roomId));
+  socket.nsp.emit(EVENT.JOIN, RoomStore.get(roomId));
+};
 
 const socketInit = (namespace: Namespace): void => {
   namespace.on('connection', (socket: Socket): void => {
@@ -13,30 +40,15 @@ const socketInit = (namespace: Namespace): void => {
     if (!roomId) {
       return;
     }
+
     RoomStore.initRoom(roomId);
-
-    socket.on(JOIN, ({ userName, profileImg }: User) => {
-      if (!userName || !profileImg) return; // TODO: throw Error;
-
-      const isHost: boolean = RoomStore.get(roomId).length === 0;
-      const isReady: boolean = isHost;
-      const newUser: PlayerInfo = {
-        socketId: socket.id,
-        profileImg,
-        userName,
-        isReady,
-        isHost,
-      };
-
-      RoomStore.pushPlayer(roomId, newUser);
-      console.log(`👋 ${userName} joined ${roomId}.`, RoomStore.get(roomId));
-      socket.nsp.emit(PUBLISH_JOIN, RoomStore.get(roomId));
-    });
+    socket.on(EVENT.JOIN, (user: User) => addPlayer(socket, roomId, user));
+    socket.on(EVENT.READY, ({ userName }) => readyPlayer(socket, roomId, userName));
 
     socket.on('disconnect', () => {
       console.log(`👋 ${socket.id} exit from ${roomId}.`);
       RoomStore.removePlayer(roomId, socket.id);
-      socket.nsp.emit(PUBLISH_LEAVE, RoomStore.get(roomId));
+      socket.nsp.emit(EVENT.JOIN, RoomStore.get(roomId));
     });
 
     chatSocketInit(socket);

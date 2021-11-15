@@ -1,14 +1,14 @@
-import { JOIN } from '@mafia/domain/constants/event';
+import * as EVENT from '@mafia/domain/constants/event';
 import { User } from '@mafia/domain/types/user';
+import { useSocketContext } from '@src/contexts/socket';
 import { useUserInfo } from '@src/contexts/userInfo';
-import { useEffect, useRef } from 'react';
-import { io, Socket } from 'socket.io-client';
+import { useEffect } from 'react';
+import { io } from 'socket.io-client';
 
 const useSocket = (roomId: string) => {
-  const socketRef = useRef<Socket>();
-  const SOCKET_URL: string = process.env.REACT_APP_SOCKET_URL || 'localhost:5001/';
+  const { socketRef } = useSocketContext();
   const { userInfo } = useUserInfo();
-  const socketId = socketRef.current?.id;
+  const SOCKET_URL: string = process.env.REACT_APP_SOCKET_URL || 'localhost:5001/';
 
   const joinRoom = (): object | User => {
     if (!userInfo) return {};
@@ -19,14 +19,8 @@ const useSocket = (roomId: string) => {
 
   useEffect(() => {
     socketRef.current = io(SOCKET_URL + roomId);
-    socketRef.current.emit(JOIN, joinRoom());
-
-    return () => {
-      socketRef.current!.disconnect();
-    };
+    socketRef.current?.emit(EVENT.JOIN, joinRoom());
   }, [roomId]);
-
-  return { socketRef, socketId };
 };
 
 export default useSocket;

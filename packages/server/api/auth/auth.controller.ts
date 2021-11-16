@@ -36,10 +36,7 @@ const AuthController = {
     const user: User = { userName: data.login, profileImg: data.avatar_url };
 
     try {
-      const exist = await UserService.getUser(data.login);
-      if (!exist) {
-        await UserService.insertUser(data.login, data.avatar_url);
-      }
+      await UserService.findOneOrCreate(data.login, data.avatar_url);
       res.json(user);
     } catch (error) {
       console.log(error);

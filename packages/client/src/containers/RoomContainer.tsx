@@ -22,7 +22,7 @@ const RoomContainer = () => {
 
   useEffect(() => {
     updateRoomList();
-  }, [roomList]);
+  }, []);
 
   return (
     <div css={roomContainerStyle}>

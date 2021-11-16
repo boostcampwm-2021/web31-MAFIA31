@@ -20,7 +20,7 @@ const UserService = {
         winCnt: result ? user.jobStat[job].winCnt + 1 : user.jobStat[job].winCnt,
       },
     };
-    await user.update({ playCnt: user.playCnt + 1, jobStat: newJobStat });
+    await User.updateOne({ userName }, { playCnt: user.playCnt + 1, jobStat: newJobStat });
   },
 };
 

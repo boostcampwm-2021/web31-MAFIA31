@@ -19,8 +19,8 @@ export interface IUser extends Document {
 const schema = new Schema({
   userName: { type: String, required: true },
   profileImg: { type: String, required: true },
-  score: { type: Number, required: false, default: 0 },
-  playCnt: { type: Number, required: false, default: 0 },
+  score: { type: Number, required: true, default: 0 },
+  playCnt: { type: Number, required: true, default: 0 },
   jobStat: {
     type: Object,
     required: true,

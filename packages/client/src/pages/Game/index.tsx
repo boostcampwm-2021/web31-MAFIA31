@@ -14,6 +14,7 @@ import useGame from '@src/hooks/useGame';
 import { PlayerState } from '@mafia/domain/types/game';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import usePreventLeave from '@src/hooks/usePreventLeave';
 
 const Game = () => {
   const [playerStateList, setPlayerStateList] = useState<PlayerState[]>([
@@ -28,6 +29,7 @@ const Game = () => {
   const { timer, isNight } = useTimer();
   const { emitAbility, mafiaPickList } = useAbility('mafia', setPlayerStateList);
   const { myJob } = useGame();
+  usePreventLeave();
 
   useEffect(() => {
     if (!isNight && timer.substr(3, 2) === '30') {

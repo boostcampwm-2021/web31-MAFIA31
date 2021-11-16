@@ -11,7 +11,6 @@ const UserService = {
   async update({ userName, job, result }: PlayerResult) {
     const user = await User.findOne({ userName });
     if (!user) throw Error('user Not Found!');
-    console.log('after job stat', user.jobStat);
 
     const newJobStat = {
       ...user.jobStat,
@@ -21,7 +20,6 @@ const UserService = {
         winCnt: result ? user.jobStat[job].winCnt + 1 : user.jobStat[job].winCnt,
       },
     };
-    console.log('after job stat', newJobStat);
     await user.update({ playCnt: user.playCnt + 1, jobStat: newJobStat });
   },
 };

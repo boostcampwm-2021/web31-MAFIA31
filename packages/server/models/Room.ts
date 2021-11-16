@@ -12,6 +12,6 @@ const schema = new Schema({
   host: { type: String, required: true },
 });
 
-const Room = model('Room', schema);
+const Room = model<IRoom>('Room', schema);
 
 export default Room;

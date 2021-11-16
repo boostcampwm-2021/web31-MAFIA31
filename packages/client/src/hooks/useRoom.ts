@@ -11,8 +11,18 @@ const useRoom = () => {
   const { userInfo } = useUserInfo();
   const history = useHistory();
 
-  const updatePlayerList = (playerList: PlayerInfo[]) => setPlayerList(playerList);
-  const pushGamePage = () => history.push('/game');
+  const updatePlayerList = (newPlayerList: PlayerInfo[]) => setPlayerList(newPlayerList);
+  const pushGamePage = () => {
+    setPlayerList((prev) => {
+      history.push({
+        pathname: '/game',
+        state: {
+          userList: prev.map(({ userName, profileImg }) => ({ userName, profileImg })),
+        },
+      });
+      return prev;
+    });
+  };
 
   useEffect(() => {
     socketRef.current?.on(EVENT.JOIN, updatePlayerList);

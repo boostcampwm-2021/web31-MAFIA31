@@ -37,10 +37,10 @@ const AuthController = {
 
     try {
       await UserService.findOneOrCreate(data.login, data.avatar_url);
-      res.json(user);
+      res.status(200).json(user);
     } catch (error) {
       console.log(error);
-      res.json({ error });
+      res.status(400).json({ error });
     }
   },
 };

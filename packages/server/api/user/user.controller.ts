@@ -5,9 +5,14 @@ import UserService from './user.service';
 const UserController = {
   async updateUser(req: Request, res: Response) {
     req.body.result.map(async (playerResult: PlayerResult) => {
-      await UserService.update(playerResult);
+      try {
+        await UserService.update(playerResult);
+      } catch (error) {
+        console.log(error);
+        res.status(400).json({ error });
+      }
     });
-    res.json({ result: 'OK' });
+    res.status(200).json({ result: 'OK' });
   },
 };
 

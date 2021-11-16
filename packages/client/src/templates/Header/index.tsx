@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { DefaultButton, ButtonSizeList, ButtonThemeList } from '@src/components/Button';
 import { primaryDark, white } from '@src/constants';
-import { LogoIcon } from '@src/components/Icon';
+import { LightLogoIcon } from '@src/components/Icon';
 
 // const TITLE = 'MAFIA31';
 const CREATE_ROOM_BUTTON = '방 만들기';
@@ -13,7 +13,7 @@ const MY_PAGE_BUTTON = '마이 페이지';
 const Header: FC = () => (
   <header css={headerStyle}>
     <Link to="rooms">
-      <LogoIcon />
+      <LightLogoIcon />
     </Link>
     <div css={buttonWrapperStyle}>
       <DefaultButton

@@ -12,7 +12,7 @@ const publishExecution = (namespace: Namespace, roomId: string) => {
   let maxCount = 0;
 
   playerList.forEach(({ userName, voteFrom }) => {
-    const voteCount = voteFrom.length;
+    const voteCount = voteFrom.size;
     if (voteCount === maxCount) {
       isSame = true;
     } else if (voteCount > maxCount) {

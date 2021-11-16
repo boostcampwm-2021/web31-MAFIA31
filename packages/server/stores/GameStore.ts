@@ -1,5 +1,5 @@
 import { GameInfo, PlayerResult } from '@mafia/domain/types/game';
-import { RoomVote } from '@mafia/domain/types/vote';
+import { RoomVote, Vote } from '@mafia/domain/types/vote';
 
 interface GameStoreType {
   [roomId: string]: GameInfo[];
@@ -33,6 +33,15 @@ class GameStore {
     GameStore.instance[roomId].map((gameInfo) => ({ ...gameInfo, voteFrom: [] }));
   }
 
+  static voteUser(roomId: string, voteInfo: Vote): boolean {
+    const { to, from } = voteInfo;
+    const votedUser = GameStore.get(roomId)?.find(({ userName }) => to === userName);
+
+    if (!votedUser) return false;
+    votedUser.voteFrom.add(from);
+    return true;
+  }
+
   static get(roomId: string) {
     return GameStore.instance[roomId];
   }
@@ -41,14 +50,13 @@ class GameStore {
     return GameStore.instance[roomId].map(({ userName, profileImg, voteFrom }) => ({
       userName,
       profileImg,
-      voteFrom,
+      voteCount: voteFrom.size,
     }));
   }
 
   static getDashBoard(roomId: string): DashBoard {
-    const mafia = GameStore.instance[roomId].filter(
-      ({ isDead, job }) => !isDead && job === 'mafia',
-    ).length;
+    const mafia = GameStore.instance[roomId].filter(({ isDead, job }) => !isDead && job === 'mafia')
+      .length;
     const citizen = GameStore.instance[roomId].filter(
       ({ isDead, job }) => !isDead && job === 'citizen',
     ).length;

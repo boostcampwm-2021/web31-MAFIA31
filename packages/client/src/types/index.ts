@@ -24,3 +24,8 @@ export interface Story {
   msg: string;
   imgSrc: string;
 }
+
+export interface Memo {
+  userName: string;
+  guessJob: string;
+}

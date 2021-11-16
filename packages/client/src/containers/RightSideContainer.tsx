@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
@@ -7,55 +7,48 @@ import { grey1, titleActive, white, JOB_DICT } from '@constants/index';
 import { SearchIcon } from '@components/Icon';
 import { MemoButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { ImageSizeList, Image } from '@components/Image';
+import { Memo } from '@src/types';
 
 type PropType = {
   playerStateList: PlayerState[];
+  memoList: Memo[];
   isNight: boolean;
   myJob: string;
 };
 
-interface Memo {
-  userName: string;
-  guessJob: string;
-}
-
-const RightSideContainer: FC<PropType> = ({ playerStateList, isNight, myJob }) => {
-  const [memoList] = useState<Memo[]>([]);
-
-  return (
-    <div css={rightSideContainerStyle(isNight)}>
-      <div css={myJobStyle(isNight)}>
-        <Image size={ImageSizeList.MEDIUM} src={`/assets/images/${myJob}.png`} />
-        <div className="jobInfo">
-          <span className="job">{JOB_DICT[myJob].title}</span>
-          <p className="jobDescript">{JOB_DICT[myJob].description}</p>
-        </div>
-      </div>
-      <hr css={hrStyle} />
-      <div css={memoListStyle}>
-        {memoList.map(({ userName, guessJob }) => (
-          <div css={memoInfoStyle(isNight)} key={userName}>
-            <MemoButton
-              userName={userName}
-              guessJob={guessJob}
-              isDead={playerStateList.filter((player) => player.userName === userName)[0].isDead}
-            />
-            <span>{userName}</span>
-          </div>
-        ))}
-      </div>
-      <hr css={hrStyle} />
-      <div css={searchButtonStyle}>
-        <IconButton
-          icon={SearchIcon}
-          size={ButtonSizeList.MEDIUM}
-          theme={ButtonThemeList.LIGHT}
-          onClick={() => {}}
-        />
+const RightSideContainer: FC<PropType> = ({ playerStateList, memoList, isNight, myJob }) => (
+  <div css={rightSideContainerStyle(isNight)}>
+    <div css={myJobStyle(isNight)}>
+      <Image size={ImageSizeList.MEDIUM} src={`/assets/images/${myJob}.png`} />
+      <div className="jobInfo">
+        <span className="job">{JOB_DICT[myJob].title}</span>
+        <p className="jobDescript">{JOB_DICT[myJob].description}</p>
       </div>
     </div>
-  );
-};
+    <hr css={hrStyle} />
+    <div css={memoListStyle}>
+      {memoList.map(({ userName, guessJob }) => (
+        <div css={memoInfoStyle(isNight)} key={userName}>
+          <MemoButton
+            userName={userName}
+            guessJob={guessJob}
+            isDead={playerStateList.filter((player) => player.userName === userName)[0].isDead}
+          />
+          <span>{userName}</span>
+        </div>
+      ))}
+    </div>
+    <hr css={hrStyle} />
+    <div css={searchButtonStyle}>
+      <IconButton
+        icon={SearchIcon}
+        size={ButtonSizeList.MEDIUM}
+        theme={ButtonThemeList.LIGHT}
+        onClick={() => {}}
+      />
+    </div>
+  </div>
+);
 
 const rightSideContainerStyle = (isNight: boolean) => css`
   position: relative;

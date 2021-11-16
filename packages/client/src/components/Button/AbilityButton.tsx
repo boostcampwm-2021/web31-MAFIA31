@@ -32,7 +32,7 @@ const AbilityButton: FC<PropType> = ({
     }
     onClick={() => onClick(userName)}
   >
-    <img src={userImg} alt="" css={userImgStyle} />
+    <img src={userImg} alt="profile_img" css={userImgStyle} />
     <div css={voteInfoStyle}>
       <span>{userName}</span>
       {!voteFrom.length ? (
@@ -77,8 +77,9 @@ const buttonStyleDay = (isDead: boolean) => css`
 `;
 
 const userImgStyle = css`
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
 `;
 
 const voteInfoStyle = css`
@@ -102,10 +103,6 @@ const voteInfoStyle = css`
 
     width: 100%;
     padding: 0 10px;
-  }
-  img {
-    width: 10px;
-    height: 10px;
   }
 `;
 export default AbilityButton;

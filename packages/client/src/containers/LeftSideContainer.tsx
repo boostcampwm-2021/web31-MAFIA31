@@ -2,12 +2,11 @@ import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-import { PlayerState, MafiaPick } from '@mafia/domain/types/game';
+import { PlayerState } from '@mafia/domain/types/game';
 import { titleActive, white, grey1 } from '@constants/index';
 import { AbilityButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { SettingIcon, RoomOutIcon } from '@components/Icon';
 import { RoomVote } from '@mafia/domain/types/vote';
-import { useUserInfo } from '@src/contexts/userInfo';
 
 type PropType = {
   playerStateList: PlayerState[];
@@ -15,7 +14,7 @@ type PropType = {
   timer: string;
   voteUser: any;
   emitAbility: any;
-  mafiaPickList: MafiaPick[];
+  victim: string;
   isNight: boolean;
 };
 
@@ -25,62 +24,55 @@ const LeftSideContainer: FC<PropType> = ({
   voteUser,
   emitAbility,
   isNight,
-  mafiaPickList,
+  victim,
   timer,
-}) => {
-  const { userInfo } = useUserInfo();
-  return (
-    <div css={leftSideContainerStyle}>
-      <div css={Style}>
-        <img
-          src={isNight ? '/assets/images/moon.png' : '/assets/images/sun.png'}
-          alt="day-night-state"
-        />
-        <div css={roomActionStyle(isNight)}>
-          <span>ROOM NAME</span>
-          <div css={roomIconButtonsStyle(isNight)}>
-            <IconButton
-              icon={SettingIcon}
-              size={ButtonSizeList.LARGE}
-              theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
-              onClick={() => {}}
-            />
-            <IconButton
-              icon={RoomOutIcon}
-              size={ButtonSizeList.LARGE}
-              theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
-              onClick={() => {}}
-            />
-          </div>
+}) => (
+  <div css={leftSideContainerStyle}>
+    <div css={Style}>
+      <img
+        src={isNight ? '/assets/images/moon.png' : '/assets/images/sun.png'}
+        alt="day-night-state"
+      />
+      <div css={roomActionStyle(isNight)}>
+        <span>ROOM NAME</span>
+        <div css={roomIconButtonsStyle(isNight)}>
+          <IconButton
+            icon={SettingIcon}
+            size={ButtonSizeList.LARGE}
+            theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
+            onClick={() => {}}
+          />
+          <IconButton
+            icon={RoomOutIcon}
+            size={ButtonSizeList.LARGE}
+            theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
+            onClick={() => {}}
+          />
         </div>
       </div>
-
-      <div css={timerStyle}>
-        <span>{timer}</span>
-      </div>
-      <hr css={hrStyle} />
-      <div css={abilityListStyle}>
-        {playerList.map(({ profileImg, userName, voteCount }) => (
-          <AbilityButton
-            key={userName}
-            isNight={isNight}
-            userImg={profileImg}
-            userName={userName}
-            voteCount={voteCount}
-            selectedByMe={mafiaPickList.some(
-              (pick) => pick.mafia === userInfo?.userName && pick.victim === userName,
-            )}
-            selectedByOthers={mafiaPickList.some(
-              (pick) => pick.mafia !== userInfo?.userName && pick.victim === userName,
-            )}
-            isDead={playerStateList.find((player) => player.userName === userName)?.isDead || false}
-            onClick={isNight ? emitAbility : voteUser}
-          />
-        ))}
-      </div>
     </div>
-  );
-};
+
+    <div css={timerStyle}>
+      <span>{timer}</span>
+    </div>
+    <hr css={hrStyle} />
+    <div css={abilityListStyle}>
+      {playerList.map(({ profileImg, userName, voteCount }) => (
+        <AbilityButton
+          key={userName}
+          isNight={isNight}
+          userImg={profileImg}
+          userName={userName}
+          voteCount={voteCount}
+          isVictim={victim === userName}
+          isDead={playerStateList.find((player) => player.userName === userName)?.isDead || false}
+          onClick={isNight ? emitAbility : voteUser}
+        />
+      ))}
+    </div>
+  </div>
+);
+
 const leftSideContainerStyle = css`
   width: 27%;
   height: 100%;

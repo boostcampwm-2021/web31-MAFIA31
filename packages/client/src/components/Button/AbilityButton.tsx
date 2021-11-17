@@ -10,8 +10,7 @@ interface PropType {
   userName: string;
   voteCount: number;
   isDead: boolean;
-  selectedByMe: boolean;
-  selectedByOthers: boolean;
+  isVictim: boolean;
   onClick: any;
 }
 
@@ -21,8 +20,7 @@ const AbilityButton: FC<PropType> = ({
   userName,
   voteCount,
   isDead,
-  selectedByMe,
-  selectedByOthers,
+  isVictim,
   onClick,
 }) => {
   const iconList = () => {
@@ -33,9 +31,7 @@ const AbilityButton: FC<PropType> = ({
   return (
     <button
       type="button"
-      css={
-        isNight ? buttonStyleNight(isDead, selectedByMe, selectedByOthers) : buttonStyleDay(isDead)
-      }
+      css={isNight ? buttonStyleNight(isDead, isVictim) : buttonStyleDay(isDead)}
       onClick={() => onClick(userName)}
     >
       <img src={userImg} alt="profile_img" css={userImgStyle} />
@@ -47,7 +43,7 @@ const AbilityButton: FC<PropType> = ({
   );
 };
 
-const buttonStyleNight = (isDead: boolean, selectedByMe: boolean, selectedByOthers: boolean) => css`
+const buttonStyleNight = (isDead: boolean, isVictim: boolean) => css`
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -58,8 +54,7 @@ const buttonStyleNight = (isDead: boolean, selectedByMe: boolean, selectedByOthe
   width: 48%;
   min-height: 75px;
   border-radius: 15px;
-  border: 1px solid ${selectedByMe ? mafia : 'none'};
-  font-size: ${selectedByOthers}; // 수정 필요
+  border: 1px solid ${isVictim ? mafia : 'none'};
 `;
 
 const buttonStyleDay = (isDead: boolean) => css`

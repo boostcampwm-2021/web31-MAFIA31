@@ -21,7 +21,7 @@ const publishExecution = (namespace: Namespace, roomId: string) => {
       maxCount = voteCount;
     }
   });
-  const excutedPlayer = { userName: maxCount === 0 || isSame ? undefined : maxPlayer };
+  const excutedPlayer = maxCount === 0 || isSame ? undefined : maxPlayer;
   namespace.emit(EXECUTION, excutedPlayer);
 };
 

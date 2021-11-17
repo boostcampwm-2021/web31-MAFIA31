@@ -10,7 +10,6 @@ import LeftSideContainer from '@containers/LeftSideContainer';
 import RightSideContainer from '@containers/RightSideContainer';
 import { useEffect, useState } from 'react';
 import useGame from '@src/hooks/useGame';
-import { PlayerState } from '@mafia/domain/types/game';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useUserInfo } from '@src/contexts/userInfo';
 import { PlayerInfo, Memo } from '@src/types';
@@ -18,6 +17,7 @@ import { User } from '@mafia/domain/types/user';
 import usePreventLeave from '@src/hooks/usePreventLeave';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import usePlayerState from '@src/hooks/usePlayerState';
 
 interface locationType {
   userList: PlayerInfo[];
@@ -35,13 +35,13 @@ const Game = () => {
 
   const { userList } = state;
 
-  const [playerStateList, setPlayerStateList] = useState<PlayerState[]>([]);
+  const { playerStateList, setPlayerStateList } = usePlayerState();
   const [memoList, setMemoList] = useState<Memo[]>([]);
   const { chatList, sendChat, sendNightChat } = useChat();
   const { voteList, voteUser, initVote } = useVote();
   const { timer, isNight } = useTimer();
-  const { emitAbility, mafiaPickList } = useAbility('mafia', setPlayerStateList);
   const { myJob } = useGame();
+  const { emitAbility, victim } = useAbility('mafia'); // 인자로 myJob 넘길것
   usePreventLeave();
 
   const initPlayerState = (userList: User[]) => {
@@ -88,7 +88,7 @@ const Game = () => {
         timer={timer}
         voteUser={voteUser}
         emitAbility={emitAbility}
-        mafiaPickList={mafiaPickList}
+        victim={victim}
         isNight={isNight}
       />
       <ChatContainer

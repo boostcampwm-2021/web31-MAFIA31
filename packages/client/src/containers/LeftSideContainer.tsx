@@ -29,6 +29,18 @@ const LeftSideContainer: FC<PropType> = ({
   timer,
 }) => {
   const { userInfo } = useUserInfo();
+  const handleClick = (userName: string) => {
+    const myState = playerStateList.find(
+      ({ userName: playerName }) => playerName === userInfo?.userName,
+    );
+    if (!myState || myState.isDead) return;
+    if (isNight) {
+      emitAbility(userName);
+    } else {
+      voteUser(userName);
+    }
+  };
+
   return (
     <div css={leftSideContainerStyle}>
       <div css={Style}>
@@ -74,7 +86,7 @@ const LeftSideContainer: FC<PropType> = ({
               (pick) => pick.mafia !== userInfo?.userName && pick.victim === userName,
             )}
             isDead={playerStateList.find((player) => player.userName === userName)?.isDead || false}
-            onClick={isNight ? emitAbility : voteUser}
+            onClick={handleClick}
           />
         ))}
       </div>

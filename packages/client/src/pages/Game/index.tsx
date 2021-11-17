@@ -1,22 +1,24 @@
+import { useEffect, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import { useLocation, useHistory } from 'react-router-dom';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import useTimer from '@src/hooks/useTimer';
+
+import { PlayerState } from '@mafia/domain/types/game';
+import { User } from '@mafia/domain/types/user';
+import { primaryDark, primaryLight, titleActive, white } from '@src/constants';
+import { PlayerInfo, Memo } from '@src/types';
+import { useUserInfo } from '@contexts/userInfo';
+import useGame from '@hooks/useGame';
+import useTimer from '@hooks/useTimer';
 import useVote from '@hooks/useVote';
 import useChat from '@hooks/useChat';
-import useAbility from '@src/hooks/useAbility';
-import { primaryDark, primaryLight, titleActive, white } from '@constants/index';
-import ChatContainer from '@containers/ChatContainer';
+import useAbility from '@hooks/useAbility';
+import usePreventLeave from '@hooks/usePreventLeave';
 import LeftSideContainer from '@containers/LeftSideContainer';
+import ChatContainer from '@containers/ChatContainer';
 import RightSideContainer from '@containers/RightSideContainer';
-import { useEffect, useState } from 'react';
-import useGame from '@src/hooks/useGame';
-import { PlayerState } from '@mafia/domain/types/game';
-import { useLocation, useHistory } from 'react-router-dom';
-import { useUserInfo } from '@src/contexts/userInfo';
-import { PlayerInfo, Memo } from '@src/types';
-import { User } from '@mafia/domain/types/user';
-import usePreventLeave from '@src/hooks/usePreventLeave';
-import { ToastContainer, toast } from 'react-toastify';
+
 import 'react-toastify/dist/ReactToastify.css';
 
 interface locationType {
@@ -34,7 +36,6 @@ const Game = () => {
   }
 
   const { userList } = state;
-
   const [playerStateList, setPlayerStateList] = useState<PlayerState[]>([]);
   const [memoList, setMemoList] = useState<Memo[]>([]);
   const { chatList, sendChat, sendNightChat } = useChat();

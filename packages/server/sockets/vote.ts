@@ -1,4 +1,4 @@
-import { EXECUTION } from '@mafia/domain/constants/event';
+import { EXECUTION, PUBLISH_VOTE } from '@mafia/domain/constants/event';
 import { Namespace } from 'socket.io';
 import GameStore from '../stores/GameStore';
 
@@ -21,8 +21,11 @@ const publishExecution = (namespace: Namespace, roomId: string) => {
       maxCount = voteCount;
     }
   });
-  const excutedPlayer = { userName: maxCount === 0 || isSame ? undefined : maxPlayer };
-  namespace.emit(EXECUTION, excutedPlayer);
+  const excutedPlayer = maxCount === 0 || isSame ? undefined : maxPlayer;
+  GameStore.resetVote(roomId);
+  GameStore.diePlayer(roomId, excutedPlayer || '');
+  namespace.emit(EXECUTION, { userName: excutedPlayer });
+  namespace.emit(PUBLISH_VOTE, GameStore.getVoteInfos(roomId));
 };
 
 const startVoteTime = (namespace: Namespace, roomId: string, time: number) => {
@@ -31,7 +34,6 @@ const startVoteTime = (namespace: Namespace, roomId: string, time: number) => {
   setTimeout(() => {
     flag = false;
     publishExecution(namespace, roomId);
-    GameStore.resetVote(roomId);
   }, time);
 };
 

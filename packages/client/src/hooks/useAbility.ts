@@ -1,22 +1,18 @@
 import * as EVENT from '@mafia/domain/constants/event';
-import { MafiaPick, PoliceInvestigation } from '@mafia/domain/types/game';
+import { PoliceInvestigation } from '@mafia/domain/types/game';
 import { useSocketContext } from '@src/contexts/socket';
-import { useUserInfo } from '@src/contexts/userInfo';
 import { useEffect, useState } from 'react';
 
-const useAbility = (job: string, setPlayerStateList: any) => {
-  const { userInfo } = useUserInfo();
+const useAbility = (job: string) => {
   const { socketRef } = useSocketContext();
-  const [mafiaPickList, setMafiaPickList] = useState<MafiaPick[]>([]);
+  const [victim, setVictim] = useState('');
 
   useEffect(() => {
     if (job === 'mafia') {
-      socketRef.current?.on(EVENT.PUBLISH_VICTIM, (userName: string) => {
-        setPlayerStateList((prev: any) => [...prev, { userName, isDead: true }]);
-      });
-      socketRef.current?.on(EVENT.MAFIA_ABILITY, (newList: MafiaPick[]) => {
-        // 마피아가 선택한 사람을 어빌리티 버튼에 재렌더링
-        setMafiaPickList(newList);
+      socketRef.current?.on(EVENT.PUBLISH_VICTIM, () => setVictim(''));
+
+      socketRef.current?.on(EVENT.MAFIA_ABILITY, (victim: string) => {
+        setVictim(victim);
       });
     } else if (job === 'police') {
       socketRef.current?.on(
@@ -36,13 +32,13 @@ const useAbility = (job: string, setPlayerStateList: any) => {
 
   const emitAbility = (userName: string) => {
     if (job === 'mafia') {
-      socketRef.current?.emit(EVENT.MAFIA_ABILITY, { mafia: userInfo?.userName, victim: userName });
+      socketRef.current?.emit(EVENT.MAFIA_ABILITY, userName);
     } else if (job === 'police') {
       socketRef.current?.emit(EVENT.POLICE_INVESTIGATION, userName);
     }
   };
 
-  return { emitAbility, mafiaPickList };
+  return { emitAbility, victim };
 };
 
 export default useAbility;

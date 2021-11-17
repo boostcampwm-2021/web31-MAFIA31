@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import { useLocation, useHistory } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
+import * as TIME from '@mafia/domain/constants/time';
 import { PlayerState } from '@mafia/domain/types/game';
 import { User } from '@mafia/domain/types/user';
 import { primaryDark, primaryLight, titleActive, white } from '@src/constants';
+import * as TOAST from '@src/constants/toast';
 import { PlayerInfo, Memo } from '@src/types';
 import { useUserInfo } from '@contexts/userInfo';
 import useGame from '@hooks/useGame';
@@ -14,14 +17,11 @@ import useTimer from '@hooks/useTimer';
 import useVote from '@hooks/useVote';
 import useChat from '@hooks/useChat';
 import useAbility from '@hooks/useAbility';
-import usePreventLeave from '@hooks/usePreventLeave';
 import LeftSideContainer from '@containers/LeftSideContainer';
 import ChatContainer from '@containers/ChatContainer';
 import RightSideContainer from '@containers/RightSideContainer';
-
-import 'react-toastify/dist/ReactToastify.css';
-import * as TIME from '@mafia/domain/constants/time';
-import * as TOAST from '@src/constants/toast';
+import usePreventLeave from '@src/hooks/usePreventLeave';
+import usePlayerState from '@src/hooks/usePlayerState';
 
 interface locationType {
   userList: PlayerInfo[];
@@ -38,19 +38,19 @@ const Game = () => {
   }
 
   const { userList } = state;
-  
+
   const initPlayerState: PlayerState[] = userList.map(({ userName }) => ({
     userName,
     isDead: false,
   }));
-  
-  const [playerStateList, setPlayerStateList] = useState<PlayerState[]>(initPlayerState);
+
+  const { playerStateList } = usePlayerState(initPlayerState);
   const [memoList, setMemoList] = useState<Memo[]>([]);
   const { chatList, sendChat, sendNightChat } = useChat();
   const { voteList, voteUser, initVote } = useVote();
   const { timer, isNight, voteSec } = useTimer();
   const { myJob } = useGame();
-  const { emitAbility, mafiaPickList } = useAbility(myJob, setPlayerStateList);
+  const { emitAbility, victim } = useAbility(myJob);
   usePreventLeave();
 
   const initMemo = (userList: User[]) => {
@@ -97,7 +97,7 @@ const Game = () => {
         timer={timer}
         voteUser={voteUser}
         emitAbility={emitAbility}
-        mafiaPickList={mafiaPickList}
+        victim={victim}
         isNight={isNight}
       />
       <ChatContainer

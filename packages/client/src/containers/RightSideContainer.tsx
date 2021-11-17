@@ -18,7 +18,7 @@ type PropType = {
 };
 
 const RightSideContainer: FC<PropType> = ({ playerStateList, memoList, isNight, myJob }) => {
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const handleClick = () => {
     setShowModal((prev) => !prev);
   };

@@ -33,7 +33,7 @@ export const Modal: FC<Props> = ({ show }) => {
   return (
     <div css={modalWrapperStyle(show)}>
       <div css={modalContentStyle(JOB_PER_PAGE)}>
-        {currJobList.map((job) => (job ? <RoleCard job={job} /> : ''))}
+        {currJobList.map((job) => (job ? <RoleCard key={job} job={job} /> : ''))}
       </div>
       <div css={modalSliderStyle}>
         <IconButton

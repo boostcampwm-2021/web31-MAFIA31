@@ -23,7 +23,7 @@ interface Memo {
 const RightSideContainer: FC<PropType> = ({ playerStateList, isNight, myJob }) => {
   const [memoList] = useState<Memo[]>([]);
   const [showModal, setShowModal] = useState(true);
-  const handleOnclick = () => {
+  const handleClick = () => {
     setShowModal((prev) => !prev);
   };
 
@@ -58,7 +58,7 @@ const RightSideContainer: FC<PropType> = ({ playerStateList, isNight, myJob }) =
           icon={SearchIcon}
           size={ButtonSizeList.MEDIUM}
           theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
-          onClick={handleOnclick}
+          onClick={handleClick}
         />
       </div>
     </div>

@@ -36,8 +36,10 @@ class GameStore {
   static voteUser(roomId: string, voteInfo: Vote): boolean {
     const { to, from } = voteInfo;
     const votedUser = GameStore.get(roomId)?.find(({ userName }) => to === userName);
+    const votingUser = GameStore.get(roomId)?.find(({ userName }) => from === userName);
 
-    if (!votedUser) return false;
+    if (!votedUser || !votingUser) return false;
+    GameStore.get(roomId).forEach(({ voteFrom }) => voteFrom.delete(from));
     votedUser.voteFrom.add(from);
     return true;
   }

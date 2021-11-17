@@ -15,6 +15,9 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { useUserInfo } from '@src/contexts/userInfo';
 import { PlayerInfo, Memo } from '@src/types';
 import { User } from '@mafia/domain/types/user';
+import usePreventLeave from '@src/hooks/usePreventLeave';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface locationType {
   userList: PlayerInfo[];
@@ -31,7 +34,6 @@ const Game = () => {
   }
 
   const { userList } = state;
-  // const { userName: myName } = userInfo;
 
   const [playerStateList, setPlayerStateList] = useState<PlayerState[]>([]);
   const [memoList, setMemoList] = useState<Memo[]>([]);
@@ -40,6 +42,7 @@ const Game = () => {
   const { timer, isNight } = useTimer();
   const { emitAbility, mafiaPickList } = useAbility('mafia', setPlayerStateList);
   const { myJob } = useGame();
+  usePreventLeave();
 
   const initPlayerState = (userList: User[]) => {
     setPlayerStateList(userList.map(({ userName }) => ({ userName, isDead: false })));
@@ -60,11 +63,25 @@ const Game = () => {
   }, []);
 
   useEffect(() => {
-    console.log('night', isNight);
+    if (!isNight && timer.substr(3, 2) === '30') {
+      toast('🗳 지금부터 투표시간입니다.');
+    }
+    if (!isNight && timer.substr(3, 2) === '10') {
+      toast('투표시간이 10초 남았습니다!', { autoClose: 10000, hideProgressBar: false });
+    }
+  }, [timer]);
+
+  useEffect(() => {
+    if (isNight) {
+      toast(`🌒 밤이 되었습니다... 개인 능력을 사용해주세요.`, { theme: 'dark' });
+    } else {
+      toast(`☀️ 낮이 되었습니다... 투표로 희생 될 사람을 결정해주세요.`, { theme: 'light' });
+    }
   }, [isNight]);
 
   return (
     <div css={gamePageStyle(isNight)}>
+      <ToastContainer position="top-center" autoClose={7000} hideProgressBar />
       <LeftSideContainer
         playerStateList={playerStateList}
         playerList={voteList}

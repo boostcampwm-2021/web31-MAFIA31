@@ -1,4 +1,5 @@
 import { PUBLISH_VOTE, VOTE } from '@mafia/domain/constants/event';
+import { User } from '@mafia/domain/types/user';
 import { RoomVote } from '@mafia/domain/types/vote';
 import { useSocketContext } from '@src/contexts/socket';
 import { useUserInfo } from '@src/contexts/userInfo';
@@ -22,7 +23,11 @@ const useVote = () => {
     socketRef.current?.emit(VOTE, { from: userInfo?.userName, to: userName });
   };
 
-  return { voteList, voteUser };
+  const initVote = (userList: User[]) => {
+    setVoteList(userList.map((user) => ({ ...user, voteCount: 0 })));
+  };
+
+  return { voteList, voteUser, initVote };
 };
 
 export default useVote;

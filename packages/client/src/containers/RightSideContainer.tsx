@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
@@ -7,21 +7,18 @@ import { grey1, titleActive, white, JOB_DICT } from '@constants/index';
 import { SearchIcon } from '@components/Icon';
 import { MemoButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { ImageSizeList, Image } from '@components/Image';
+import { Memo } from '@src/types';
 import { Modal } from '@src/components/Modal';
 
 type PropType = {
   playerStateList: PlayerState[];
+  memoList: Memo[];
   isNight: boolean;
   myJob: string;
 };
 
-interface Memo {
-  userName: string;
-  guessJob: string;
-}
 
-const RightSideContainer: FC<PropType> = ({ playerStateList, isNight, myJob }) => {
-  const [memoList] = useState<Memo[]>([]);
+const RightSideContainer: FC<PropType> = ({ playerStateList, memoList, isNight, myJob }) => {
   const [showModal, setShowModal] = useState(true);
   const handleClick = () => {
     setShowModal((prev) => !prev);
@@ -62,8 +59,7 @@ const RightSideContainer: FC<PropType> = ({ playerStateList, isNight, myJob }) =
         />
       </div>
     </div>
-  );
-};
+);
 
 const rightSideContainerStyle = (isNight: boolean) => css`
   position: relative;

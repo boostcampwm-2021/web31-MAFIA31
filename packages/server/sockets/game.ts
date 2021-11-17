@@ -1,7 +1,9 @@
 import * as EVENT from '@mafia/domain/constants/event';
 import { GameInfo, PlayerResult } from '@mafia/domain/types/game';
 import { Vote } from '@mafia/domain/types/vote';
+import axios from 'axios';
 import { Namespace, Socket } from 'socket.io';
+import { apiURL } from '../config/url.config.json';
 import { JOB_ARR } from '../constants/job';
 import GameStore from '../stores/GameStore';
 import RoomStore from '../stores/RoomStore';
@@ -20,6 +22,13 @@ const checkEnd = (roomId: string) => {
   return mafia >= citizen || mafia === 0;
 };
 
+const updateStats = (roomId: string) => {
+  const result = getGameResult(roomId);
+  axios.post(`${apiURL}/user/update`, {
+    result,
+  });
+};
+
 const startTimer = (namespace: Namespace, roomId: string) => {
   const TURN_TIME = 60;
   let counter = -1;
@@ -34,6 +43,7 @@ const startTimer = (namespace: Namespace, roomId: string) => {
     if (checkEnd(roomId)) {
       namespace.emit(EVENT.GAME_OVER, getGameResult(roomId));
       clearInterval(gameTimer);
+      updateStats(roomId);
       return;
     }
 

@@ -2,7 +2,6 @@ import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { DefaultButton, ButtonSizeList, ButtonThemeList } from '@src/components/Button';
-import { primaryDark } from '@constants/colors';
 import disconnectSocket from '@src/utils/disconnectSocket';
 
 const BUTTON_TEXT = 'Github 로그인';
@@ -14,7 +13,7 @@ const Login: FC = () => {
 
   return (
     <div css={loginPageStyle}>
-      <div css={logoTextStyle}>MAFIA 31</div>
+      <img src="/assets/icons/dark-logo.svg" alt="logo" css={logoStyle} />
       <img css={logoImageStyle} src="/assets/images/home.png" alt="home" />
       <a
         href={`https:github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}`}
@@ -40,12 +39,8 @@ const loginPageStyle = css`
   height: 100vh;
 `;
 
-const logoTextStyle = css`
-  font-style: normal;
-
-  font-size: 100px;
-  font-weight: 900;
-  color: ${primaryDark};
+const logoStyle = css`
+  width: 300px;
 `;
 
 const logoImageStyle = css`

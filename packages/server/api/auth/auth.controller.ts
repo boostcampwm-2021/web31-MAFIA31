@@ -2,6 +2,7 @@ import { User } from '@mafia/domain/types/user';
 import axios from 'axios';
 import express from 'express';
 import { githubClientId, githubClientSecret } from '../../config/github.config.json';
+import UserService from '../user/user.service';
 
 const getAccessToken = async (code: string) => {
   const {
@@ -33,7 +34,14 @@ const AuthController = {
       },
     });
     const user: User = { userName: data.login, profileImg: data.avatar_url };
-    res.json(user);
+
+    try {
+      await UserService.findOneOrCreate(data.login, data.avatar_url);
+      res.status(200).json(user);
+    } catch (error) {
+      console.log(error);
+      res.status(400).json({ error });
+    }
   },
 };
 

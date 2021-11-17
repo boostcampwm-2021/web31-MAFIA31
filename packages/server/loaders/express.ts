@@ -1,6 +1,6 @@
 import cors from 'cors';
 import express from 'express';
-import { clientURL } from '../config/client.config.json';
+import { clientURL } from '../config/url.config.json';
 
 const expressLoader = (app: express.Application) => {
   const PORT: string = process.env.PORT || '5000';

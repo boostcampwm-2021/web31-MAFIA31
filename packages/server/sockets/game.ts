@@ -33,15 +33,15 @@ const startTimer = (namespace: Namespace, roomId: string) => {
   const VOTE_TIME = 10000;
   const TURN_TIME = 60;
   let counter = 0;
-  let isNight: boolean = true;
+  let isNight: boolean = false;
 
-  const remainTime = TURN_TIME - counter;
+  let remainTime = TURN_TIME - counter;
   namespace.emit(EVENT.TIMER, remainTime);
   startVoteTime(namespace, roomId, VOTE_TIME);
 
   const gameTimer = setInterval(() => {
     counter = (counter + 1) % TURN_TIME;
-    const remainTime = TURN_TIME - counter;
+    remainTime = TURN_TIME - counter;
     namespace.emit(EVENT.TIMER, remainTime);
 
     if (counter !== 0) return;
@@ -62,6 +62,7 @@ const startTimer = (namespace: Namespace, roomId: string) => {
 };
 
 const shuffle = (arr: string[]) => arr.sort(() => Math.random() - 0.5);
+
 const assignJobs = (roomId: string) => {
   const jobs = JOB_ARR[RoomStore.get(roomId).length];
   const mixedJobs = shuffle(jobs);
@@ -90,6 +91,7 @@ const emitJobs = (namespace: Namespace, roomId: string): void => {
 const startGame = (namespace: Namespace, roomId: string) => {
   assignJobs(roomId);
   emitJobs(namespace, roomId);
+  console.log(GameStore.get(roomId));
   namespace.emit(EVENT.PUBLISH_GAME_START);
   startTimer(namespace, roomId);
 };

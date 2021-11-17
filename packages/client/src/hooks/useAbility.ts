@@ -1,5 +1,5 @@
 import * as EVENT from '@mafia/domain/constants/event';
-import { MafiaPick } from '@mafia/domain/types/game';
+import { MafiaPick, PoliceInvestigation } from '@mafia/domain/types/game';
 import { useSocketContext } from '@src/contexts/socket';
 import { useUserInfo } from '@src/contexts/userInfo';
 import { useEffect, useState } from 'react';
@@ -21,7 +21,7 @@ const useAbility = (job: string, setPlayerStateList: any) => {
     } else if (job === 'police') {
       socketRef.current?.on(
         EVENT.POLICE_INVESTIGATION,
-        ({ userName, isMafia }: { userName: string; isMafia: string }) => {
+        ({ userName, isMafia }: PoliceInvestigation) => {
           console.log(userName, isMafia);
         },
       );

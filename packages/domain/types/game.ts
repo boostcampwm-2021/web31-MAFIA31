@@ -22,3 +22,8 @@ export interface PlayerResult {
   job: string;
   result: boolean;
 }
+
+export interface PoliceInvestigation {
+  userName: string;
+  isMafia: boolean;
+}

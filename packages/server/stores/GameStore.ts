@@ -69,7 +69,7 @@ class GameStore {
     return GameStore.instance[roomId].map(({ userName, job }) => ({
       userName,
       job,
-      result: job === win,
+      result: (win === 'citizen' && job !== 'mafia') || win === job,
     }));
   }
 }

@@ -45,6 +45,7 @@
           ["@utils", "./src/utils"],
           ["@hooks", "./src/hooks"],
           ["@pages", "./src/pages"],
+          ["@contexts", "./src/contexts"],
           ["@constants", "./src/constants"],
           ["@containers", "./src/containers"],
           ["@components", "./src/components"]

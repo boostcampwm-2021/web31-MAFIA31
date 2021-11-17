@@ -18,7 +18,7 @@ const StoryMsg: FC<PropType> = ({ msg, imgSrc }) => {
     setSrc(imgSrc);
     setTimeout(() => {
       setDisabled(false);
-      setSrc('');
+      setSrc(imgSrc.replace(/\..+/, '.png'));
     }, 2000);
   }, [imgSrc]);
 

@@ -78,10 +78,11 @@ class GameStore {
   }
 
   static getDashBoard(roomId: string): DashBoard {
-    const mafia = GameStore.instance[roomId].filter(({ isDead, job }) => !isDead && job === 'mafia')
-      .length;
+    const mafia = GameStore.instance[roomId].filter(
+      ({ isDead, job }) => !isDead && job === 'mafia',
+    ).length;
     const citizen = GameStore.instance[roomId].filter(
-      ({ isDead, job }) => !isDead && job === 'citizen',
+      ({ isDead, job }) => !isDead && job !== 'mafia',
     ).length;
 
     return { mafia, citizen };
@@ -91,7 +92,7 @@ class GameStore {
     return GameStore.instance[roomId].map(({ userName, job }) => ({
       userName,
       job,
-      result: job === win,
+      result: (win === 'citizen' && job !== 'mafia') || win === job,
     }));
   }
 }

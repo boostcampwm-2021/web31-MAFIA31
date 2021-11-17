@@ -1,5 +1,5 @@
-import { MAFIA_ABILITY, PUBLISH_VICTIM } from '@mafia/domain/constants/event';
-import { MafiaPick } from '@mafia/domain/types/game';
+import { MAFIA_ABILITY, POLICE_INVESTIGATION, PUBLISH_VICTIM } from '@mafia/domain/constants/event';
+import { MafiaPick, PoliceInvestigation } from '@mafia/domain/types/game';
 import { Namespace, Socket } from 'socket.io';
 import GameStore from '../stores/GameStore';
 
@@ -32,6 +32,14 @@ const abilitySocketInit = (socket: Socket) => {
       mafiaPickList.push(mafiaPick);
     }
     namespace.to('mafia').emit(MAFIA_ABILITY, mafiaPickList);
+  });
+
+  socket.on(POLICE_INVESTIGATION, (userName: string) => {
+    const isMafia: boolean =
+      GameStore.get(namespace.name).find((el) => el.userName === userName)?.job === 'mafia';
+
+    const resData: PoliceInvestigation = { userName, isMafia };
+    namespace.to('police').emit(POLICE_INVESTIGATION, resData);
   });
 };
 

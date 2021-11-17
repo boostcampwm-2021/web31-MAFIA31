@@ -20,7 +20,12 @@ const GameResult = () => {
   const myJob = playerResultList.find(
     (playerResult) => playerResult.userName === userInfo?.userName,
   )?.job;
-  const winnerJob = playerResultList.find((playerResult) => playerResult.result === true)?.job;
+
+  let winnerJob = playerResultList.find((playerResult) => playerResult.result === true)?.job;
+  winnerJob = winnerJob !== 'mafia' ? 'citizen' : winnerJob;
+
+  const winOrLose =
+    (myJob !== 'mafia' && winnerJob === 'citizen') || myJob === winnerJob ? 'WIN' : 'LOSE';
 
   return (
     <div css={resultPageStyle}>
@@ -28,7 +33,7 @@ const GameResult = () => {
         <div css={teamResultTitleStyle}>
           <span css={teamResultTitleColorStyle(winnerJob!)}>{winnerJob!.toUpperCase()}</span> WIN!
         </div>
-        <div css={personalResultTitleStyle}>YOU {myJob === winnerJob ? 'WIN' : 'LOSE'}</div>
+        <div css={personalResultTitleStyle}>YOU {winOrLose}</div>
       </div>
       <div css={resultCardListStyle(playerResultList.length)}>
         {playerResultList.map(({ userName, job, result }) => (

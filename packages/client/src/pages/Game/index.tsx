@@ -56,7 +56,6 @@ const Game = () => {
   };
 
   useEffect(() => {
-    console.log('userList', userList);
     init();
   }, []);
 

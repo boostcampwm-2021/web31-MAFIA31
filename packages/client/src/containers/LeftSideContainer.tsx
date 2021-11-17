@@ -60,13 +60,13 @@ const LeftSideContainer: FC<PropType> = ({
       </div>
       <hr css={hrStyle} />
       <div css={abilityListStyle}>
-        {playerList.map(({ profileImg, userName, voteFrom }) => (
+        {playerList.map(({ profileImg, userName, voteCount }) => (
           <AbilityButton
             key={userName}
             isNight={isNight}
             userImg={profileImg}
             userName={userName}
-            voteFrom={voteFrom}
+            voteCount={voteCount}
             selectedByMe={mafiaPickList.some(
               (pick) => pick.mafia === userInfo?.userName && pick.victim === userName,
             )}

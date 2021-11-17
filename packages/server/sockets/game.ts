@@ -21,14 +21,19 @@ const checkEnd = (roomId: string) => {
 };
 
 const startTimer = (namespace: Namespace, roomId: string) => {
+  const VOTE_TIME = 10000;
   const TURN_TIME = 60;
-  let counter = -1;
-  let isNight: boolean = false;
+  let counter = 0;
+  let isNight: boolean = true;
+
+  const remainTime = TURN_TIME - counter;
+  namespace.emit(EVENT.TIMER, remainTime);
+  startVoteTime(namespace, roomId, VOTE_TIME);
 
   const gameTimer = setInterval(() => {
+    counter = (counter + 1) % TURN_TIME;
     const remainTime = TURN_TIME - counter;
     namespace.emit(EVENT.TIMER, remainTime);
-    counter = (counter + 1) % TURN_TIME;
 
     if (counter !== 0) return;
     if (checkEnd(roomId)) {
@@ -41,7 +46,7 @@ const startTimer = (namespace: Namespace, roomId: string) => {
     namespace.emit(EVENT.TURN_CHANGE, isNight);
 
     if (isNight) return;
-    startVoteTime(namespace, roomId, 10000);
+    startVoteTime(namespace, roomId, VOTE_TIME);
     publishVictim(namespace);
   }, 1000);
 };
@@ -59,7 +64,7 @@ const assignJobs = (roomId: string) => {
       profileImg,
       isDead: false,
       job: mixedJobs[idx],
-      voteFrom: [],
+      voteFrom: new Set(),
     }),
   );
   GameStore.initGame(roomId, gameInfoList);
@@ -79,11 +84,8 @@ const startGame = (namespace: Namespace, roomId: string) => {
   startTimer(namespace, roomId);
 };
 
-const votePlayer = (namespace: Namespace, roomId: string, to: string, from: string) => {
-  const votedUser = GameStore.get(roomId)?.find(({ userName }) => to === userName);
-  if (!canVote() || !votedUser) return;
-
-  votedUser.voteFrom.push(from);
+const votePlayer = (namespace: Namespace, roomId: string, voteInfo: Vote) => {
+  if (!canVote() || !GameStore.voteUser(roomId, voteInfo)) return;
   namespace.emit(EVENT.PUBLISH_VOTE, GameStore.getVoteInfos(roomId));
 };
 
@@ -92,7 +94,7 @@ const gameSocketInit = (socket: Socket): void => {
   const { name: roomId } = namespace;
 
   socket.on(EVENT.GAME_START, () => startGame(namespace, roomId));
-  socket.on(EVENT.VOTE, ({ to, from }: Vote) => votePlayer(namespace, roomId, to, from));
+  socket.on(EVENT.VOTE, (voteInfo: Vote) => votePlayer(namespace, roomId, voteInfo));
 };
 
 export default gameSocketInit;

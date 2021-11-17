@@ -24,7 +24,7 @@ const useVote = () => {
   };
 
   const initVote = (userList: User[]) => {
-    setVoteList(userList.map((user) => ({ ...user, voteFrom: [] })));
+    setVoteList(userList.map((user) => ({ ...user, voteCount: 0 })));
   };
 
   return { voteList, voteUser, initVote };

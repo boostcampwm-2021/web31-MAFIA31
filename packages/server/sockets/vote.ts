@@ -1,4 +1,5 @@
-import { EXECUTION } from '@mafia/domain/constants/event';
+import * as EVENT from '@mafia/domain/constants/event';
+import * as TIME from '@mafia/domain/constants/time';
 import { Namespace } from 'socket.io';
 import GameStore from '../stores/GameStore';
 
@@ -22,17 +23,23 @@ const publishExecution = (namespace: Namespace, roomId: string) => {
     }
   });
   const excutedPlayer = { userName: maxCount === 0 || isSame ? undefined : maxPlayer };
-  namespace.emit(EXECUTION, excutedPlayer);
+  namespace.emit(EVENT.EXECUTION, excutedPlayer);
 };
 
-const startVoteTime = (namespace: Namespace, roomId: string, time: number) => {
+const startVoteTime = (namespace: Namespace, roomId: string, seconds: number) => {
   flag = true;
+  namespace.emit(EVENT.VOTE_TIME, seconds);
+
+  setTimeout(() => {
+    namespace.emit(EVENT.VOTE_TIME, TIME.VOTE_ALARM);
+  }, seconds * 1000 - TIME.VOTE_ALARM * 1000);
 
   setTimeout(() => {
     flag = false;
+    namespace.emit(EVENT.VOTE_TIME, 0);
     publishExecution(namespace, roomId);
     GameStore.resetVote(roomId);
-  }, time);
+  }, seconds * 1000);
 };
 
 export { startVoteTime, canVote };

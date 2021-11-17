@@ -4,31 +4,39 @@ import { useSocketContext } from '@src/contexts/socket';
 import { useUserInfo } from '@src/contexts/userInfo';
 import { useEffect, useState } from 'react';
 
-const jobAbility: Record<string, string> = {
-  mafia: EVENT.MAFIA_ABILITY,
-};
-
 const useAbility = (job: string, setPlayerStateList: any) => {
   const { userInfo } = useUserInfo();
   const { socketRef } = useSocketContext();
   const [mafiaPickList, setMafiaPickList] = useState<MafiaPick[]>([]);
 
   useEffect(() => {
-    socketRef.current?.on(EVENT.PUBLISH_VICTIM, (v: string) => {
-      setPlayerStateList((prev: any) => [...prev, { userName: v, isDead: true }]);
-    });
-    socketRef.current?.on(jobAbility[job], (newList: MafiaPick[]) => {
-      // 마피아가 선택한 사람을 어빌리티 버튼에 재렌더링
-      setMafiaPickList(newList);
-    });
+    if (job === 'mafia') {
+      socketRef.current?.on(EVENT.PUBLISH_VICTIM, (userName: string) => {
+        setPlayerStateList((prev: any) => [...prev, { userName, isDead: true }]);
+      });
+      socketRef.current?.on(EVENT.MAFIA_ABILITY, (newList: MafiaPick[]) => {
+        // 마피아가 선택한 사람을 어빌리티 버튼에 재렌더링
+        setMafiaPickList(newList);
+      });
+    } else if (job === 'police') {
+      socketRef.current?.on(EVENT.POLICE_INVESTICATION, (isMafia: boolean) => {
+        console.log(isMafia);
+      });
+    }
+
     return () => {
       socketRef.current?.off(EVENT.PUBLISH_VICTIM);
-      socketRef.current?.off(jobAbility[job]);
+      socketRef.current?.off(EVENT.MAFIA_ABILITY);
+      socketRef.current?.off(EVENT.POLICE_INVESTICATION);
     };
   }, [socketRef.current]);
 
-  const emitAbility = (victim: string) => {
-    socketRef.current?.emit(jobAbility[job], { mafia: userInfo?.userName, victim });
+  const emitAbility = (userName: string) => {
+    if (job === 'mafia') {
+      socketRef.current?.emit(EVENT.MAFIA_ABILITY, { mafia: userInfo?.userName, victim: userName });
+    } else if (job === 'police') {
+      socketRef.current?.emit(EVENT.POLICE_INVESTICATION, userName);
+    }
   };
 
   return { emitAbility, mafiaPickList };

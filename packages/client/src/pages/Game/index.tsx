@@ -43,8 +43,9 @@ const Game = () => {
   const { chatList, sendChat, sendNightChat } = useChat();
   const { voteList, voteUser, initVote } = useVote();
   const { timer, isNight } = useTimer();
-  const { emitAbility, mafiaPickList } = useAbility('mafia', setPlayerStateList);
   const { myJob } = useGame();
+
+  const { emitAbility, mafiaPickList } = useAbility(myJob, setPlayerStateList);
   usePreventLeave();
 
   const initMemo = (userList: User[]) => {

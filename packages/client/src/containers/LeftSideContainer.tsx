@@ -7,6 +7,7 @@ import { titleActive, white, grey1 } from '@constants/index';
 import { AbilityButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { SettingIcon, RoomOutIcon } from '@components/Icon';
 import { RoomVote } from '@mafia/domain/types/vote';
+import { useUserInfo } from '@src/contexts/userInfo';
 
 type PropType = {
   playerStateList: PlayerState[];
@@ -26,52 +27,67 @@ const LeftSideContainer: FC<PropType> = ({
   isNight,
   victim,
   timer,
-}) => (
-  <div css={leftSideContainerStyle}>
-    <div css={Style}>
-      <img
-        src={isNight ? '/assets/images/moon.png' : '/assets/images/sun.png'}
-        alt="day-night-state"
-      />
-      <div css={roomActionStyle(isNight)}>
-        <span>ROOM NAME</span>
-        <div css={roomIconButtonsStyle(isNight)}>
-          <IconButton
-            icon={SettingIcon}
-            size={ButtonSizeList.LARGE}
-            theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
-            onClick={() => {}}
-          />
-          <IconButton
-            icon={RoomOutIcon}
-            size={ButtonSizeList.LARGE}
-            theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
-            onClick={() => {}}
-          />
+}) => {
+  const { userInfo } = useUserInfo();
+  const handleClick = (userName: string) => {
+    const myState = playerStateList.find(
+      ({ userName: playerName }) => playerName === userInfo?.userName,
+    );
+    if (!myState || myState.isDead) return;
+    if (isNight) {
+      emitAbility(userName);
+    } else {
+      voteUser(userName);
+    }
+  };
+
+  return (
+    <div css={leftSideContainerStyle}>
+      <div css={Style}>
+        <img
+          src={isNight ? '/assets/images/moon.png' : '/assets/images/sun.png'}
+          alt="day-night-state"
+        />
+        <div css={roomActionStyle(isNight)}>
+          <span>ROOM NAME</span>
+          <div css={roomIconButtonsStyle(isNight)}>
+            <IconButton
+              icon={SettingIcon}
+              size={ButtonSizeList.LARGE}
+              theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
+              onClick={() => {}}
+            />
+            <IconButton
+              icon={RoomOutIcon}
+              size={ButtonSizeList.LARGE}
+              theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
+              onClick={() => {}}
+            />
+          </div>
         </div>
       </div>
-    </div>
 
-    <div css={timerStyle}>
-      <span>{timer}</span>
+      <div css={timerStyle}>
+        <span>{timer}</span>
+      </div>
+      <hr css={hrStyle} />
+      <div css={abilityListStyle}>
+        {playerList.map(({ profileImg, userName, voteCount }) => (
+          <AbilityButton
+            key={userName}
+            isNight={isNight}
+            userImg={profileImg}
+            userName={userName}
+            voteCount={voteCount}
+            isVictim={victim === userName}
+            isDead={playerStateList.find((player) => player.userName === userName)?.isDead || false}
+            onClick={handleClick}
+          />
+        ))}
+      </div>
     </div>
-    <hr css={hrStyle} />
-    <div css={abilityListStyle}>
-      {playerList.map(({ profileImg, userName, voteCount }) => (
-        <AbilityButton
-          key={userName}
-          isNight={isNight}
-          userImg={profileImg}
-          userName={userName}
-          voteCount={voteCount}
-          isVictim={victim === userName}
-          isDead={playerStateList.find((player) => player.userName === userName)?.isDead || false}
-          onClick={isNight ? emitAbility : voteUser}
-        />
-      ))}
-    </div>
-  </div>
-);
+  );
+};
 
 const leftSideContainerStyle = css`
   width: 27%;

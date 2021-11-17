@@ -23,6 +23,10 @@ const jobTable: JobTable = {
     imgSrc: 'assets/images/citizen.png',
     koreanName: '시민',
   },
+  police: {
+    imgSrc: 'assets/images/police.png',
+    koreanName: '경찰',
+  },
 };
 
 const ResultCard: FC<PropType> = ({ userName, job, win }) => {

@@ -1,4 +1,5 @@
 import * as EVENT from '@mafia/domain/constants/event';
+import * as TIME from '@mafia/domain/constants/time';
 import { GameInfo, PlayerResult } from '@mafia/domain/types/game';
 import { Vote } from '@mafia/domain/types/vote';
 import axios from 'axios';
@@ -29,39 +30,48 @@ const updateStats = (roomId: string) => {
   });
 };
 
-const startTimer = (namespace: Namespace, roomId: string) => {
-  const VOTE_TIME = 10000;
-  const TURN_TIME = 60;
-  let counter = 0;
-  let isNight: boolean = true;
+const changeTurn = (
+  namespace: Namespace,
+  roomId: string,
+  interval: ReturnType<typeof setInterval>,
+  isNight: boolean,
+) => {
+  if (checkEnd(roomId)) {
+    namespace.emit(EVENT.GAME_OVER, getGameResult(roomId));
+    clearInterval(interval);
+    updateStats(roomId);
+    return;
+  }
 
-  const remainTime = TURN_TIME - counter;
-  namespace.emit(EVENT.TIMER, remainTime);
-  startVoteTime(namespace, roomId, VOTE_TIME);
+  namespace.emit(EVENT.TURN_CHANGE, isNight);
+  if (isNight) return;
+  publishVictim(namespace);
+};
+
+const startTimer = (namespace: Namespace, roomId: string) => {
+  let counter = 0;
+  let isNight: boolean = false;
+
+
+  namespace.emit(EVENT.TIMER, TIME.TURN - counter);
+  namespace.emit(EVENT.TURN_CHANGE, isNight);
 
   const gameTimer = setInterval(() => {
-    counter = (counter + 1) % TURN_TIME;
-    const remainTime = TURN_TIME - counter;
-    namespace.emit(EVENT.TIMER, remainTime);
+    counter = (counter + 1) % TIME.TURN;
+    namespace.emit(EVENT.TIMER, TIME.TURN - counter);
 
-    if (counter !== 0) return;
-    if (checkEnd(roomId)) {
-      namespace.emit(EVENT.GAME_OVER, getGameResult(roomId));
-      clearInterval(gameTimer);
-      updateStats(roomId);
-      return;
+    if (!isNight && counter === TIME.VOTE_START) {
+      startVoteTime(namespace, roomId, TIME.VOTE);
     }
 
+    if (counter !== 0) return;
     isNight = !isNight;
-    namespace.emit(EVENT.TURN_CHANGE, isNight);
-
-    if (isNight) return;
-    startVoteTime(namespace, roomId, VOTE_TIME);
-    publishVictim(namespace);
+    changeTurn(namespace, roomId, gameTimer, isNight);
   }, 1000);
 };
 
 const shuffle = (arr: string[]) => arr.sort(() => Math.random() - 0.5);
+
 const assignJobs = (roomId: string) => {
   const jobs = JOB_ARR[RoomStore.get(roomId).length];
   const mixedJobs = shuffle(jobs);
@@ -89,9 +99,9 @@ const emitJobs = (namespace: Namespace, roomId: string): void => {
 
 const startGame = (namespace: Namespace, roomId: string) => {
   assignJobs(roomId);
-  emitJobs(namespace, roomId);
   namespace.emit(EVENT.PUBLISH_GAME_START);
   startTimer(namespace, roomId);
+  emitJobs(namespace, roomId);
 };
 
 const votePlayer = (namespace: Namespace, roomId: string, voteInfo: Vote) => {

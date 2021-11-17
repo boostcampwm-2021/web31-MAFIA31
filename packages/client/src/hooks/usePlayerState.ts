@@ -3,9 +3,9 @@ import { PlayerState } from '@mafia/domain/types/game';
 import { useSocketContext } from '@src/contexts/socket';
 import { useEffect, useState } from 'react';
 
-const usePlayerState = () => {
+const usePlayerState = (initialValue: PlayerState[]) => {
   const { socketRef } = useSocketContext();
-  const [playerStateList, setPlayerStateList] = useState<PlayerState[]>([]);
+  const [playerStateList, setPlayerStateList] = useState<PlayerState[]>(initialValue);
   const updatePlayerState = (userName: string) => {
     setPlayerStateList((prev) =>
       prev.map((player) => (player.userName === userName ? { ...player, isDead: true } : player)),
@@ -22,7 +22,7 @@ const usePlayerState = () => {
     };
   }, [socketRef.current]);
 
-  return { playerStateList, setPlayerStateList };
+  return { playerStateList };
 };
 
 export default usePlayerState;

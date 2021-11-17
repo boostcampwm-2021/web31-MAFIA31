@@ -34,7 +34,11 @@ const LeftSideContainer: FC<PropType> = ({
       ({ userName: playerName }) => playerName === userInfo?.userName,
     );
     if (!myState || myState.isDead) return;
-    isNight ? emitAbility(userName) : voteUser(userName);
+    if (isNight) {
+      emitAbility(userName);
+    } else {
+      voteUser(userName);
+    }
   };
 
   return (

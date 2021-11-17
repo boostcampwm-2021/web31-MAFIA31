@@ -17,7 +17,6 @@ type PropType = {
   myJob: string;
 };
 
-
 const RightSideContainer: FC<PropType> = ({ playerStateList, memoList, isNight, myJob }) => {
   const [showModal, setShowModal] = useState(true);
   const handleClick = () => {
@@ -59,7 +58,8 @@ const RightSideContainer: FC<PropType> = ({ playerStateList, memoList, isNight, 
         />
       </div>
     </div>
-);
+  );
+};
 
 const rightSideContainerStyle = (isNight: boolean) => css`
   position: relative;

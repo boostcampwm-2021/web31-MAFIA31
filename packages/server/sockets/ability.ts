@@ -2,25 +2,27 @@ import { MAFIA_ABILITY, PUBLISH_VICTIM } from '@mafia/domain/constants/event';
 import { Namespace, Socket } from 'socket.io';
 import GameStore from '../stores/GameStore';
 
-let victim: string = '';
+const VictimStore: Record<string, string> = {};
 
 const publishVictim = (namespace: Namespace) => {
   const roomId = namespace.name;
+  const victim = VictimStore[roomId];
   namespace.emit(PUBLISH_VICTIM, victim);
   const newGameInfoList = GameStore.get(roomId).map((player) =>
     player.userName === victim ? { ...player, isDead: true } : player,
   );
   GameStore.set(roomId, newGameInfoList);
-  console.log(GameStore.get(roomId));
-  victim = '';
+  VictimStore[roomId] = '';
 };
 
 const abilitySocketInit = (socket: Socket) => {
   const { nsp: namespace } = socket;
+  const roomId = namespace.name;
+  VictimStore[roomId] = '';
 
   socket.on(MAFIA_ABILITY, (mafiaPick: string) => {
-    victim = mafiaPick;
-    namespace.to('mafia').emit(MAFIA_ABILITY, victim);
+    VictimStore[roomId] = mafiaPick;
+    namespace.to('mafia').emit(MAFIA_ABILITY, VictimStore[roomId]);
   });
 };
 

@@ -25,6 +25,10 @@ class GameStore {
     return GameStore.instance[roomId];
   }
 
+  static set(roomId: string, gameInfo: GameInfo[]) {
+    GameStore.instance[roomId] = gameInfo;
+  }
+
   static resetGame(roomId: string) {
     GameStore.instance[roomId] = [];
   }
@@ -34,7 +38,11 @@ class GameStore {
   }
 
   static resetVote(roomId: string) {
-    GameStore.instance[roomId].map((gameInfo) => ({ ...gameInfo, voteFrom: [] }));
+    const resetVoteGameInfo: GameInfo[] = GameStore.get(roomId).map((gameInfo) => ({
+      ...gameInfo,
+      voteFrom: new Set(),
+    }));
+    GameStore.set(roomId, resetVoteGameInfo);
   }
 
   static voteUser(roomId: string, voteInfo: Vote): boolean {
@@ -58,6 +66,13 @@ class GameStore {
     const gameInfo = GameStore.get(roomId).find(({ userName }) => playerName === userName);
     if (!gameInfo) return gameInfo;
     return gameInfo.isDead;
+  }
+
+  static diePlayer(roomId: string, playerName: string) {
+    const deadPlayer = GameStore.get(roomId).find(({ userName }) => userName === playerName);
+    if (!deadPlayer) return;
+
+    deadPlayer.isDead = true;
   }
 
   static getDashBoard(roomId: string): DashBoard {

@@ -2,7 +2,7 @@ import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-import { PlayerState, MafiaPick } from '@mafia/domain/types/game';
+import { PlayerState } from '@mafia/domain/types/game';
 import { titleActive, white, grey1 } from '@constants/index';
 import { AbilityButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { SettingIcon, RoomOutIcon } from '@components/Icon';
@@ -15,7 +15,7 @@ type PropType = {
   timer: string;
   voteUser: any;
   emitAbility: any;
-  mafiaPickList: MafiaPick[];
+  victim: string;
   isNight: boolean;
 };
 
@@ -25,7 +25,7 @@ const LeftSideContainer: FC<PropType> = ({
   voteUser,
   emitAbility,
   isNight,
-  mafiaPickList,
+  victim,
   timer,
 }) => {
   const { userInfo } = useUserInfo();
@@ -79,12 +79,7 @@ const LeftSideContainer: FC<PropType> = ({
             userImg={profileImg}
             userName={userName}
             voteCount={voteCount}
-            selectedByMe={mafiaPickList.some(
-              (pick) => pick.mafia === userInfo?.userName && pick.victim === userName,
-            )}
-            selectedByOthers={mafiaPickList.some(
-              (pick) => pick.mafia !== userInfo?.userName && pick.victim === userName,
-            )}
+            isVictim={victim === userName}
             isDead={playerStateList.find((player) => player.userName === userName)?.isDead || false}
             onClick={handleClick}
           />
@@ -93,6 +88,7 @@ const LeftSideContainer: FC<PropType> = ({
     </div>
   );
 };
+
 const leftSideContainerStyle = css`
   width: 27%;
   height: 100%;

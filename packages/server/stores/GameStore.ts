@@ -25,8 +25,8 @@ class GameStore {
     return GameStore.instance[roomId];
   }
 
-  static set(roomId: string, gameInfo: GameInfo[]) {
-    GameStore.instance[roomId] = gameInfo;
+  static set(roomId: string, gameInfoList: GameInfo[]) {
+    GameStore.instance[roomId] = gameInfoList;
   }
 
   static resetGame(roomId: string) {

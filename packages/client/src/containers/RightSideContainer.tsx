@@ -34,12 +34,12 @@ const RightSideContainer: FC<PropType> = ({ playerStateList, memoList, isNight, 
       </div>
       <hr css={hrStyle} />
       <div css={memoListStyle}>
-        {memoList.map(({ userName, guessJob }) => (
+        {memoList.map(({ userName, guessJob }, idx) => (
           <div css={memoInfoStyle(isNight)} key={userName}>
             <MemoButton
               userName={userName}
               guessJob={guessJob}
-              isDead={playerStateList.filter((player) => player.userName === userName)[0].isDead}
+              isDead={playerStateList[idx].isDead}
             />
             <span>{userName}</span>
           </div>

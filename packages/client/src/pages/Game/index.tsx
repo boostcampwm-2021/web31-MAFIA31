@@ -20,6 +20,8 @@ import ChatContainer from '@containers/ChatContainer';
 import RightSideContainer from '@containers/RightSideContainer';
 
 import 'react-toastify/dist/ReactToastify.css';
+import * as TIME from '@mafia/domain/constants/time';
+import * as TOAST from '@src/constants/toast';
 
 interface locationType {
   userList: PlayerInfo[];
@@ -40,7 +42,7 @@ const Game = () => {
   const [memoList, setMemoList] = useState<Memo[]>([]);
   const { chatList, sendChat, sendNightChat } = useChat();
   const { voteList, voteUser, initVote } = useVote();
-  const { timer, isNight } = useTimer();
+  const { timer, isNight, voteSec } = useTimer();
   const { emitAbility, mafiaPickList } = useAbility('mafia', setPlayerStateList);
   const { myJob } = useGame();
   usePreventLeave();
@@ -64,19 +66,24 @@ const Game = () => {
   }, []);
 
   useEffect(() => {
-    if (!isNight && timer.substr(3, 2) === '30') {
-      toast('🗳 지금부터 투표시간입니다.');
+    if (voteSec === undefined) return;
+    if (voteSec === TIME.VOTE) {
+      toast(TOAST.VOTE_START);
+    } else if (voteSec === TIME.VOTE_ALARM) {
+      toast(TOAST.VOTE_ALARM, {
+        autoClose: TIME.VOTE_ALARM * 1000,
+        hideProgressBar: false,
+      });
+    } else if (voteSec === 0) {
+      toast(TOAST.VOTE_END);
     }
-    if (!isNight && timer.substr(3, 2) === '10') {
-      toast('투표시간이 10초 남았습니다!', { autoClose: 10000, hideProgressBar: false });
-    }
-  }, [timer]);
+  }, [voteSec]);
 
   useEffect(() => {
     if (isNight) {
-      toast(`🌒 밤이 되었습니다... 개인 능력을 사용해주세요.`, { theme: 'dark' });
+      toast(TOAST.NIGHT, { theme: 'dark' });
     } else {
-      toast(`☀️ 낮이 되었습니다... 투표로 희생 될 사람을 결정해주세요.`, { theme: 'light' });
+      toast(TOAST.DAY, { theme: 'light' });
     }
   }, [isNight]);
 

@@ -8,6 +8,7 @@ const useTimer = () => {
   const [isNight, setIsNight] = useState<boolean>(false);
   const seconds = useRef<number>();
   const [timer, setTimer] = useState<string>('00:00');
+  const [voteSec, setVoteSec] = useState<number | undefined>(undefined);
 
   const updateTimer = (remainTime: number): void => {
     seconds.current = remainTime;
@@ -18,14 +19,15 @@ const useTimer = () => {
   useEffect(() => {
     socketRef.current?.on(EVENT.TIMER, updateTimer);
     socketRef.current?.on(EVENT.TURN_CHANGE, (isNight: boolean) => setIsNight(isNight));
-
+    socketRef.current?.on(EVENT.VOTE_TIME, (time: number): void => setVoteSec(time));
     return () => {
       socketRef.current?.off(EVENT.TIMER, updateTimer);
       socketRef.current?.off(EVENT.TURN_CHANGE);
+      socketRef.current?.off(EVENT.VOTE_TIME);
     };
   }, [socketRef.current]);
 
-  return { isNight, timer };
+  return { isNight, timer, voteSec };
 };
 
 export default useTimer;

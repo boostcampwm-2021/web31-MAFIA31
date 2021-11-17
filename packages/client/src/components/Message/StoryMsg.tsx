@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState, useCallback, useEffect } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { primaryDark, white } from '@src/constants';
@@ -9,12 +9,29 @@ interface PropType {
   imgSrc: string;
 }
 
-const StoryMsg: FC<PropType> = ({ msg, imgSrc }) => (
-  <div css={StoryMsgStyle}>
-    <div css={StoryTextStyle}>{msg}</div>
-    <Image size={ImageSizeList.STORY} src={imgSrc} />
-  </div>
-);
+const StoryMsg: FC<PropType> = ({ msg, imgSrc }) => {
+  const [src, setSrc] = useState<string>(imgSrc);
+  const [disabled, setDisabled] = useState<boolean>(false);
+  const handleClick = useCallback(() => {
+    if (!imgSrc.includes('.gif')) return;
+    setDisabled(true);
+    setSrc(imgSrc);
+    setTimeout(() => {
+      setDisabled(false);
+      setSrc('');
+    }, 2000);
+  }, [imgSrc]);
+
+  useEffect(() => {
+    handleClick();
+  }, []);
+  return (
+    <button type="button" css={StoryMsgStyle} onClick={() => handleClick()} disabled={disabled}>
+      <div css={StoryTextStyle}>{msg}</div>
+      <Image size={ImageSizeList.STORY} src={src} />
+    </button>
+  );
+};
 
 const StoryMsgStyle = css`
   display: flex;

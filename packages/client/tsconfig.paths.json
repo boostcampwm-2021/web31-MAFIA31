@@ -8,6 +8,7 @@
       "@hooks/*": ["src/hooks/*"],
       "@pages/*": ["src/pages/*"],
       "@constants/*": ["src/constants/*"],
+      "@contexts/*": ["src/contexts/*"],
       "@containers/*": ["src/containers/*"],
       "@components/*": ["src/components/*"]
     }

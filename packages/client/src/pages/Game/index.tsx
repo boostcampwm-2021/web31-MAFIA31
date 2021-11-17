@@ -1,23 +1,27 @@
+import { useEffect, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import { useLocation, useHistory } from 'react-router-dom';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import useTimer from '@src/hooks/useTimer';
+
+import { PlayerState } from '@mafia/domain/types/game';
+import { User } from '@mafia/domain/types/user';
+import { primaryDark, primaryLight, titleActive, white } from '@src/constants';
+import { PlayerInfo, Memo } from '@src/types';
+import { useUserInfo } from '@contexts/userInfo';
+import useGame from '@hooks/useGame';
+import useTimer from '@hooks/useTimer';
 import useVote from '@hooks/useVote';
 import useChat from '@hooks/useChat';
-import useAbility from '@src/hooks/useAbility';
-import { primaryDark, primaryLight, titleActive, white } from '@constants/index';
-import ChatContainer from '@containers/ChatContainer';
+import useAbility from '@hooks/useAbility';
+import usePreventLeave from '@hooks/usePreventLeave';
 import LeftSideContainer from '@containers/LeftSideContainer';
+import ChatContainer from '@containers/ChatContainer';
 import RightSideContainer from '@containers/RightSideContainer';
-import { useEffect, useState } from 'react';
-import useGame from '@src/hooks/useGame';
-import { PlayerState } from '@mafia/domain/types/game';
-import { useLocation, useHistory } from 'react-router-dom';
-import { useUserInfo } from '@src/contexts/userInfo';
-import { PlayerInfo, Memo } from '@src/types';
-import { User } from '@mafia/domain/types/user';
-import usePreventLeave from '@src/hooks/usePreventLeave';
-import { ToastContainer, toast } from 'react-toastify';
+
 import 'react-toastify/dist/ReactToastify.css';
+import * as TIME from '@mafia/domain/constants/time';
+import * as TOAST from '@src/constants/toast';
 
 interface locationType {
   userList: PlayerInfo[];
@@ -34,17 +38,18 @@ const Game = () => {
   }
 
   const { userList } = state;
+  
   const initPlayerState: PlayerState[] = userList.map(({ userName }) => ({
     userName,
     isDead: false,
   }));
+  
   const [playerStateList, setPlayerStateList] = useState<PlayerState[]>(initPlayerState);
   const [memoList, setMemoList] = useState<Memo[]>([]);
   const { chatList, sendChat, sendNightChat } = useChat();
   const { voteList, voteUser, initVote } = useVote();
-  const { timer, isNight } = useTimer();
+  const { timer, isNight, voteSec } = useTimer();
   const { myJob } = useGame();
-
   const { emitAbility, mafiaPickList } = useAbility(myJob, setPlayerStateList);
   usePreventLeave();
 
@@ -62,19 +67,24 @@ const Game = () => {
   }, []);
 
   useEffect(() => {
-    if (!isNight && timer.substr(3, 2) === '30') {
-      toast('🗳 지금부터 투표시간입니다.');
+    if (voteSec === undefined) return;
+    if (voteSec === TIME.VOTE) {
+      toast(TOAST.VOTE_START);
+    } else if (voteSec === TIME.VOTE_ALARM) {
+      toast(TOAST.VOTE_ALARM, {
+        autoClose: TIME.VOTE_ALARM * 1000,
+        hideProgressBar: false,
+      });
+    } else if (voteSec === 0) {
+      toast(TOAST.VOTE_END);
     }
-    if (!isNight && timer.substr(3, 2) === '10') {
-      toast('투표시간이 10초 남았습니다!', { autoClose: 10000, hideProgressBar: false });
-    }
-  }, [timer]);
+  }, [voteSec]);
 
   useEffect(() => {
     if (isNight) {
-      toast(`🌒 밤이 되었습니다... 개인 능력을 사용해주세요.`, { theme: 'dark' });
+      toast(TOAST.NIGHT, { theme: 'dark' });
     } else {
-      toast(`☀️ 낮이 되었습니다... 투표로 희생 될 사람을 결정해주세요.`, { theme: 'light' });
+      toast(TOAST.DAY, { theme: 'light' });
     }
   }, [isNight]);
 

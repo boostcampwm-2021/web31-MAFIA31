@@ -13,9 +13,11 @@ const getRandomInt = (min: number, max: number) => {
 
 // 낮 됐다는 이벤트 받으면 호출할 함수
 const publishVictim = (namespace: Namespace) => {
+  const { name: roomId } = namespace;
   if (mafiaPickList.length > 0) {
     const randNum = getRandomInt(0, mafiaPickList.length);
     let { victim } = mafiaPickList[randNum];
+    GameStore.diePlayer(roomId, victim);
     namespace.emit(PUBLISH_VICTIM, victim);
     mafiaPickList.length = 0;
     victim = '';

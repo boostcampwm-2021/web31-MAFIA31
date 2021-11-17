@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
@@ -17,9 +17,8 @@ type PropType = {
   myJob: string;
 };
 
-
 const RightSideContainer: FC<PropType> = ({ playerStateList, memoList, isNight, myJob }) => {
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
   const handleClick = () => {
     setShowModal((prev) => !prev);
   };
@@ -59,7 +58,8 @@ const RightSideContainer: FC<PropType> = ({ playerStateList, memoList, isNight, 
         />
       </div>
     </div>
-);
+  );
+};
 
 const rightSideContainerStyle = (isNight: boolean) => css`
   position: relative;

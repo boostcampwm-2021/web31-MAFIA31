@@ -7,6 +7,7 @@ import { grey1, titleActive, white, JOB_DICT } from '@constants/index';
 import { SearchIcon } from '@components/Icon';
 import { MemoButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { ImageSizeList, Image } from '@components/Image';
+import { Modal } from '@src/components/Modal';
 
 type PropType = {
   playerStateList: PlayerState[];
@@ -21,6 +22,10 @@ interface Memo {
 
 const RightSideContainer: FC<PropType> = ({ playerStateList, isNight, myJob }) => {
   const [memoList] = useState<Memo[]>([]);
+  const [showModal, setShowModal] = useState(true);
+  const handleClick = () => {
+    setShowModal((prev) => !prev);
+  };
 
   return (
     <div css={rightSideContainerStyle(isNight)}>
@@ -45,12 +50,15 @@ const RightSideContainer: FC<PropType> = ({ playerStateList, isNight, myJob }) =
         ))}
       </div>
       <hr css={hrStyle} />
+      <div css={modalWrapperStyle}>
+        <Modal show={showModal} />
+      </div>
       <div css={searchButtonStyle}>
         <IconButton
           icon={SearchIcon}
           size={ButtonSizeList.MEDIUM}
-          theme={ButtonThemeList.LIGHT}
-          onClick={() => {}}
+          theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
+          onClick={handleClick}
         />
       </div>
     </div>
@@ -115,10 +123,17 @@ const memoInfoStyle = (isNight: boolean) => css`
   color: ${isNight ? white : titleActive};
 `;
 
-const searchButtonStyle = css`
+const searchButtonStyle = () => css`
   position: absolute;
   right: 40px;
   bottom: 40px;
+  cursor: pointer;
+`;
+
+const modalWrapperStyle = () => css`
+  position: absolute;
+  right: 70px;
+  bottom: 70px;
 `;
 
 export default RightSideContainer;

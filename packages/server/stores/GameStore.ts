@@ -59,7 +59,7 @@ class GameStore {
       ({ isDead, job }) => !isDead && job === 'mafia',
     ).length;
     const citizen = GameStore.instance[roomId].filter(
-      ({ isDead, job }) => !isDead && job === 'citizen',
+      ({ isDead, job }) => !isDead && job !== 'mafia',
     ).length;
 
     return { mafia, citizen };

@@ -21,6 +21,10 @@ class GameStore {
     return GameStore.instance;
   }
 
+  static get(roomId: string) {
+    return GameStore.instance[roomId];
+  }
+
   static resetGame(roomId: string) {
     GameStore.instance[roomId] = [];
   }
@@ -42,16 +46,18 @@ class GameStore {
     return true;
   }
 
-  static get(roomId: string) {
-    return GameStore.instance[roomId];
-  }
-
   static getVoteInfos(roomId: string): RoomVote[] {
     return GameStore.instance[roomId].map(({ userName, profileImg, voteFrom }) => ({
       userName,
       profileImg,
       voteCount: voteFrom.size,
     }));
+  }
+
+  static getPlayerState(roomId: string, playerName: string) {
+    const gameInfo = GameStore.get(roomId).find(({ userName }) => playerName === userName);
+    if (!gameInfo) return gameInfo;
+    return gameInfo.isDead;
   }
 
   static getDashBoard(roomId: string): DashBoard {

@@ -34,8 +34,11 @@ const Game = () => {
   }
 
   const { userList } = state;
-
-  const [playerStateList, setPlayerStateList] = useState<PlayerState[]>([]);
+  const initPlayerState: PlayerState[] = userList.map(({ userName }) => ({
+    userName,
+    isDead: false,
+  }));
+  const [playerStateList, setPlayerStateList] = useState<PlayerState[]>(initPlayerState);
   const [memoList, setMemoList] = useState<Memo[]>([]);
   const { chatList, sendChat, sendNightChat } = useChat();
   const { voteList, voteUser, initVote } = useVote();
@@ -44,10 +47,6 @@ const Game = () => {
   const { myJob } = useGame();
   usePreventLeave();
 
-  const initPlayerState = (userList: User[]) => {
-    setPlayerStateList(userList.map(({ userName }) => ({ userName, isDead: false })));
-  };
-
   const initMemo = (userList: User[]) => {
     setMemoList(userList.map(({ userName }) => ({ userName, guessJob: 'question' })));
   };
@@ -55,7 +54,6 @@ const Game = () => {
   const init = () => {
     initVote(userList);
     initMemo(userList);
-    initPlayerState(userList);
   };
 
   useEffect(() => {

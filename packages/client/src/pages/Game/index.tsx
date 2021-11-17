@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import useTimer from '@src/hooks/useTimer';
-// import useExecute from '@hooks/useExecute';
 import useVote from '@hooks/useVote';
 import useChat from '@hooks/useChat';
 import useAbility from '@src/hooks/useAbility';
@@ -12,24 +11,56 @@ import RightSideContainer from '@containers/RightSideContainer';
 import { useEffect, useState } from 'react';
 import useGame from '@src/hooks/useGame';
 import { PlayerState } from '@mafia/domain/types/game';
+import { useLocation, useHistory } from 'react-router-dom';
+import { useUserInfo } from '@src/contexts/userInfo';
+import { PlayerInfo, Memo } from '@src/types';
+import { User } from '@mafia/domain/types/user';
+import usePreventLeave from '@src/hooks/usePreventLeave';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import usePreventLeave from '@src/hooks/usePreventLeave';
+
+interface locationType {
+  userList: PlayerInfo[];
+}
 
 const Game = () => {
-  const [playerStateList, setPlayerStateList] = useState<PlayerState[]>([
-    { userName: 'user1', isDead: true },
-    { userName: 'user2', isDead: false },
-    { userName: 'user3', isDead: true },
-    { userName: 'user4', isDead: false },
-  ]);
-  // const playerStateList = useExecute();
+  const { state } = useLocation<locationType>();
+  const { userInfo } = useUserInfo();
+  const history = useHistory();
+
+  if (!state?.userList || !userInfo?.userName) {
+    history.push('/');
+    return <></>;
+  }
+
+  const { userList } = state;
+
+  const [playerStateList, setPlayerStateList] = useState<PlayerState[]>([]);
+  const [memoList, setMemoList] = useState<Memo[]>([]);
   const { chatList, sendChat, sendNightChat } = useChat();
-  const { voteList, voteUser } = useVote();
+  const { voteList, voteUser, initVote } = useVote();
   const { timer, isNight } = useTimer();
   const { emitAbility, mafiaPickList } = useAbility('mafia', setPlayerStateList);
   const { myJob } = useGame();
   usePreventLeave();
+
+  const initPlayerState = (userList: User[]) => {
+    setPlayerStateList(userList.map(({ userName }) => ({ userName, isDead: false })));
+  };
+
+  const initMemo = (userList: User[]) => {
+    setMemoList(userList.map(({ userName }) => ({ userName, guessJob: 'question' })));
+  };
+
+  const init = () => {
+    initVote(userList);
+    initMemo(userList);
+    initPlayerState(userList);
+  };
+
+  useEffect(() => {
+    init();
+  }, []);
 
   useEffect(() => {
     if (!isNight && timer.substr(3, 2) === '30') {
@@ -66,7 +97,12 @@ const Game = () => {
         sendNightChat={sendNightChat}
         isNight={isNight}
       />
-      <RightSideContainer playerStateList={playerStateList} myJob={myJob} isNight={isNight} />
+      <RightSideContainer
+        playerStateList={playerStateList}
+        memoList={memoList}
+        myJob={myJob}
+        isNight={isNight}
+      />
     </div>
   );
 };

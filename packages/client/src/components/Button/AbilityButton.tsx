@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { white, titleActive, grey3, mafia } from '@constants/colors';
@@ -8,7 +8,7 @@ interface PropType {
   isNight: boolean;
   userImg: string;
   userName: string;
-  voteFrom: string[];
+  voteCount: number;
   isDead: boolean;
   selectedByMe: boolean;
   selectedByOthers: boolean;
@@ -19,34 +19,33 @@ const AbilityButton: FC<PropType> = ({
   isNight,
   userImg,
   userName,
-  voteFrom,
+  voteCount,
   isDead,
   selectedByMe,
   selectedByOthers,
   onClick,
-}) => (
-  <button
-    type="button"
-    css={
-      isNight ? buttonStyleNight(isDead, selectedByMe, selectedByOthers) : buttonStyleDay(isDead)
-    }
-    onClick={() => onClick(userName)}
-  >
-    <img src={userImg} alt="" css={userImgStyle} />
-    <div css={voteInfoStyle}>
-      <span>{userName}</span>
-      {!voteFrom.length ? (
-        <></>
-      ) : (
-        <div>
-          {voteFrom.map((voteUser) => (
-            <VoteIcon key={voteUser} />
-          ))}
-        </div>
-      )}
-    </div>
-  </button>
-);
+}) => {
+  const iconList = () => {
+    const arr = Array.from({ length: voteCount }, (_, idx) => idx);
+    return arr.map((e) => <VoteIcon key={e} />);
+  };
+
+  return (
+    <button
+      type="button"
+      css={
+        isNight ? buttonStyleNight(isDead, selectedByMe, selectedByOthers) : buttonStyleDay(isDead)
+      }
+      onClick={() => onClick(userName)}
+    >
+      <img src={userImg} alt="profile_img" css={userImgStyle} />
+      <div css={voteInfoStyle}>
+        <span>{userName}</span>
+        {!voteCount ? <></> : <div>{useMemo(() => iconList(), [voteCount])}</div>}
+      </div>
+    </button>
+  );
+};
 
 const buttonStyleNight = (isDead: boolean, selectedByMe: boolean, selectedByOthers: boolean) => css`
   display: flex;
@@ -77,8 +76,9 @@ const buttonStyleDay = (isDead: boolean) => css`
 `;
 
 const userImgStyle = css`
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
 `;
 
 const voteInfoStyle = css`
@@ -102,10 +102,6 @@ const voteInfoStyle = css`
 
     width: 100%;
     padding: 0 10px;
-  }
-  img {
-    width: 10px;
-    height: 10px;
   }
 `;
 export default AbilityButton;

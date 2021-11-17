@@ -4,7 +4,7 @@ export interface GameInfo {
   profileImg: string;
   job: string;
   isDead: boolean;
-  voteFrom: string[];
+  voteFrom: Set<string>;
 }
 
 export interface PlayerState {

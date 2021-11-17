@@ -46,6 +46,10 @@ class GameStore {
     return GameStore.instance[roomId];
   }
 
+  static set(roomId: string, gameInfoList: GameInfo[]) {
+    GameStore.instance[roomId] = gameInfoList;
+  }
+
   static getVoteInfos(roomId: string): RoomVote[] {
     return GameStore.instance[roomId].map(({ userName, profileImg, voteFrom }) => ({
       userName,
@@ -55,8 +59,9 @@ class GameStore {
   }
 
   static getDashBoard(roomId: string): DashBoard {
-    const mafia = GameStore.instance[roomId].filter(({ isDead, job }) => !isDead && job === 'mafia')
-      .length;
+    const mafia = GameStore.instance[roomId].filter(
+      ({ isDead, job }) => !isDead && job === 'mafia',
+    ).length;
     const citizen = GameStore.instance[roomId].filter(
       ({ isDead, job }) => !isDead && job === 'citizen',
     ).length;

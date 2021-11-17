@@ -15,4 +15,4 @@ export const PUBLISH_VICTIM = 'publish victim';
 export const PUBLISH_JOB = 'publish job';
 export const NIGHT_MESSAGE = 'send night msg';
 export const JOIN = 'join';
-export const POLICE_INVESTICATION = 'police investigation';
+export const POLICE_INVESTIGATION = 'police investigation';

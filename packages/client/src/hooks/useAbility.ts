@@ -19,23 +19,26 @@ const useAbility = (job: string, setPlayerStateList: any) => {
         setMafiaPickList(newList);
       });
     } else if (job === 'police') {
-      socketRef.current?.on(EVENT.POLICE_INVESTICATION, (isMafia: boolean) => {
-        console.log(isMafia);
-      });
+      socketRef.current?.on(
+        EVENT.POLICE_INVESTIGATION,
+        ({ userName, isMafia }: { userName: string; isMafia: string }) => {
+          console.log(userName, isMafia);
+        },
+      );
     }
 
     return () => {
       socketRef.current?.off(EVENT.PUBLISH_VICTIM);
       socketRef.current?.off(EVENT.MAFIA_ABILITY);
-      socketRef.current?.off(EVENT.POLICE_INVESTICATION);
+      socketRef.current?.off(EVENT.POLICE_INVESTIGATION);
     };
-  }, [socketRef.current]);
+  }, [socketRef.current, job]);
 
   const emitAbility = (userName: string) => {
     if (job === 'mafia') {
       socketRef.current?.emit(EVENT.MAFIA_ABILITY, { mafia: userInfo?.userName, victim: userName });
     } else if (job === 'police') {
-      socketRef.current?.emit(EVENT.POLICE_INVESTICATION, userName);
+      socketRef.current?.emit(EVENT.POLICE_INVESTIGATION, userName);
     }
   };
 

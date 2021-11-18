@@ -19,7 +19,7 @@ const publishVictim = (namespace: Namespace) => {
     });
   } else {
     namespace.emit(EVENT.PUBLISH_VICTIM, {
-      userName: survivor,
+      userName: victim,
       storyName: StoryName.PUBLISH_VICTIM,
     });
     const newGameInfoList = GameStore.get(roomId).map((player) =>

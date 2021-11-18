@@ -42,7 +42,7 @@ const abilitySocketInit = (socket: Socket) => {
     namespace.to('mafia').emit(EVENT.MAFIA_ABILITY, VictimStore[roomId]);
   });
 
-  socket.on(EVENT.POLICE_INVESTIGATION, (userName: string) => {
+  socket.on(EVENT.POLICE_ABILITY, (userName: string) => {
     if (!GameStore.getCanInvest()) {
       return;
     }
@@ -53,11 +53,11 @@ const abilitySocketInit = (socket: Socket) => {
 
     const data: PoliceInvestigation = {
       userName,
-      storyName: StoryName.POLICE_INVESTIGATION,
+      storyName: StoryName.POLICE_ABILITY,
       isMafia,
     };
 
-    namespace.to('police').emit(EVENT.POLICE_INVESTIGATION, data);
+    namespace.to('police').emit(EVENT.POLICE_ABILITY, data);
   });
 
   socket.on(EVENT.DOCTOR_ABILITY, (userName: string) => {

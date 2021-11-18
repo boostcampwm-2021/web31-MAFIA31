@@ -25,7 +25,7 @@ const useAbility = (job: string) => {
     if (job === 'mafia') {
       socketRef.current?.emit(EVENT.MAFIA_ABILITY, userName);
     } else if (job === 'police') {
-      socketRef.current?.emit(EVENT.POLICE_INVESTIGATION, userName);
+      socketRef.current?.emit(EVENT.POLICE_ABILITY, userName);
     } else if (job === 'doctor') {
       socketRef.current?.emit(EVENT.DOCTOR_ABILITY, userName);
     }

@@ -108,6 +108,7 @@ const chatContainerStyle = css`
   height: 100%;
   padding: 40px;
   gap: 20px;
+  color: ${titleActive};
   background-color: ${white};
 `;
 
@@ -151,7 +152,7 @@ const inputStyle = (isNight: boolean) => css`
     outline: none;
   }
   ::placeholder {
-    color: ${isNight ? 'rgba(255, 255, 255, 0.6)' : titleActive};
+    color: ${isNight ? 'rgba(255, 255, 255, 0.6)' : 'rgba(60, 60, 60, 0.6)'};
   }
 `;
 

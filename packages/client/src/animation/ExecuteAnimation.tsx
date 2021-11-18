@@ -17,7 +17,7 @@ const wrapperStyle = css`
   width: ${width}px;
   height: ${height}px;
   position: relative;
-  background-image: url(‘/assets/images/citizen.png’);
+  background-image: url('/assets/images/citizen.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

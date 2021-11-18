@@ -12,7 +12,7 @@ const RoomContainer = () => {
   const [roomList, setRoomList] = useState<RoomInfo[]>([]);
 
   const updateRoomList = async () => {
-    const url = `${process.env.REACT_APP_API_URL}/api/room`;
+    const url = `${process.env.REACT_APP_API_URL}/api/rooms`;
 
     const response = await fetch(url);
     const data = await response.json();

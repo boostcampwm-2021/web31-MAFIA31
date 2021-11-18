@@ -1,7 +1,10 @@
 <h1 align="center">
 	🔫 MAFIA31
 </h1>
-<img src="https://img.shields.io/badge/version-v0.0.1-blue" alt="version0.0.1" align='right'/>
+
+<img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/boostcampwm-2021/web31-MAFIA31&count_bg=%234E416D&title_bg=%23727272&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false" alt="hits" align='right' style='margin-left:5px;' />
+
+<img src="https://img.shields.io/badge/version-v0.0.1-blue" alt="version0.0.1" align='right' style='margin-left:5px;'/>
 
 🔗 배포: <http://mafia31.kro.kr>
 
@@ -10,6 +13,7 @@
 ## 👋 소개
 
 마피아 게임을 웹에서 설치 없이 간편하게 즐겨보세요! 🔫
+
 귀여운 자체 제작 캐릭터와 애니메이션이 기다리고 있어요 💜
 
 <br/><br/><br/>
@@ -29,10 +33,7 @@
 
 ## 🛠 기술 스택
 
-|                                                      **프론트엔드**                                                       |                                         **백엔드**                                          |                                    **배포**                                    |
-| :-----------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------: |
-| <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/512px-React-icon.svg.png" width="100"> | <img src="https://nodejs.org/static/images/logos/nodejs-new-pantone-black.svg" width="130"> | <img src="https://t1.daumcdn.net/cfile/tistory/21227C3459016C9518" width="80"> |
-|                                                           React                                                           |                                      node.js + express                                      |                                     nCloud                                     |
+![기술 스택](https://user-images.githubusercontent.com/69030160/142336884-078c4145-1124-4cfb-b52d-d0f2483aa0d5.png)
 
 <br/><br/><br/>
 
@@ -112,6 +113,7 @@ yarn start:dev
 - [팀 노션][notion]
 - [위키][wiki]
 - [백로그][backlog]
+- [피그마][figma]
 
 <br/><br/><br/>
 
@@ -128,3 +130,4 @@ yarn start:dev
 [notion]: https://seed-cry-ce7.notion.site/QUARTER-f5f30a4b31264ae48129812cfb6e67f0
 [wiki]: https://github.com/boostcampwm-2021/web31-MAFIA31/wiki
 [backlog]: https://www.notion.so/1661832777304e1cb5b174e5cdf88828?v=60f48437c978401988726113f48ec8f7
+[figma]: https://www.figma.com/file/t5XZb9VtAkkOFe5EK2taaH/MAFIA?node-id=0%3A1

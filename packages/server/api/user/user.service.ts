@@ -2,6 +2,13 @@ import { PlayerResult } from '@mafia/domain/types/game';
 import User from '../../models/User';
 
 const UserService = {
+  async findOne(userName: string) {
+    const user = await User.findOne({ userName });
+    if (!user) {
+      throw Error('User Not Found');
+    }
+    return user;
+  },
   async findOneOrCreate(userName: string, profileImg: string) {
     const exist = await User.findOne({ userName });
     if (!exist) {

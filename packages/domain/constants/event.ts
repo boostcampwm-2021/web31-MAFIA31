@@ -21,5 +21,6 @@ export const TURN_CHANGE = 'turn change';
 
 export const MAFIA_ABILITY = 'mafia ability';
 export const PUBLISH_VICTIM = 'publish victim';
-export const POLICE_INVESTIGATION = 'police investigation';
-
+export const POLICE_ABILITY = 'police ability';
+export const DOCTOR_ABILITY = 'doctor ability';
+export const PUBLISH_SURVIVOR = 'publish survivor';

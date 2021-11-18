@@ -21,6 +21,7 @@ const useGame = () => {
         state: { playerResultList: gameResult },
       }),
     );
+
     return () => {
       socketRef.current?.off(EVENT.PUBLISH_JOB, updateMyJob);
       socketRef.current?.off(EVENT.GAME_OVER);

@@ -14,6 +14,24 @@ const UserController = {
     });
     res.status(200).json({ result: 'OK' });
   },
+
+  async getUser(req: Request, res: Response) {
+    if (!req.params.userName) {
+      res.status(400).json({
+        error: 'Request not include userName',
+      });
+      return;
+    }
+    try {
+      const stat = await UserService.findOne(req.params.userName);
+      res.status(200).json(stat);
+    } catch (error) {
+      console.log(error);
+      if (error instanceof Error) {
+        res.status(400).json({ error: error.message });
+      }
+    }
+  },
 };
 
 export default UserController;

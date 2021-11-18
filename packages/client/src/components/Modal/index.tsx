@@ -7,11 +7,7 @@ import { RoleCard } from '../Card';
 import { SlideLeftIcon, SlideRightIcon } from '../Icon';
 import { IconButton, ButtonSizeList, ButtonThemeList } from '../Button';
 
-interface Props {
-  show: boolean;
-}
-
-export const Modal: FC<Props> = ({ show }) => {
+export const Modal: FC = () => {
   const startIdx = 1;
   const JOB_PER_PAGE = 3;
   const totalPage = Math.ceil(Object.keys(JOB_DICT).length / JOB_PER_PAGE);
@@ -31,7 +27,7 @@ export const Modal: FC<Props> = ({ show }) => {
   const handleRightOnClick = () => (currPage < totalPage ? goToNextPage() : stay());
 
   return (
-    <div css={modalWrapperStyle(show)}>
+    <div css={modalWrapperStyle}>
       <div css={modalContentStyle(JOB_PER_PAGE)}>
         {currJobList.map((job) => (job ? <RoleCard key={job} job={job} /> : ''))}
       </div>
@@ -56,10 +52,9 @@ export const Modal: FC<Props> = ({ show }) => {
   );
 };
 
-const modalWrapperStyle = (show: boolean) => css`
+const modalWrapperStyle = css`
   display: flex;
   flex-direction: column;
-  visibility: ${show ? 'visible' : 'hidden'};
   align-items: center;
   justify-content: center;
   gap: 16px 9px;

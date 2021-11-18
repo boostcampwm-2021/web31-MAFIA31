@@ -46,9 +46,13 @@ const RightSideContainer: FC<PropType> = ({ playerStateList, memoList, isNight, 
         ))}
       </div>
       <hr css={hrStyle} />
-      <div css={modalWrapperStyle}>
-        <Modal show={showModal} />
-      </div>
+      {showModal ? (
+        <div css={modalWrapperStyle}>
+          <Modal />
+        </div>
+      ) : (
+        <></>
+      )}
       <div css={searchButtonStyle}>
         <IconButton
           icon={SearchIcon}

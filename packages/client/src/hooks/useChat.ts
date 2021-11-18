@@ -1,5 +1,5 @@
 import * as EVENT from '@mafia/domain/constants/event';
-import { Message } from '@mafia/domain/types/chat';
+import { Message, StoryName } from '@mafia/domain/types/chat';
 import { STORY_DICTIONARY } from '@src/constants/story';
 import { useSocketContext } from '@src/contexts/socket';
 import { Story } from '@src/types';
@@ -11,54 +11,30 @@ const useChat = () => {
   const updateChatList = (msg: Message): void => {
     setChatList((prev) => [...prev, msg]);
   };
-  const updateVictimStory = (userName: string) => {
-    if (userName) {
-      console.log(userName);
-      const storyType = userName ? STORY_DICTIONARY.PUBLISH_VICTIM : STORY_DICTIONARY.NO_KILL;
-      const story: Story = {
-        id: Date.now().toString(),
-        msg: storyType?.msg(userName),
-        imgSrc: storyType?.imgSrc,
-      };
-      setChatList((prev) => [...prev, story]);
-    }
-  };
 
-  const updateExecutionStory = (userName: string) => {
-    if (userName) {
-      const storyType = STORY_DICTIONARY.EXECUTION;
-      const story: Story = {
-        id: Date.now().toString(),
-        msg: storyType?.msg(userName),
-        imgSrc: storyType?.imgSrc,
-      };
-      setChatList((prev) => [...prev, story]);
-    }
-  };
+  const updateStory = ({ userName, storyName }: { userName: string; storyName: StoryName }) => {
+    const storyType = STORY_DICTIONARY[storyName];
 
-  const updateSurvivorStory = (userName: string) => {
-    if (userName) {
-      const storyType = STORY_DICTIONARY.PUBLISH_SURVIVOR;
-      const story: Story = {
-        id: Date.now().toString(),
-        msg: storyType?.msg(userName),
-        imgSrc: storyType?.imgSrc,
-      };
-      setChatList((prev) => [...prev, story]);
-    }
+    const story: Story = {
+      id: Date.now().toString(),
+      msg: storyType?.msg(userName),
+      imgSrc: storyType?.imgSrc,
+    };
+
+    setChatList((prev) => [...prev, story]);
   };
 
   useEffect(() => {
     socketRef.current?.on(EVENT.PUBLISH_MESSAGE, updateChatList);
-    socketRef.current?.on(EVENT.EXECUTION, updateExecutionStory);
-    socketRef.current?.on(EVENT.PUBLISH_VICTIM, updateVictimStory);
-    socketRef.current?.on(EVENT.PUBLISH_SURVIVOR, updateSurvivorStory);
+    socketRef.current?.on(EVENT.EXECUTION, updateStory);
+    socketRef.current?.on(EVENT.PUBLISH_VICTIM, updateStory);
+    socketRef.current?.on(EVENT.PUBLISH_SURVIVOR, updateStory);
 
     return () => {
       socketRef.current?.off(EVENT.PUBLISH_MESSAGE, updateChatList);
-      socketRef.current?.off(EVENT.EXECUTION, updateExecutionStory);
-      socketRef.current?.off(EVENT.PUBLISH_VICTIM, updateVictimStory);
-      socketRef.current?.off(EVENT.PUBLISH_SURVIVOR, updateSurvivorStory);
+      socketRef.current?.off(EVENT.EXECUTION, updateStory);
+      socketRef.current?.off(EVENT.PUBLISH_VICTIM, updateStory);
+      socketRef.current?.off(EVENT.PUBLISH_SURVIVOR, updateStory);
     };
   }, [socketRef.current]);
 

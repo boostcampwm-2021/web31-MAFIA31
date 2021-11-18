@@ -1,4 +1,5 @@
 import * as EVENT from '@mafia/domain/constants/event';
+import { StoryName } from '@mafia/domain/types/chat';
 import { PoliceInvestigation } from '@mafia/domain/types/game';
 import { Namespace, Socket } from 'socket.io';
 import GameStore from '../stores/GameStore';
@@ -12,9 +13,15 @@ const publishVictim = (namespace: Namespace) => {
   const survivor = SurvivorStore[roomId];
 
   if (victim === survivor) {
-    namespace.emit(EVENT.PUBLISH_SURVIVOR, survivor);
+    namespace.emit(EVENT.PUBLISH_SURVIVOR, {
+      userName: survivor,
+      storyName: StoryName.PUBLISH_SURVIVOR,
+    });
   } else {
-    namespace.emit(EVENT.PUBLISH_VICTIM, victim);
+    namespace.emit(EVENT.PUBLISH_VICTIM, {
+      userName: survivor,
+      storyName: StoryName.PUBLISH_VICTIM,
+    });
     const newGameInfoList = GameStore.get(roomId).map((player) =>
       player.userName === victim ? { ...player, isDead: true } : player,
     );
@@ -44,7 +51,6 @@ const abilitySocketInit = (socket: Socket) => {
   });
 
   socket.on(EVENT.DOCTOR_ABILITY, (userName: string) => {
-    console.log(userName);
     SurvivorStore[roomId] = userName;
   });
 };

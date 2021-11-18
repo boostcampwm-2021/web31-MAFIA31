@@ -13,7 +13,7 @@ const Login: FC = () => {
 
   return (
     <div css={loginPageStyle}>
-      <img src="/assets/icons/dark-logo.svg" alt="logo" css={logoStyle} />
+      <img src="/assets/icons/black-logo.svg" alt="logo" css={logoStyle} />
       <img css={logoImageStyle} src="/assets/images/home.png" alt="home" />
       <a
         href={`https:github.com/login/oauth/authorize?client_id=${process.env.REACT_APP_GITHUB_CLIENT_ID}`}

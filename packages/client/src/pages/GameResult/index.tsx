@@ -4,7 +4,7 @@ import { citizen, mafia, primaryLight, white } from '@constants/colors';
 import { ResultCard } from '@components/Card';
 import { ButtonSizeList, ButtonThemeList, DefaultButton } from '@src/components/Button';
 import { PlayerResult } from '@mafia/domain/types/game';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useUserInfo } from '@src/contexts/userInfo';
 
 const MAX_USER = 12;
@@ -48,13 +48,14 @@ const GameResult = () => {
           text="돌아가기"
           onClick={() => {}}
         />
-        <DefaultButton
-          size={ButtonSizeList.MEDIUM}
-          theme={ButtonThemeList.DARK}
-          imageSrc="/assets/icons/exit.svg"
-          text="방 나가기"
-          onClick={() => {}}
-        />
+        <Link to="/rooms">
+          <DefaultButton
+            size={ButtonSizeList.MEDIUM}
+            theme={ButtonThemeList.DARK}
+            imageSrc="/assets/icons/exit.svg"
+            text="방 나가기"
+          />
+        </Link>
       </div>
     </div>
   );

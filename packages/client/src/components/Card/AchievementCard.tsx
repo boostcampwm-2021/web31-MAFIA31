@@ -44,7 +44,6 @@ const descriptionStyle = (isMouseOver: boolean) => css`
   display: flex;
   align-items: center;
   justify-content: center;
-  /* text-align: center; */
 
   z-index: ${isMouseOver ? 0 : -1};
   color: ${white};

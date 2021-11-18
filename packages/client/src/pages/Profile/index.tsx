@@ -192,10 +192,6 @@ const achievementListStyle = css`
   ::-webkit-scrollbar {
     display: none;
   }
-
-  /* @media (max-width: 1024px) {
-    height: 600px;
-  } */
 `;
 
 export default Profile;

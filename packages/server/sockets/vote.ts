@@ -32,19 +32,19 @@ const publishExecution = (namespace: Namespace, roomId: string) => {
   namespace.emit(PUBLISH_VOTE, GameStore.getVoteInfos(roomId));
 };
 
-const startVoteTime = (namespace: Namespace, roomId: string, seconds: number) => {
+const startVoteTime = (namespace: Namespace, roomId: string) => {
   flag = true;
-  namespace.emit(EVENT.VOTE_TIME, seconds);
+  namespace.emit(EVENT.VOTE_TIME, TIME.VOTE);
 
   setTimeout(() => {
     namespace.emit(EVENT.VOTE_TIME, TIME.VOTE_ALARM);
-  }, seconds * 1000 - TIME.VOTE_ALARM * 1000);
+  }, (TIME.VOTE - TIME.VOTE_ALARM) * TIME.SEC);
 
   setTimeout(() => {
     flag = false;
-    namespace.emit(EVENT.VOTE_TIME, 0);
+    namespace.emit(EVENT.VOTE_TIME, TIME.VOTE_END);
     publishExecution(namespace, roomId);
-  }, seconds * 1000);
+  }, (TIME.VOTE - TIME.VOTE_END) * TIME.SEC);
 };
 
 export { startVoteTime, canVote };

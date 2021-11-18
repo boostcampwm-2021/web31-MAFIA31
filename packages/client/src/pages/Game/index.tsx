@@ -62,31 +62,48 @@ const Game = () => {
     initMemo(userList);
   };
 
-  useEffect(() => {
-    init();
-  }, []);
+  const viewToast = (condition: any) => {
+    const NIGHT = true;
+    const DAY = false;
+
+    const toastOp = ((): [string, any?] | undefined => {
+      switch (condition) {
+        case TIME.VOTE:
+          return [TOAST.VOTE_START];
+        case TIME.VOTE_END:
+          return [TOAST.VOTE_END];
+        case TIME.VOTE_ALARM:
+          return [
+            TOAST.VOTE_ALARM,
+            {
+              autoClose: TIME.VOTE_ALARM * TIME.SEC,
+              hideProgressBar: false,
+            },
+          ];
+        case NIGHT:
+          return [TOAST.NIGHT, { theme: 'dark' }];
+        case DAY:
+          return [TOAST.DAY, { theme: 'light' }];
+        default:
+          return undefined;
+      }
+    })();
+
+    if (toastOp === undefined) return;
+    toast(...toastOp);
+  };
 
   useEffect(() => {
-    if (voteSec === undefined) return;
-    if (voteSec === TIME.VOTE) {
-      toast(TOAST.VOTE_START);
-    } else if (voteSec === TIME.VOTE_ALARM) {
-      toast(TOAST.VOTE_ALARM, {
-        autoClose: TIME.VOTE_ALARM * 1000,
-        hideProgressBar: false,
-      });
-    } else if (voteSec === 0) {
-      toast(TOAST.VOTE_END);
-    }
+    viewToast(isNight);
+  }, [isNight]);
+
+  useEffect(() => {
+    viewToast(voteSec);
   }, [voteSec]);
 
   useEffect(() => {
-    if (isNight) {
-      toast(TOAST.NIGHT, { theme: 'dark' });
-    } else {
-      toast(TOAST.DAY, { theme: 'light' });
-    }
-  }, [isNight]);
+    init();
+  }, []);
 
   return (
     <div css={gamePageStyle(isNight)}>

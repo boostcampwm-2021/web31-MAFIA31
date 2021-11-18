@@ -73,6 +73,7 @@ const modalWrapperStyle = (show: boolean) => css`
 const modalContentStyle = (JOB_PER_PAGE: number) => css`
   display: grid;
   grid-template-columns: repeat(${JOB_PER_PAGE}, 1fr);
+  color: black;
 `;
 
 const modalSliderStyle = css`

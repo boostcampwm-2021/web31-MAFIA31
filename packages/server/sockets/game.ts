@@ -44,8 +44,9 @@ const changeTurn = (
   }
 
   namespace.emit(EVENT.TURN_CHANGE, isNight);
-  if (isNight) return;
-  publishVictim(namespace);
+  if (!isNight) {
+    publishVictim(namespace);
+  }
 };
 
 const startTimer = (namespace: Namespace, roomId: string) => {

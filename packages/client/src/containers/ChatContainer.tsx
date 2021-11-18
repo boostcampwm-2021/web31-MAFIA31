@@ -67,7 +67,7 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNigh
       <div css={chatMsgsStyle} ref={chatMsgsRef}>
         {chatList.map((el) =>
           isStory(el) ? (
-            <StoryMsg key={el.id} msg={el.msg} imgSrc={el.imgSrc} />
+            <StoryMsg key={el.id} msg={el.msg} imgSrc={el.imgSrc} type={el.type} />
           ) : (
             <ChatMsg
               key={el.id}

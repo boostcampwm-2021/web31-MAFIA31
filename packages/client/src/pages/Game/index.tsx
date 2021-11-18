@@ -116,6 +116,7 @@ const Game = () => {
         emitAbility={emitAbility}
         victim={victim}
         isNight={isNight}
+        myJob={myJob}
       />
       <ChatContainer
         chatList={chatList}

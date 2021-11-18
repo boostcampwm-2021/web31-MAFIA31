@@ -1,6 +1,7 @@
 import * as EVENT from '@mafia/domain/constants/event';
 import { EXECUTION, PUBLISH_VOTE } from '@mafia/domain/constants/event';
 import * as TIME from '@mafia/domain/constants/time';
+import { StoryName } from '@mafia/domain/types/chat';
 import { Namespace } from 'socket.io';
 import GameStore from '../stores/GameStore';
 
@@ -27,7 +28,7 @@ const publishExecution = (namespace: Namespace, roomId: string) => {
   const excutedPlayer = maxCount === 0 || isSame ? undefined : maxPlayer;
   GameStore.resetVote(roomId);
   GameStore.diePlayer(roomId, excutedPlayer || '');
-  namespace.emit(EXECUTION, excutedPlayer);
+  namespace.emit(EXECUTION, { userName: excutedPlayer, storyName: StoryName.EXECUTION });
   namespace.emit(PUBLISH_VOTE, GameStore.getVoteInfos(roomId));
 };
 

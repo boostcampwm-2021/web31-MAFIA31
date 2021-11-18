@@ -28,6 +28,7 @@ const schema = new Schema({
       mafia: { killRate: 0, winRate: 0, cnt: 0, winCnt: 0, mvpCnt: 0 },
       citizen: { killRate: 0, winRate: 0, cnt: 0, winCnt: 0, mvpCnt: 0 },
       police: { killRate: 0, winRate: 0, cnt: 0, winCnt: 0, mvpCnt: 0 },
+      doctor: { killRate: 0, winRate: 0, cnt: 0, winCnt: 0, mvpCnt: 0 },
     },
   },
 });

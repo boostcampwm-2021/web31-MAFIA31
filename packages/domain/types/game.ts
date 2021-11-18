@@ -1,3 +1,5 @@
+import { StoryName } from './chat';
+
 export interface GameInfo {
   socketId: string;
   userName: string;
@@ -25,5 +27,6 @@ export interface PlayerResult {
 
 export interface PoliceInvestigation {
   userName: string;
+  storyName: StoryName;
   isMafia: boolean;
 }

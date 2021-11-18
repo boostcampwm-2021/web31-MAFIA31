@@ -9,7 +9,7 @@ import { SEC } from '@mafia/domain/constants/time';
 interface PropType {
   msg: string;
   imgSrc: string;
-  type: string;
+  type?: string;
 }
 
 const StoryMsg: FC<PropType> = ({ msg, imgSrc, type }) => {

@@ -3,11 +3,11 @@ import User from '../../models/User';
 
 const UserService = {
   async findOne(userName: string) {
-    const exist = await User.findOne({ userName });
-    if (!exist) {
+    const user = await User.findOne({ userName });
+    if (!user) {
       throw Error('User Not Found');
     }
-    return { score: exist.score, playCnt: exist.playCnt, jobStat: exist.jobStat };
+    return user;
   },
   async findOneOrCreate(userName: string, profileImg: string) {
     const exist = await User.findOne({ userName });

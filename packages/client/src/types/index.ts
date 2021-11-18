@@ -12,12 +12,19 @@ export interface PlayerInfo extends User {
   voteFrom: string[];
 }
 
-export interface StoryDictionary {
-  [story: string]: {
-    msg: (name: string) => string;
-    imgSrc: string;
-  };
+export enum StoryName {
+  EXECUTION = 'EXECUTION',
+  PUBLISH_VICTIM = 'PUBLISH_VICTIM',
+  NO_KILL = 'NO_KILL',
+  PUBLISH_SURVIVOR = 'PUBLISH_SURVIVOR',
 }
+
+export interface StoryContent {
+  msg: (name: string) => string;
+  imgSrc: string;
+}
+
+export type StoryDictionary = Record<StoryName, StoryContent>;
 
 export interface Story {
   id: string;

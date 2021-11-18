@@ -65,9 +65,8 @@ const imageSizeStyle: themeOptions = {
     padding: 20px;
   `,
   STORY: css`
-    width: 342px;
-    height: 167px;
-    padding: 16px;
+    width: 27vw;
+    height: 20vh;
     img {
       object-fit: contain;
     }

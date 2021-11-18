@@ -21,6 +21,7 @@ const useChat = () => {
     storyName: StoryName;
     isMafia?: boolean;
   }) => {
+    if (!userName) return;
     const storyType = STORY_DICTIONARY[storyName];
 
     const story: Story = {

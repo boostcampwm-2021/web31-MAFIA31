@@ -21,12 +21,17 @@ const useAbility = (job: string) => {
           console.log(userName, isMafia);
         },
       );
+    } else if (job === 'doctor') {
+      socketRef.current?.on(EVENT.DOCTOR_ABILITY, (userName: string) => {
+        console.log(userName);
+      });
     }
 
     return () => {
       socketRef.current?.off(EVENT.PUBLISH_VICTIM);
       socketRef.current?.off(EVENT.MAFIA_ABILITY);
       socketRef.current?.off(EVENT.POLICE_INVESTIGATION);
+      socketRef.current?.off(EVENT.DOCTOR_ABILITY);
     };
   }, [socketRef.current, job]);
 
@@ -35,6 +40,8 @@ const useAbility = (job: string) => {
       socketRef.current?.emit(EVENT.MAFIA_ABILITY, userName);
     } else if (job === 'police') {
       socketRef.current?.emit(EVENT.POLICE_INVESTIGATION, userName);
+    } else if (job === 'doctor') {
+      socketRef.current?.emit(EVENT.DOCTOR_ABILITY, userName);
     }
   };
 

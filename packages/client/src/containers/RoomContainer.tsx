@@ -38,14 +38,14 @@ const RoomContainer = () => {
 const roomContainerStyle = css`
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-evenly;
   align-content: flex-start;
   overflow-y: scroll;
   -ms-overflow-style: none;
 
-  padding: 40px;
+  padding: 30px 20px;
   height: 100%;
-  gap: 30px 30px;
+  gap: 30px 50px;
 
   ::-webkit-scrollbar {
     display: none;

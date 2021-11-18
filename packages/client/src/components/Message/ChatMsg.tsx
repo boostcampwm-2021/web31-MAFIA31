@@ -33,7 +33,11 @@ const msgContainerStyle = (isMyMsg: boolean) => css`
     display: ${isMyMsg ? 'none' : 'flex'};
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 5px;
+    padding: 3px;
+    width: 50px;
+    max-width: 50px;
 
     span {
       font-size: 10px;

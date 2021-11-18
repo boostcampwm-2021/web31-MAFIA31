@@ -25,7 +25,7 @@ const Profile: FC = () => {
 
   return (
     <div css={profilePageStyle}>
-      <Header />
+      <Header exit />
       <div css={profilePageBodyStyle}>
         <div css={leftSideStyle}>
           <div css={profileStyle}>
@@ -192,10 +192,6 @@ const achievementListStyle = css`
   ::-webkit-scrollbar {
     display: none;
   }
-
-  /* @media (max-width: 1024px) {
-    height: 600px;
-  } */
 `;
 
 export default Profile;

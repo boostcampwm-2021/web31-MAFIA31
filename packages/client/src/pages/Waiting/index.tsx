@@ -43,7 +43,7 @@ const Waiting = () => {
 
   return (
     <div css={pageStyle}>
-      <Header />
+      <Header exit />
       <div css={pageBodyStyle}>
         <WaitingListContainer userList={playerList} />
         <div css={bottomBarStyle}>

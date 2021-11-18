@@ -39,7 +39,7 @@ const roomCardStyle = css`
   box-shadow: 2px 2px 8px rgba(78, 65, 109, 0.25);
 
   :hover {
-    opacity: 0.8;
+    opacity: 0.7;
   }
 `;
 

@@ -18,8 +18,12 @@ const getGameResult = (roomId: string): PlayerResult[] => {
 };
 
 const checkEnd = (roomId: string) => {
+  if (RoomStore.get(roomId).length === 0) {
+    return true;
+  }
+
   const { mafia, citizen } = GameStore.getDashBoard(roomId);
-  console.log('mafia:citizen', mafia, citizen);
+
   return mafia >= citizen || mafia === 0;
 };
 
@@ -51,7 +55,6 @@ const changeTurn = (
 const startTimer = (namespace: Namespace, roomId: string) => {
   let counter = 0;
   let isNight: boolean = false;
-
 
   namespace.emit(EVENT.TIMER, TIME.TURN - counter);
   namespace.emit(EVENT.TURN_CHANGE, isNight);

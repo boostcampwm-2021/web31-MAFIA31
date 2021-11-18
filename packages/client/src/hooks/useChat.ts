@@ -12,16 +12,14 @@ const useChat = () => {
     setChatList((prev) => [...prev, msg]);
   };
   const updateVictimStory = (userName: string) => {
-    if (userName) {
-      console.log(userName);
-      const storyType = userName ? STORY_DICTIONARY.PUBLISH_VICTIM : STORY_DICTIONARY.NO_KILL;
-      const story: Story = {
-        id: Date.now().toString(),
-        msg: storyType?.msg(userName),
-        imgSrc: storyType?.imgSrc,
-      };
-      setChatList((prev) => [...prev, story]);
-    }
+    const storyType = userName ? STORY_DICTIONARY.PUBLISH_VICTIM : STORY_DICTIONARY.NO_KILL;
+    const story: Story = {
+      id: Date.now().toString(),
+      msg: storyType?.msg(userName),
+      imgSrc: storyType?.imgSrc,
+      type: storyType?.type,
+    };
+    setChatList((prev) => [...prev, story]);
   };
 
   const updateStoryToChatList = (userName: string) => {
@@ -31,6 +29,7 @@ const useChat = () => {
         id: Date.now().toString(),
         msg: storyType?.msg(userName),
         imgSrc: storyType?.imgSrc,
+        type: storyType?.type,
       };
       setChatList((prev) => [...prev, story]);
     }

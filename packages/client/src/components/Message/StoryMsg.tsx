@@ -3,16 +3,24 @@ import { FC } from 'react';
 import { css } from '@emotion/react';
 import { primaryDark, white } from '@src/constants';
 import { Image, ImageSizeList } from '@components/Image';
+import ExecuteAnimation from '@src/animation/ExecureAnimation';
 
 interface PropType {
   msg: string;
   imgSrc: string;
+  type: string;
 }
 
-const StoryMsg: FC<PropType> = ({ msg, imgSrc }) => (
+const StoryMsg: FC<PropType> = ({ msg, imgSrc, type }) => (
   <div css={StoryMsgStyle}>
     <div css={StoryTextStyle}>{msg}</div>
-    <Image size={ImageSizeList.STORY} src={imgSrc} />
+    {type === 'execution' ? (
+      <div css={backgroundStyle}>
+        <ExecuteAnimation />
+      </div>
+    ) : (
+      <Image size={ImageSizeList.STORY} src={imgSrc} />
+    )}
   </div>
 );
 
@@ -42,6 +50,21 @@ const StoryTextStyle = css`
   line-height: 35px;
   text-align: center;
   border-radius: 20px;
+`;
+
+const backgroundStyle = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 342px;
+  height: 167px;
+  padding: 16px;
+  border-radius: 20px;
+  overflow-y: hidden;
+  img {
+    object-fit: contain;
+  }
+  background-color: ${white};
 `;
 
 export default StoryMsg;

@@ -16,6 +16,7 @@ export interface StoryDictionary {
   [story: string]: {
     msg: (name: string) => string;
     imgSrc: string;
+    type: string;
   };
 }
 
@@ -23,6 +24,7 @@ export interface Story {
   id: string;
   msg: string;
   imgSrc: string;
+  type: string;
 }
 
 export interface Memo {

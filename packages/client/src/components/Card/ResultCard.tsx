@@ -31,45 +31,40 @@ const jobTable: JobTable = {
 
 const ResultCard: FC<PropType> = ({ userName, job, win }) => {
   const WINNER_STAMP_SRC = '/assets/icons/stamp-winner.png';
+
   return (
     <div css={resultCardStyle}>
-      <div css={margin}>{jobTable[job].koreanName}</div>
-      <img css={winnerStampStyle(win)} src={WINNER_STAMP_SRC} alt="winner stamp" />
+      <span className="job">{jobTable[job].koreanName}</span>
+      {win ? <img css={winnerStampStyle} src={WINNER_STAMP_SRC} alt="winner stamp" /> : <></>}
       <Image size={ImageSizeList.SMALL} src={jobTable[job].imgSrc} />
-      <div css={margin}>{userName}</div>
+      <span>{userName}</span>
     </div>
   );
 };
 
 const resultCardStyle = css`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-evenly;
 
-  position: relative;
   width: 190px;
-  height: 243px;
-
-  background: ${white};
-  box-shadow: 2px 2px 8px rgba(78, 65, 109, 0.25);
+  height: 190px;
   border-radius: 20px;
+  background-color: ${white};
+  box-shadow: 2px 2px 8px rgba(78, 65, 109, 0.25);
+
+  .job {
+    font-weight: bold;
+  }
 `;
 
-const margin = css`
-  margin: 20px 0px;
-`;
-
-const winnerStampStyle = (isWinner: boolean) => css`
-  display: ${isWinner ? 'block' : 'none'};
-
+const winnerStampStyle = css`
   position: absolute;
-  top: 30px;
-  left: 135px;
-
-  animation-name: pulse;
-  animation-duration: 0.5s;
-  animation-fill-mode: forwards;
+  animation: pulse 1s forwards;
+  top: 10px;
+  right: -20px;
 
   @keyframes pulse {
     0% {

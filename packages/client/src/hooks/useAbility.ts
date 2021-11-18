@@ -11,12 +11,13 @@ const useAbility = (job: string) => {
   useEffect(() => {
     if (job === 'mafia') {
       socketRef.current?.on(EVENT.PUBLISH_VICTIM, resetVictim);
-
+      socketRef.current?.on(EVENT.PUBLISH_SURVIVOR, resetVictim);
       socketRef.current?.on(EVENT.MAFIA_ABILITY, setNewVictim);
     }
 
     return () => {
       socketRef.current?.off(EVENT.PUBLISH_VICTIM, resetVictim);
+      socketRef.current?.off(EVENT.PUBLISH_SURVIVOR, resetVictim);
       socketRef.current?.off(EVENT.MAFIA_ABILITY, setNewVictim);
     };
   }, [socketRef.current, job]);

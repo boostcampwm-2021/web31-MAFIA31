@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { white } from '@src/constants';
+import { titleActive, white } from '@src/constants';
 import { JOB_DICT } from '@src/constants/job';
 import { RoleCard } from '../Card';
 import { SlideLeftIcon, SlideRightIcon } from '../Icon';
@@ -57,12 +57,14 @@ const modalWrapperStyle = css`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
   gap: 16px 9px;
   width: 500px;
   padding: 16px;
+  border-radius: 20px;
+  color: ${titleActive};
   background-color: ${white};
   box-shadow: 0px 0px 4px rgba(78, 65, 109, 0.25);
-  border-radius: 20px;
 `;
 
 const modalContentStyle = (JOB_PER_PAGE: number) => css`

@@ -21,6 +21,9 @@ const useGame = () => {
         state: { playerResultList: gameResult },
       }),
     );
+    socketRef.current?.on(EVENT.PUBLISH_SURVIVOR, (userName: string) => {
+      console.log(`${userName} is survived.`);
+    });
     return () => {
       socketRef.current?.off(EVENT.PUBLISH_JOB, updateMyJob);
       socketRef.current?.off(EVENT.GAME_OVER);

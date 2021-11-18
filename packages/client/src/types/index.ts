@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { StoryName } from '@mafia/domain/types/chat';
 import { User } from '@mafia/domain/types/user';
 
 export interface RoomInfo {
@@ -12,19 +13,19 @@ export interface PlayerInfo extends User {
   voteFrom: string[];
 }
 
-export interface StoryDictionary {
-  [story: string]: {
-    msg: (name: string) => string;
-    imgSrc: string;
-    type: string;
-  };
+export interface StoryContent {
+  msg: (name: string, isMafia?: boolean) => string;
+  imgSrc: string;
+  type?: string;
 }
+
+export type StoryDictionary = Record<StoryName, StoryContent>;
 
 export interface Story {
   id: string;
   msg: string;
   imgSrc: string;
-  type: string;
+  type?: string;
 }
 
 export interface Memo {

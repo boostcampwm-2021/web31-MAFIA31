@@ -1,9 +1,10 @@
-import { FC } from 'react';
+import { FC, useRef, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { primaryDark, white } from '@src/constants';
 import { Image, ImageSizeList } from '@components/Image';
-import ExecuteAnimation from '@src/animation/ExecureAnimation';
+import ExecuteAnimation from '@src/animation/ExecuteAnimation';
+import { SEC } from '@mafia/domain/constants/time';
 
 interface PropType {
   msg: string;
@@ -11,20 +12,45 @@ interface PropType {
   type: string;
 }
 
-const StoryMsg: FC<PropType> = ({ msg, imgSrc, type }) => (
-  <div css={StoryMsgStyle}>
-    <div css={StoryTextStyle}>{msg}</div>
-    {type === 'execution' ? (
-      <div css={backgroundStyle}>
-        <ExecuteAnimation />
-      </div>
-    ) : (
-      <Image size={ImageSizeList.STORY} src={imgSrc} />
-    )}
-  </div>
-);
+const StoryMsg: FC<PropType> = ({ msg, imgSrc, type }) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [disabled, setDisabled] = useState(false);
+  const handleClick = () => {
+    if (!videoRef.current) return;
+    setDisabled(true);
+    videoRef.current.currentTime = 0;
+    videoRef.current.play();
+    setTimeout(() => {
+      setDisabled(false);
+    }, videoRef.current.duration * SEC);
+  };
+  return (
+    <button type="button" css={storyMsgStyle} onClick={handleClick} disabled={disabled}>
+      <div css={storyTextStyle}>{msg}</div>
+      {imgSrc.includes('.mp4') ? (
+        <div css={storyVideoMask}>
+          <video css={storyVideoStyle} src={imgSrc} autoPlay ref={videoRef} />
+        </div>
+      ) : type === 'execution' ? (
+        <div css={backgroundStyle}>
+          <ExecuteAnimation />
+        </div>
+      ) : (
+        <Image size={ImageSizeList.STORY} src={imgSrc} />
+      )}
+    </button>
+  );
+};
 
-const StoryMsgStyle = css`
+const storyVideoMask = css`
+  width: 27vw;
+  height: 20vh;
+  border-radius: 15px;
+  overflow: hidden;
+  background-color: ${white};
+`;
+
+const storyMsgStyle = css`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -37,7 +63,7 @@ const StoryMsgStyle = css`
   border-radius: 20px;
 `;
 
-const StoryTextStyle = css`
+const storyTextStyle = css`
   padding-bottom: 16px;
   min-width: 342px;
   padding: 33px;
@@ -65,6 +91,11 @@ const backgroundStyle = css`
     object-fit: contain;
   }
   background-color: ${white};
+`;
+
+const storyVideoStyle = css`
+  width: 100%;
+  height: 100%;
 `;
 
 export default StoryMsg;

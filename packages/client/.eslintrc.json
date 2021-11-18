@@ -31,7 +31,8 @@
     "no-shadow": "off",
     "react/require-default-props": "off",
     "import/no-unresolved": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "jsx-a11y/media-has-caption": "off"
   },
   "settings": {
     "import/resolver": {

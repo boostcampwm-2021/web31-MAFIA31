@@ -6,14 +6,14 @@ import { useEffect, useState } from 'react';
 const useAbility = (job: string) => {
   const { socketRef } = useSocketContext();
   const [victim, setVictim] = useState('');
+  const resetVictim = () => setVictim('');
+  const setNewVictim = (victim: string) => setVictim(victim);
 
   useEffect(() => {
     if (job === 'mafia') {
-      socketRef.current?.on(EVENT.PUBLISH_VICTIM, () => setVictim(''));
+      socketRef.current?.on(EVENT.PUBLISH_VICTIM, resetVictim);
 
-      socketRef.current?.on(EVENT.MAFIA_ABILITY, (victim: string) => {
-        setVictim(victim);
-      });
+      socketRef.current?.on(EVENT.MAFIA_ABILITY, setNewVictim);
     } else if (job === 'police') {
       socketRef.current?.on(
         EVENT.POLICE_INVESTIGATION,
@@ -24,8 +24,8 @@ const useAbility = (job: string) => {
     }
 
     return () => {
-      socketRef.current?.off(EVENT.PUBLISH_VICTIM);
-      socketRef.current?.off(EVENT.MAFIA_ABILITY);
+      socketRef.current?.off(EVENT.PUBLISH_VICTIM, resetVictim);
+      socketRef.current?.off(EVENT.MAFIA_ABILITY, setNewVictim);
       socketRef.current?.off(EVENT.POLICE_INVESTIGATION);
     };
   }, [socketRef.current, job]);

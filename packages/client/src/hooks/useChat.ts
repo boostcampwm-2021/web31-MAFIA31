@@ -13,7 +13,6 @@ const useChat = () => {
   };
   const updateVictimStory = (userName: string) => {
     if (userName) {
-      console.log(userName);
       const storyType = userName ? STORY_DICTIONARY.PUBLISH_VICTIM : STORY_DICTIONARY.NO_KILL;
       const story: Story = {
         id: Date.now().toString(),
@@ -24,7 +23,7 @@ const useChat = () => {
     }
   };
 
-  const updateStoryToChatList = (userName: string) => {
+  const updateVoteStory = (userName: string) => {
     if (userName) {
       const storyType = STORY_DICTIONARY.EXECUTION;
       const story: Story = {
@@ -38,12 +37,12 @@ const useChat = () => {
 
   useEffect(() => {
     socketRef.current?.on(EVENT.PUBLISH_MESSAGE, updateChatList);
-    socketRef.current?.on(EVENT.EXECUTION, updateStoryToChatList);
+    socketRef.current?.on(EVENT.EXECUTION, updateVoteStory);
     socketRef.current?.on(EVENT.PUBLISH_VICTIM, updateVictimStory);
 
     return () => {
       socketRef.current?.off(EVENT.PUBLISH_MESSAGE, updateChatList);
-      socketRef.current?.off(EVENT.EXECUTION, updateStoryToChatList);
+      socketRef.current?.off(EVENT.EXECUTION, updateVoteStory);
       socketRef.current?.off(EVENT.PUBLISH_VICTIM, updateVictimStory);
     };
   }, [socketRef.current]);

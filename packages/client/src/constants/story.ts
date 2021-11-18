@@ -7,7 +7,7 @@ export const STORY_DICTIONARY: StoryDictionary = {
   },
   PUBLISH_VICTIM: {
     msg: (name) => `탕! ${name}이(가) 죽었어요!`,
-    imgSrc: '/assets/images/mafia-kill.gif',
+    imgSrc: '/assets/images/mafia-kill.mp4',
   },
   NO_KILL: {
     msg: () => `오늘 밤은 총소리가 들리지 않았어요!`,

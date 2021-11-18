@@ -1,4 +1,4 @@
-import { FC, useState, useCallback, useEffect } from 'react';
+import { FC, useRef, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { primaryDark, white } from '@src/constants';
@@ -8,32 +8,43 @@ interface PropType {
   msg: string;
   imgSrc: string;
 }
-
 const StoryMsg: FC<PropType> = ({ msg, imgSrc }) => {
-  const [src, setSrc] = useState<string>(imgSrc);
-  const [disabled, setDisabled] = useState<boolean>(false);
-  const handleClick = useCallback(() => {
-    if (!imgSrc.includes('.gif')) return;
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [disabled, setDisabled] = useState(false);
+
+  const handleClick = () => {
+    if (!videoRef.current) return;
     setDisabled(true);
-    setSrc(imgSrc);
+    videoRef.current.currentTime = 0;
+    videoRef.current.play();
     setTimeout(() => {
       setDisabled(false);
-      setSrc(imgSrc.replace(/\..+/, '.png'));
-    }, 2000);
-  }, [imgSrc]);
+    }, videoRef.current.duration * 1000);
+  };
 
-  useEffect(() => {
-    handleClick();
-  }, []);
   return (
-    <button type="button" css={StoryMsgStyle} onClick={() => handleClick()} disabled={disabled}>
-      <div css={StoryTextStyle}>{msg}</div>
-      <Image size={ImageSizeList.STORY} src={src} />
+    <button type="button" css={storyMsgStyle} onClick={handleClick} disabled={disabled}>
+      <div css={storyTextStyle}>{msg}</div>
+      {imgSrc.includes('.mp4') ? (
+        <div css={storyVideoMask}>
+          <video css={storyVideoStyle} src={imgSrc} autoPlay ref={videoRef} />
+        </div>
+      ) : (
+        <Image size={ImageSizeList.STORY} src={imgSrc} />
+      )}
     </button>
   );
 };
 
-const StoryMsgStyle = css`
+const storyVideoMask = css`
+  width: 342px;
+  height: 167px;
+  border-radius: 15px;
+  overflow: hidden;
+  background-color: ${white};
+`;
+
+const storyMsgStyle = css`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -46,7 +57,7 @@ const StoryMsgStyle = css`
   border-radius: 20px;
 `;
 
-const StoryTextStyle = css`
+const storyTextStyle = css`
   padding-bottom: 16px;
   min-width: 342px;
   padding: 33px;
@@ -59,6 +70,11 @@ const StoryTextStyle = css`
   line-height: 35px;
   text-align: center;
   border-radius: 20px;
+`;
+
+const storyVideoStyle = css`
+  width: 342px;
+  height: 167px;
 `;
 
 export default StoryMsg;

@@ -25,7 +25,7 @@ const Profile: FC = () => {
 
   return (
     <div css={profilePageStyle}>
-      <Header />
+      <Header exit />
       <div css={profilePageBodyStyle}>
         <div css={leftSideStyle}>
           <div css={profileStyle}>

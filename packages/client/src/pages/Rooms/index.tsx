@@ -6,7 +6,7 @@ import Header from '@src/templates/Header';
 
 const Rooms: FC = () => (
   <div css={roomsPageStyle}>
-    <Header />
+    <Header createRoom profilePage />
     <div css={roomsPageBodyStyle}>
       <RoomContainer />
     </div>

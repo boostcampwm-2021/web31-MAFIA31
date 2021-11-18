@@ -7,26 +7,50 @@ import { primaryDark } from '@src/constants';
 import { LightLogoIcon } from '@src/components/Icon';
 
 const CREATE_ROOM_BUTTON = '방 만들기';
+const EXIT_ROOM_BUTTON = '나가기';
 const MY_PAGE_BUTTON = '마이 페이지';
 
-const Header: FC = () => (
+interface Props {
+  createRoom?: boolean;
+  exit?: boolean;
+  profilePage?: boolean;
+}
+
+const Header: FC<Props> = ({ createRoom = false, exit = false, profilePage = false }) => (
   <header css={headerStyle}>
     <Link to="/rooms">
       <LightLogoIcon />
     </Link>
     <div css={buttonWrapperStyle}>
-      <DefaultButton
-        text={CREATE_ROOM_BUTTON}
-        size={ButtonSizeList.SMALL}
-        theme={ButtonThemeList.LIGHT}
-      />
-      <Link to={{ pathname: '/profile' }}>
+      {createRoom ? (
         <DefaultButton
-          text={MY_PAGE_BUTTON}
+          text={CREATE_ROOM_BUTTON}
           size={ButtonSizeList.SMALL}
           theme={ButtonThemeList.LIGHT}
         />
-      </Link>
+      ) : (
+        <></>
+      )}
+      {exit ? (
+        <DefaultButton
+          text={EXIT_ROOM_BUTTON}
+          size={ButtonSizeList.SMALL}
+          theme={ButtonThemeList.LIGHT}
+        />
+      ) : (
+        <></>
+      )}
+      {profilePage ? (
+        <Link to={{ pathname: '/profile' }}>
+          <DefaultButton
+            text={MY_PAGE_BUTTON}
+            size={ButtonSizeList.SMALL}
+            theme={ButtonThemeList.LIGHT}
+          />
+        </Link>
+      ) : (
+        <></>
+      )}
     </div>
   </header>
 );

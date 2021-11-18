@@ -24,7 +24,7 @@ const useChat = () => {
     }
   };
 
-  const updateStoryToChatList = (userName: string) => {
+  const updateExecutionStory = (userName: string) => {
     if (userName) {
       const storyType = STORY_DICTIONARY.EXECUTION;
       const story: Story = {
@@ -36,15 +36,29 @@ const useChat = () => {
     }
   };
 
+  const updateSurvivorStory = (userName: string) => {
+    if (userName) {
+      const storyType = STORY_DICTIONARY.PUBLISH_SURVIVOR;
+      const story: Story = {
+        id: Date.now().toString(),
+        msg: storyType?.msg(userName),
+        imgSrc: storyType?.imgSrc,
+      };
+      setChatList((prev) => [...prev, story]);
+    }
+  };
+
   useEffect(() => {
     socketRef.current?.on(EVENT.PUBLISH_MESSAGE, updateChatList);
-    socketRef.current?.on(EVENT.EXECUTION, updateStoryToChatList);
+    socketRef.current?.on(EVENT.EXECUTION, updateExecutionStory);
     socketRef.current?.on(EVENT.PUBLISH_VICTIM, updateVictimStory);
+    socketRef.current?.on(EVENT.PUBLISH_SURVIVOR, updateSurvivorStory);
 
     return () => {
       socketRef.current?.off(EVENT.PUBLISH_MESSAGE, updateChatList);
-      socketRef.current?.off(EVENT.EXECUTION, updateStoryToChatList);
+      socketRef.current?.off(EVENT.EXECUTION, updateExecutionStory);
       socketRef.current?.off(EVENT.PUBLISH_VICTIM, updateVictimStory);
+      socketRef.current?.off(EVENT.PUBLISH_SURVIVOR, updateSurvivorStory);
     };
   }, [socketRef.current]);
 

@@ -25,7 +25,7 @@ const checkEnd = (roomId: string) => {
 
 const updateStats = (roomId: string) => {
   const result = getGameResult(roomId);
-  axios.post(`${apiURL}/user/update`, {
+  axios.post(`${apiURL}/users/stat`, {
     result,
   });
 };
@@ -51,7 +51,6 @@ const changeTurn = (
 const startTimer = (namespace: Namespace, roomId: string) => {
   let counter = 0;
   let isNight: boolean = false;
-
 
   namespace.emit(EVENT.TIMER, TIME.TURN - counter);
   namespace.emit(EVENT.TURN_CHANGE, isNight);

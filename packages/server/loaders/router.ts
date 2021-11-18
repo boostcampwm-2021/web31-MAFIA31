@@ -5,8 +5,8 @@ import userRouter from '../api/user';
 
 const routerLoader = (app: express.Application) => {
   app.use('/api/auth', authRouter);
-  app.use('/api/room', roomRouter);
-  app.use('/api/user', userRouter);
+  app.use('/api/rooms', roomRouter);
+  app.use('/api/users', userRouter);
 };
 
 export default routerLoader;

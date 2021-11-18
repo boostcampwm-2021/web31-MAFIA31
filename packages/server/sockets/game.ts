@@ -29,7 +29,7 @@ const checkEnd = (roomId: string) => {
 
 const updateStats = (roomId: string) => {
   const result = getGameResult(roomId);
-  axios.post(`${apiURL}/user/update`, {
+  axios.post(`${apiURL}/users/stat`, {
     result,
   });
 };

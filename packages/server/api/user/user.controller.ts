@@ -3,16 +3,16 @@ import { Request, Response } from 'express';
 import UserService from './user.service';
 
 const UserController = {
-  async updateUser(req: Request, res: Response) {
-    req.body.result.map(async (playerResult: PlayerResult) => {
-      try {
-        await UserService.update(playerResult);
-      } catch (error) {
-        console.log(error);
-        res.status(400).json({ error });
+  async updateUsersStat(req: Request, res: Response) {
+    await Promise.all(
+      req.body.result.map((playerResult: PlayerResult) => UserService.update(playerResult)),
+    ).catch((error) => {
+      console.log(error);
+      if (error instanceof Error) {
+        res.status(400).json({ error: error.message });
       }
     });
-    res.status(200).json({ result: 'OK' });
+    res.status(200).json({ result: 'Success' });
   },
 
   async getUser(req: Request, res: Response) {

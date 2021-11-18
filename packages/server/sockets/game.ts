@@ -48,7 +48,10 @@ const changeTurn = (
   }
 
   namespace.emit(EVENT.TURN_CHANGE, isNight);
-  if (isNight) return;
+  if (isNight) {
+    GameStore.setCanInvest(true);
+    return;
+  }
   publishVictim(namespace);
 };
 

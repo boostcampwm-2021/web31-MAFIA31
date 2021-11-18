@@ -43,6 +43,11 @@ const abilitySocketInit = (socket: Socket) => {
   });
 
   socket.on(EVENT.POLICE_INVESTIGATION, (userName: string) => {
+    if (!GameStore.getCanInvest()) {
+      return;
+    }
+    GameStore.setCanInvest(false);
+
     const isMafia: boolean =
       GameStore.get(namespace.name).find((el) => el.userName === userName)?.job === 'mafia';
 

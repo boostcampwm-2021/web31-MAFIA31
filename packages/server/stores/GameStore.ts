@@ -13,8 +13,18 @@ interface DashBoard {
 class GameStore {
   static instance: GameStoreType = {};
 
+  private static canInvest: boolean = true;
+
   constructor() {
     throw new Error('This is Singleton Class! Use getInstance()');
+  }
+
+  static getCanInvest() {
+    return this.canInvest;
+  }
+
+  static setCanInvest(flag: boolean) {
+    this.canInvest = flag;
   }
 
   static getInstance() {

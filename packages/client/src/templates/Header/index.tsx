@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { FC } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { DefaultButton, ButtonSizeList, ButtonThemeList } from '@src/components/Button';
 import { primaryDark } from '@src/constants';
 import { LightLogoIcon } from '@src/components/Icon';
@@ -16,44 +16,53 @@ interface Props {
   profilePage?: boolean;
 }
 
-const Header: FC<Props> = ({ createRoom = false, exit = false, profilePage = false }) => (
-  <header css={headerStyle}>
-    <Link to="/rooms">
-      <LightLogoIcon />
-    </Link>
-    <div css={buttonWrapperStyle}>
-      {createRoom ? (
-        <DefaultButton
-          text={CREATE_ROOM_BUTTON}
-          size={ButtonSizeList.SMALL}
-          theme={ButtonThemeList.LIGHT}
-        />
-      ) : (
-        <></>
-      )}
-      {exit ? (
-        <DefaultButton
-          text={EXIT_ROOM_BUTTON}
-          size={ButtonSizeList.SMALL}
-          theme={ButtonThemeList.LIGHT}
-        />
-      ) : (
-        <></>
-      )}
-      {profilePage ? (
-        <Link to={{ pathname: '/profile' }}>
+const Header: FC<Props> = ({ createRoom = false, exit = false, profilePage = false }) => {
+  const history = useHistory();
+
+  const goBack = () => {
+    history.goBack();
+  };
+
+  return (
+    <header css={headerStyle}>
+      <Link to="/rooms">
+        <LightLogoIcon />
+      </Link>
+      <div css={buttonWrapperStyle}>
+        {createRoom ? (
           <DefaultButton
-            text={MY_PAGE_BUTTON}
+            text={CREATE_ROOM_BUTTON}
             size={ButtonSizeList.SMALL}
             theme={ButtonThemeList.LIGHT}
           />
-        </Link>
-      ) : (
-        <></>
-      )}
-    </div>
-  </header>
-);
+        ) : (
+          <></>
+        )}
+        {exit ? (
+          <DefaultButton
+            text={EXIT_ROOM_BUTTON}
+            size={ButtonSizeList.SMALL}
+            theme={ButtonThemeList.LIGHT}
+            onClick={goBack}
+          />
+        ) : (
+          <></>
+        )}
+        {profilePage ? (
+          <Link to={{ pathname: '/profile' }}>
+            <DefaultButton
+              text={MY_PAGE_BUTTON}
+              size={ButtonSizeList.SMALL}
+              theme={ButtonThemeList.LIGHT}
+            />
+          </Link>
+        ) : (
+          <></>
+        )}
+      </div>
+    </header>
+  );
+};
 
 const headerStyle = css`
   display: flex;

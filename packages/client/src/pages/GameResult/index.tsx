@@ -50,7 +50,7 @@ const GameResult = () => {
           <DefaultButton
             size={ButtonSizeList.MEDIUM}
             theme={ButtonThemeList.DARK}
-            imageSrc="/assets/icons/exit.svg"
+            imageSrc="/assets/icons/logout.svg"
             text="방 나가기"
           />
         </Link>

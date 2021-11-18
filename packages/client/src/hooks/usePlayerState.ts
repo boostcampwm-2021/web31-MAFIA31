@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 const usePlayerState = (initialValue: PlayerState[]) => {
   const { socketRef } = useSocketContext();
   const [playerStateList, setPlayerStateList] = useState<PlayerState[]>(initialValue);
-  const updatePlayerState = (userName: string) => {
+  const updatePlayerState = ({ userName }: { userName: string }) => {
     setPlayerStateList((prev) =>
       prev.map((player) => (player.userName === userName ? { ...player, isDead: true } : player)),
     );

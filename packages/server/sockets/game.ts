@@ -52,7 +52,6 @@ const startTimer = (namespace: Namespace, roomId: string) => {
   let counter = 0;
   let isNight: boolean = false;
 
-
   namespace.emit(EVENT.TIMER, TIME.TURN - counter);
   namespace.emit(EVENT.TURN_CHANGE, isNight);
 
@@ -61,13 +60,13 @@ const startTimer = (namespace: Namespace, roomId: string) => {
     namespace.emit(EVENT.TIMER, TIME.TURN - counter);
 
     if (!isNight && counter === TIME.VOTE_START) {
-      startVoteTime(namespace, roomId, TIME.VOTE);
+      startVoteTime(namespace, roomId);
     }
 
     if (counter !== 0) return;
     isNight = !isNight;
     changeTurn(namespace, roomId, gameTimer, isNight);
-  }, 1000);
+  }, TIME.SEC);
 };
 
 const shuffle = (arr: string[]) => arr.sort(() => Math.random() - 0.5);

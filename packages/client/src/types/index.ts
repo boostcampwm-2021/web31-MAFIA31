@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { StoryName } from '@mafia/domain/types/chat';
 import { User } from '@mafia/domain/types/user';
 
 export interface RoomInfo {
@@ -10,13 +11,6 @@ export interface RoomInfo {
 export interface PlayerInfo extends User {
   userImg: string;
   voteFrom: string[];
-}
-
-export enum StoryName {
-  EXECUTION = 'EXECUTION',
-  PUBLISH_VICTIM = 'PUBLISH_VICTIM',
-  NO_KILL = 'NO_KILL',
-  PUBLISH_SURVIVOR = 'PUBLISH_SURVIVOR',
 }
 
 export interface StoryContent {

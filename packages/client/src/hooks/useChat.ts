@@ -13,7 +13,6 @@ const useChat = () => {
   };
   const updateVictimStory = (userName: string) => {
     if (userName) {
-      console.log(userName);
       const storyType = userName ? STORY_DICTIONARY.PUBLISH_VICTIM : STORY_DICTIONARY.NO_KILL;
       const story: Story = {
         id: Date.now().toString(),

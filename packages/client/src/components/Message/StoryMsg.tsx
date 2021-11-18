@@ -37,8 +37,8 @@ const StoryMsg: FC<PropType> = ({ msg, imgSrc }) => {
 };
 
 const storyVideoMask = css`
-  width: 342px;
-  height: 167px;
+  width: 27vw;
+  height: 20vh;
   border-radius: 15px;
   overflow: hidden;
   background-color: ${white};
@@ -73,8 +73,8 @@ const storyTextStyle = css`
 `;
 
 const storyVideoStyle = css`
-  width: 342px;
-  height: 167px;
+  width: 100%;
+  height: 100%;
 `;
 
 export default StoryMsg;

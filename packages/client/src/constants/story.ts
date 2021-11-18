@@ -4,6 +4,7 @@ export const STORY_DICTIONARY: StoryDictionary = {
   EXECUTION: {
     msg: (name) => `투표로 ${name}이(가) 죽었어요!`,
     imgSrc: '/assets/images/vote-kill.png',
+    type: 'execution',
   },
   PUBLISH_VICTIM: {
     msg: (name) => `탕! ${name}이(가) 죽었어요!`,

@@ -16,6 +16,7 @@ export interface PlayerInfo extends User {
 export interface StoryContent {
   msg: (name: string, isMafia?: boolean) => string;
   imgSrc: string;
+  type?: string;
 }
 
 export type StoryDictionary = Record<StoryName, StoryContent>;
@@ -24,6 +25,7 @@ export interface Story {
   id: string;
   msg: string;
   imgSrc: string;
+  type?: string;
 }
 
 export interface Memo {

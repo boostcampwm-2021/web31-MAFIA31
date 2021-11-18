@@ -17,6 +17,7 @@ type PropType = {
   emitAbility: any;
   victim: string;
   isNight: boolean;
+  myJob: string;
 };
 
 const LeftSideContainer: FC<PropType> = ({
@@ -27,6 +28,7 @@ const LeftSideContainer: FC<PropType> = ({
   isNight,
   victim,
   timer,
+  myJob,
 }) => {
   const { userInfo } = useUserInfo();
   const handleClick = (userName: string) => {
@@ -82,6 +84,7 @@ const LeftSideContainer: FC<PropType> = ({
             isVictim={victim === userName}
             isDead={playerStateList.find((player) => player.userName === userName)?.isDead || false}
             onClick={handleClick}
+            myJob={myJob}
           />
         ))}
       </div>

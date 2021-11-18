@@ -32,7 +32,8 @@
     "react/require-default-props": "off",
     "import/no-unresolved": "off",
     "import/prefer-default-export": "off",
-    "jsx-a11y/media-has-caption": "off"
+    "jsx-a11y/media-has-caption": "off",
+    "no-nested-ternary": "off"
   },
   "settings": {
     "import/resolver": {

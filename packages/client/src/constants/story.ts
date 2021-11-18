@@ -17,4 +17,8 @@ export const STORY_DICTIONARY: StoryDictionary = {
     msg: (name) => `의사의 활약으로 ${name}이(가) 마피아의 공격에서 살아남았습니다!`,
     imgSrc: '/assets/images/doctor-heal.png',
   },
+  POLICE_INVESTIGATION: {
+    msg: (name, isMafia) => `${name}은(는) 마피아가 ${isMafia ? `맞습니다!` : `아닙니다!`}`,
+    imgSrc: '/assets/images/police.png',
+  },
 };

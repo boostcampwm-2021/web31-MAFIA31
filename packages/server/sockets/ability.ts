@@ -46,8 +46,13 @@ const abilitySocketInit = (socket: Socket) => {
     const isMafia: boolean =
       GameStore.get(namespace.name).find((el) => el.userName === userName)?.job === 'mafia';
 
-    const resData: PoliceInvestigation = { userName, isMafia };
-    namespace.to('police').emit(EVENT.POLICE_INVESTIGATION, resData);
+    const data: PoliceInvestigation = {
+      userName,
+      storyName: StoryName.POLICE_INVESTIGATION,
+      isMafia,
+    };
+
+    namespace.to('police').emit(EVENT.POLICE_INVESTIGATION, data);
   });
 
   socket.on(EVENT.DOCTOR_ABILITY, (userName: string) => {

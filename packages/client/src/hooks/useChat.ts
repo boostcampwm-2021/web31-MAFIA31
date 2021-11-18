@@ -12,12 +12,20 @@ const useChat = () => {
     setChatList((prev) => [...prev, msg]);
   };
 
-  const updateStory = ({ userName, storyName }: { userName: string; storyName: StoryName }) => {
+  const updateStory = ({
+    userName,
+    storyName,
+    isMafia,
+  }: {
+    userName: string;
+    storyName: StoryName;
+    isMafia?: boolean;
+  }) => {
     const storyType = STORY_DICTIONARY[storyName];
 
     const story: Story = {
       id: Date.now().toString(),
-      msg: storyType?.msg(userName),
+      msg: storyType?.msg(userName, isMafia),
       imgSrc: storyType?.imgSrc,
     };
 
@@ -29,6 +37,7 @@ const useChat = () => {
     socketRef.current?.on(EVENT.EXECUTION, updateStory);
     socketRef.current?.on(EVENT.PUBLISH_VICTIM, updateStory);
     socketRef.current?.on(EVENT.PUBLISH_SURVIVOR, updateStory);
+    socketRef.current?.on(EVENT.POLICE_INVESTIGATION, updateStory);
 
     return () => {
       socketRef.current?.off(EVENT.PUBLISH_MESSAGE, updateChatList);

@@ -14,7 +14,7 @@ export interface PlayerInfo extends User {
 }
 
 export interface StoryContent {
-  msg: (name: string) => string;
+  msg: (name: string, isMafia?: boolean) => string;
   imgSrc: string;
 }
 

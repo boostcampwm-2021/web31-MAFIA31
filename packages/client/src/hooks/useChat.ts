@@ -45,6 +45,7 @@ const useChat = () => {
       socketRef.current?.off(EVENT.EXECUTION, updateStory);
       socketRef.current?.off(EVENT.PUBLISH_VICTIM, updateStory);
       socketRef.current?.off(EVENT.PUBLISH_SURVIVOR, updateStory);
+      socketRef.current?.off(EVENT.POLICE_ABILITY, updateStory);
     };
   }, [socketRef.current]);
 

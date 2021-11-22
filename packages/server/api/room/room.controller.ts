@@ -42,14 +42,14 @@ const RoomController = {
       res.status(400).json({ error });
     }
   },
-  async addRoom(req: express.Request, res: express.Response) {
-    try {     
+  async addRoom(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
       const newRoom: IRoom = req.body.newRoom;
-    
+
       if (!checkRoomId(newRoom.roomId)) {
-          throw new InvalidRoomIdError();
+        throw new InvalidRoomIdError();
       }
-      
+
       await Room.create(newRoom);
       res.status(200).json(newRoom);
     } catch (error) {

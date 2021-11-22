@@ -1,32 +1,30 @@
+import { Link } from 'react-router-dom';
+import { useQuery } from 'react-query';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import axios from 'axios';
+
 import { RoomCard } from '@src/components/Card';
 import { RoomInfo } from '@src/types';
 import disconnectSocket from '@src/utils/disconnectSocket';
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 const RoomContainer = () => {
   disconnectSocket();
 
-  const [roomList, setRoomList] = useState<RoomInfo[]>([]);
-
-  const updateRoomList = async () => {
+  const getRoomList = async () => {
     const url = `${process.env.REACT_APP_API_URL}/api/rooms`;
-
-    const response = await fetch(url);
-    const data = await response.json();
-
-    setRoomList(data.roomList);
+    const { data } = await axios.get(url);
+    return data.roomList;
   };
 
-  useEffect(() => {
-    updateRoomList();
-  }, []);
+  const { isLoading, data: roomList, error } = useQuery<RoomInfo[], Error>('rooms', getRoomList);
+
+  if (isLoading) return <div>Loading</div>;
+  if (error) return <div>An error has occurred: {error.message}</div>;
 
   return (
     <div css={roomContainerStyle}>
-      {roomList.map((roomInfo) => (
+      {roomList!.map((roomInfo) => (
         <Link to={{ pathname: '/waiting', state: { roomInfo } }} key={roomInfo.roomId}>
           <RoomCard roomInfo={roomInfo} />
         </Link>

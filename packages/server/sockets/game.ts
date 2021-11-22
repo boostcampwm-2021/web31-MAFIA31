@@ -17,6 +17,24 @@ const getGameResult = (roomId: string): PlayerResult[] => {
   return GameStore.getGameResult(roomId, win);
 };
 
+const updateRoomStatus = async (roomId: string, status: string) => {
+  await axios.put(`${apiURL}/rooms`, {
+    roomId: roomId.split('/')[1],
+    status,
+  });
+};
+
+const endGame = (
+  namespace: Namespace,
+  roomId: string,
+  interval: ReturnType<typeof setInterval>,
+) => {
+  namespace.emit(EVENT.GAME_OVER, getGameResult(roomId));
+  clearInterval(interval);
+  updateRoomStatus(roomId, 'ready');
+  updateStats(roomId);
+};
+
 const checkEnd = (roomId: string) => {
   if (RoomStore.get(roomId).length === 0) {
     return true;
@@ -41,14 +59,12 @@ const changeTurn = (
   isNight: boolean,
 ) => {
   if (checkEnd(roomId)) {
-    namespace.emit(EVENT.GAME_OVER, getGameResult(roomId));
-    clearInterval(interval);
-    updateStats(roomId);
+    endGame(namespace, roomId, interval);
     return;
   }
 
   namespace.emit(EVENT.TURN_CHANGE, isNight);
-  
+
   if (isNight) {
     GameStore.setCanInvest(true);
     return;
@@ -105,6 +121,7 @@ const emitJobs = (namespace: Namespace, roomId: string): void => {
 };
 
 const startGame = (namespace: Namespace, roomId: string) => {
+  updateRoomStatus(roomId, 'start');
   assignJobs(roomId);
   namespace.emit(EVENT.PUBLISH_GAME_START);
   startTimer(namespace, roomId);

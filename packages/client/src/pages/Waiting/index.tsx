@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import Header from '@src/templates/Header';
 import { RoomInfo } from '@src/types';
 import WaitingListContainer from '@src/containers/WaitingListContainer';
@@ -15,12 +15,17 @@ interface locationType {
 }
 
 const Waiting = () => {
-  const { state } = useLocation<locationType>();
+  const history = useHistory();
+  const { search } = useLocation<locationType>();
   const { userInfo } = useUserInfo();
-  useSocket(state.roomInfo.roomId);
+  useSocket(search.replace(/\?/g, ''));
   const { userName: myName } = userInfo!;
   const [isHost, setIsHost] = useState<boolean>();
   const { playerList, sendReady, sendGameStart, isAllReady } = useRoom();
+
+  if (!search.match(/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/)) {
+    history.goBack();
+  }
 
   const updateHost = () => {
     if (!playerList[0]) {

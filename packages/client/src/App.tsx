@@ -2,6 +2,7 @@ import { useLayoutEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { useCookies } from 'react-cookie';
+import jwtDecode from 'jwt-decode';
 import Callback from './pages/Callback';
 import Game from './pages/Game';
 import GameResult from './pages/GameResult';
@@ -21,7 +22,7 @@ const App = () => {
 
   useLayoutEffect(() => {
     if (!userInfo?.userName && cookies.jwt) {
-      const token = JSON.parse(atob(cookies.jwt.split('.')[1]));
+      const token: { userName: string; profileImg: string } = jwtDecode(cookies.jwt);
       setUserInfo({
         userName: token.userName,
         profileImg: token.profileImg,

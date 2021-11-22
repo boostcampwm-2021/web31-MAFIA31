@@ -10,7 +10,7 @@ const Callback = () => {
 
   const getUserData = async (code: string) => {
     const url = `${process.env.REACT_APP_API_URL}/api/auth/user?code=${code}`;
-    const response = await fetch(url);
+    const response = await fetch(url, { credentials: 'include' });
     const userData = await response.json();
     setUserInfo(userData);
   };

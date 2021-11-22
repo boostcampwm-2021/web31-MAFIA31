@@ -4,7 +4,7 @@ import Room, { IRoom } from '../../models/Room';
 const RoomController = {
   async getRoomList(req: express.Request, res: express.Response) {
     try {
-      const roomList = await Room.find();
+      const roomList = await Room.find({ status: 'ready' });
       res.status(200).json({ roomList });
     } catch (error) {
       console.log(error);

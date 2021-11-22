@@ -50,7 +50,7 @@ const Game = () => {
   const { voteList, voteUser, initVote } = useVote();
   const { timer, isNight, voteSec } = useTimer();
   const { myJob } = useGame();
-  const { emitAbility, victim } = useAbility(myJob);
+  const { emitAbility, victim, survivor } = useAbility(myJob);
   usePreventLeave();
 
   const initMemo = (userList: User[]) => {
@@ -115,6 +115,7 @@ const Game = () => {
         voteUser={voteUser}
         emitAbility={emitAbility}
         victim={victim}
+        survivor={survivor}
         isNight={isNight}
         myJob={myJob}
       />

@@ -21,7 +21,7 @@ const RoomContainer = () => {
   return (
     <div css={roomContainerStyle}>
       {roomList!.map((roomInfo) => (
-        <Link to={{ pathname: '/waiting', state: { roomInfo } }} key={roomInfo.roomId}>
+        <Link to={{ pathname: '/waiting', search: roomInfo.roomId }} key={roomInfo.roomId}>
           <RoomCard roomInfo={roomInfo} />
         </Link>
       ))}

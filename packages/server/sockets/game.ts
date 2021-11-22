@@ -25,17 +25,6 @@ const updateRoomStatus = async (roomId: string, status: string) => {
   });
 };
 
-const endGame = (
-  namespace: Namespace,
-  roomId: string,
-  interval: ReturnType<typeof setInterval>,
-) => {
-  namespace.emit(EVENT.GAME_OVER, getGameResult(roomId));
-  clearInterval(interval);
-  updateRoomStatus(roomId, 'ready');
-  updateStats(roomId);
-};
-
 const checkEnd = (roomId: string) => {
   if (RoomStore.get(roomId).length === 0) {
     return true;
@@ -51,6 +40,17 @@ const updateStats = (roomId: string) => {
   axios.post(`${apiURL}/users/stat`, {
     result,
   });
+};
+
+const endGame = (
+  namespace: Namespace,
+  roomId: string,
+  interval: ReturnType<typeof setInterval>,
+) => {
+  namespace.emit(EVENT.GAME_OVER, getGameResult(roomId));
+  clearInterval(interval);
+  updateRoomStatus(roomId, 'ready');
+  updateStats(roomId);
 };
 
 const changeTurn = (

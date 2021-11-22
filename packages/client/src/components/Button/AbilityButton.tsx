@@ -12,6 +12,7 @@ interface PropType {
   voteCount: number;
   isDead: boolean;
   isVictim: boolean;
+  isSurvivor: boolean;
   onClick: any;
   myJob: string;
 }
@@ -26,6 +27,7 @@ const AbilityButton: FC<PropType> = ({
   voteCount,
   isDead,
   isVictim,
+  isSurvivor,
   onClick,
   myJob,
 }) => {
@@ -47,6 +49,15 @@ const AbilityButton: FC<PropType> = ({
     }
   };
 
+  let abilityState = <></>;
+  if (isNight && isVictim) {
+    abilityState = <img src="/assets/images/bullet.png" alt="bullet" />;
+  } else if (isNight && isSurvivor) {
+    abilityState = <img src="/assets/images/healthcare.png" alt="cure" />;
+  } else if (!isNight && voteCount) {
+    abilityState = <div>{useMemo(() => iconList(), [voteCount])}</div>;
+  }
+
   return (
     <button
       type="button"
@@ -56,17 +67,7 @@ const AbilityButton: FC<PropType> = ({
       <img src={userImg} alt="profile_img" css={userImgStyle} />
       <div css={voteInfoStyle}>
         <span>{userName}</span>
-        {isNight ? (
-          isVictim ? (
-            <img src="/assets/images/bullet.png" alt="" />
-          ) : (
-            <></>
-          )
-        ) : !voteCount ? (
-          <></>
-        ) : (
-          <div>{useMemo(() => iconList(), [voteCount])}</div>
-        )}
+        {abilityState}
       </div>
     </button>
   );

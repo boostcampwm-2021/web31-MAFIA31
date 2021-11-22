@@ -28,3 +28,6 @@ yarn-error.log*
 
 # vs-code
 .vscode/launch.json
+
+# rest client
+*.rest

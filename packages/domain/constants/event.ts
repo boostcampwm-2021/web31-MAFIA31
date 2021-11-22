@@ -24,3 +24,5 @@ export const PUBLISH_VICTIM = 'publish victim';
 export const POLICE_ABILITY = 'police ability';
 export const DOCTOR_ABILITY = 'doctor ability';
 export const PUBLISH_SURVIVOR = 'publish survivor';
+
+export const NOTICE_MAFIA = 'notice mafia';

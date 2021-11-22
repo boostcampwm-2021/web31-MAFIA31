@@ -16,17 +16,35 @@ const useChat = () => {
     userName,
     storyName,
     isMafia,
+    mafiaList,
   }: {
-    userName: string;
+    userName?: string;
     storyName: StoryName;
     isMafia?: boolean;
+    mafiaList?: string[];
   }) => {
-    if (!userName) return;
+    if (!storyName) return;
+    if (storyName === 'EXECUTION' && !userName) {
+      return;
+    }
+    if (storyName === 'PUBLISH_VICTIM' && !userName) {
+      return;
+    }
+    if (storyName === 'PUBLISH_SURVIVOR' && !userName) {
+      return;
+    }
+    if (storyName === 'POLICE_ABILITY' && !userName && !isMafia) {
+      return;
+    }
+    if (storyName === 'NOTICE_MAFIA' && !mafiaList) {
+      return;
+    }
+
     const storyType = STORY_DICTIONARY[storyName];
 
     const story: Story = {
       id: Date.now().toString(),
-      msg: storyType?.msg(userName, isMafia),
+      msg: storyType?.msg(userName, isMafia, mafiaList),
       imgSrc: storyType?.imgSrc,
       type: storyType?.type,
     };
@@ -40,6 +58,8 @@ const useChat = () => {
     socketRef.current?.on(EVENT.PUBLISH_VICTIM, updateStory);
     socketRef.current?.on(EVENT.PUBLISH_SURVIVOR, updateStory);
     socketRef.current?.on(EVENT.POLICE_ABILITY, updateStory);
+    socketRef.current?.on(EVENT.PUBLISH_JOB, updateStory);
+    socketRef.current?.on(EVENT.NOTICE_MAFIA, updateStory);
 
     return () => {
       socketRef.current?.off(EVENT.PUBLISH_MESSAGE, updateChatList);
@@ -47,6 +67,8 @@ const useChat = () => {
       socketRef.current?.off(EVENT.PUBLISH_VICTIM, updateStory);
       socketRef.current?.off(EVENT.PUBLISH_SURVIVOR, updateStory);
       socketRef.current?.off(EVENT.POLICE_ABILITY, updateStory);
+      socketRef.current?.off(EVENT.PUBLISH_JOB, updateStory);
+      socketRef.current?.off(EVENT.NOTICE_MAFIA, updateStory);
     };
   }, [socketRef.current]);
 

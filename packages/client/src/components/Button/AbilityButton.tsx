@@ -2,7 +2,7 @@
 import { FC, useMemo } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { white, titleActive, grey3 } from '@constants/colors';
+import { white, titleActive, grey3, mafia } from '@constants/colors';
 import { VoteIcon } from '@components/Icon';
 
 interface PropType {
@@ -11,7 +11,9 @@ interface PropType {
   userName: string;
   voteCount: number;
   isDead: boolean;
+  isMafia: boolean;
   isVictim: boolean;
+  isSurvivor: boolean;
   onClick: any;
   myJob: string;
 }
@@ -25,7 +27,9 @@ const AbilityButton: FC<PropType> = ({
   userName,
   voteCount,
   isDead,
+  isMafia,
   isVictim,
+  isSurvivor,
   onClick,
   myJob,
 }) => {
@@ -47,6 +51,15 @@ const AbilityButton: FC<PropType> = ({
     }
   };
 
+  let abilityState = <></>;
+  if (isNight && isVictim) {
+    abilityState = <img src="/assets/images/bullet.png" alt="bullet" />;
+  } else if (isNight && isSurvivor) {
+    abilityState = <img src="/assets/images/healthcare.png" alt="cure" />;
+  } else if (!isNight && voteCount) {
+    abilityState = <div>{useMemo(() => iconList(), [voteCount])}</div>;
+  }
+
   return (
     <button
       type="button"
@@ -54,19 +67,9 @@ const AbilityButton: FC<PropType> = ({
       onClick={handleClick}
     >
       <img src={userImg} alt="profile_img" css={userImgStyle} />
-      <div css={voteInfoStyle}>
+      <div css={voteInfoStyle(isMafia)}>
         <span>{userName}</span>
-        {isNight ? (
-          isVictim ? (
-            <img src="/assets/images/bullet.png" alt="" />
-          ) : (
-            <></>
-          )
-        ) : !voteCount ? (
-          <></>
-        ) : (
-          <div>{useMemo(() => iconList(), [voteCount])}</div>
-        )}
+        {abilityState}
       </div>
     </button>
   );
@@ -104,7 +107,7 @@ const userImgStyle = css`
   border-radius: 50%;
 `;
 
-const voteInfoStyle = css`
+const voteInfoStyle = (isMafia: boolean) => css`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -116,7 +119,7 @@ const voteInfoStyle = css`
   span {
     font-size: 12px;
     font-weight: bold;
-    color: ${titleActive};
+    color: ${isMafia ? mafia : titleActive};
   }
 
   div {

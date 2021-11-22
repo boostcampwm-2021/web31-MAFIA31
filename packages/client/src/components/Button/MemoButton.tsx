@@ -7,11 +7,12 @@ interface PropType {
   userName: string;
   guessJob: string;
   isDead: boolean;
+  isMafia: boolean;
 }
 
-const MemoButton: FC<PropType> = ({ userName, guessJob, isDead }) => (
+const MemoButton: FC<PropType> = ({ userName, guessJob, isDead, isMafia }) => (
   <button type="button" css={buttonStyle(isDead)}>
-    <img src={`/assets/images/${guessJob}.png`} alt={guessJob + userName} />
+    <img src={`/assets/images/${isMafia ? 'mafia' : guessJob}.png`} alt={guessJob + userName} />
   </button>
 );
 

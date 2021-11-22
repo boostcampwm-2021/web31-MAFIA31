@@ -22,11 +22,10 @@ const checkEnd = (roomId: string) => {
   if (RoomStore.get(roomId).length === 0) {
     return true;
   }
-  return false;
 
-  // const { mafia, citizen } = GameStore.getDashBoard(roomId);
+  const { mafia, citizen } = GameStore.getDashBoard(roomId);
 
-  // return mafia >= citizen || mafia === 0;
+  return mafia >= citizen || mafia === 0;
 };
 
 const updateStats = (roomId: string) => {

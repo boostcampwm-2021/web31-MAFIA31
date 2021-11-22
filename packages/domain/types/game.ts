@@ -12,6 +12,7 @@ export interface GameInfo {
 export interface PlayerState {
   userName: string;
   isDead: boolean;
+  isMafia: boolean;
 }
 
 export interface MafiaPick {

@@ -22,4 +22,8 @@ export const STORY_DICTIONARY: StoryDictionary = {
     msg: (name, isMafia) => `${name}은(는) 마피아가 ${isMafia ? `맞습니다!` : `아닙니다!`}`,
     imgSrc: '/assets/images/police.png',
   },
+  NOTICE_MAFIA: {
+    msg: (name, isMafia, mafiaList) => `${mafiaList?.join(', ')}은(는) 마피아 입니다.`,
+    imgSrc: '/assets/images/mafia.png',
+  },
 };

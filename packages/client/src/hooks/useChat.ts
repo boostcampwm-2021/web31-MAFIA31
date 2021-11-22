@@ -23,7 +23,23 @@ const useChat = () => {
     isMafia?: boolean;
     mafiaList?: string[];
   }) => {
-    if (!mafiaList) return;
+    if (!storyName) return;
+    if (storyName === 'EXECUTION' && !userName) {
+      return;
+    }
+    if (storyName === 'PUBLISH_VICTIM' && !userName) {
+      return;
+    }
+    if (storyName === 'PUBLISH_SURVIVOR' && !userName) {
+      return;
+    }
+    if (storyName === 'POLICE_ABILITY' && !userName && !isMafia) {
+      return;
+    }
+    if (storyName === 'NOTICE_MAFIA' && !mafiaList) {
+      return;
+    }
+
     const storyType = STORY_DICTIONARY[storyName];
 
     const story: Story = {

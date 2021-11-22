@@ -6,7 +6,6 @@ import Header from '@src/templates/Header';
 import { grey4, primaryDark, primaryLight, titleActive, white } from '@src/constants';
 import { Achievement } from '@mafia/domain/types/achievement';
 import { AchievementCard } from '@src/components/Card';
-import disconnectSocket from '@src/utils/disconnectSocket';
 import dummmyAchievementList from './dummyData';
 
 const ACHIEVEMENT_PERCENTAGE_LABEL = '업적 달성률';
@@ -16,8 +15,6 @@ const TITLE = '업적';
 const TROPHY_IMG_SRC = 'assets/images/trophy.png';
 
 const Profile: FC = () => {
-  disconnectSocket();
-
   const nickname = '닉네임';
   const profileImgSrc = 'assets/images/mafia.png';
   const achievementPercent = 45;

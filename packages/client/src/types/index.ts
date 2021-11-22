@@ -5,6 +5,7 @@ import { User } from '@mafia/domain/types/user';
 export interface RoomInfo {
   roomId: string;
   title: string;
+  status: string;
   host: string;
 }
 

@@ -48,31 +48,39 @@ const changeTurn = (
   }
 
   namespace.emit(EVENT.TURN_CHANGE, isNight);
-  
+
   if (isNight) {
     GameStore.setCanInvest(true);
     return;
   }
+
   publishVictim(namespace);
 };
 
 const startTimer = (namespace: Namespace, roomId: string) => {
-  let counter = 0;
+  let counter = TIME.DAY_DURATION;
   let isNight: boolean = false;
 
-  namespace.emit(EVENT.TIMER, TIME.TURN - counter);
+  namespace.emit(EVENT.TIMER, counter);
   namespace.emit(EVENT.TURN_CHANGE, isNight);
 
   const gameTimer = setInterval(() => {
-    counter = (counter + 1) % TIME.TURN;
-    namespace.emit(EVENT.TIMER, TIME.TURN - counter);
+    counter -= 1;
+    namespace.emit(EVENT.TIMER, counter);
 
     if (!isNight && counter === TIME.VOTE_START) {
       startVoteTime(namespace, roomId);
     }
 
     if (counter !== 0) return;
+
     isNight = !isNight;
+    if (isNight) {
+      counter = TIME.NIGHT_DURATION + 1;
+    } else {
+      counter = TIME.DAY_DURATION + 1;
+    }
+
     changeTurn(namespace, roomId, gameTimer, isNight);
   }, TIME.SEC);
 };

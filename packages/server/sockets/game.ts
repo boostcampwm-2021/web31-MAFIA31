@@ -1,5 +1,6 @@
 import * as EVENT from '@mafia/domain/constants/event';
 import * as TIME from '@mafia/domain/constants/time';
+import { StoryName } from '@mafia/domain/types/chat';
 import { GameInfo, PlayerResult } from '@mafia/domain/types/game';
 import { Vote } from '@mafia/domain/types/vote';
 import axios from 'axios';
@@ -21,10 +22,11 @@ const checkEnd = (roomId: string) => {
   if (RoomStore.get(roomId).length === 0) {
     return true;
   }
+  return false;
 
-  const { mafia, citizen } = GameStore.getDashBoard(roomId);
+  // const { mafia, citizen } = GameStore.getDashBoard(roomId);
 
-  return mafia >= citizen || mafia === 0;
+  // return mafia >= citizen || mafia === 0;
 };
 
 const updateStats = (roomId: string) => {
@@ -112,11 +114,25 @@ const emitJobs = (namespace: Namespace, roomId: string): void => {
   });
 };
 
+const noticeMafia = (namespace: Namespace, roomId: string): void => {
+  const mafiaList: string[] = [];
+  GameStore.get(roomId).forEach(({ job, userName }) => {
+    if (job === 'mafia') {
+      mafiaList.push(userName);
+    }
+  });
+  namespace.to('mafia').emit(EVENT.NOTICE_MAFIA, {
+    storyName: StoryName.NOTICE_MAFIA,
+    mafiaList,
+  });
+};
+
 const startGame = (namespace: Namespace, roomId: string) => {
   assignJobs(roomId);
   namespace.emit(EVENT.PUBLISH_GAME_START);
   startTimer(namespace, roomId);
   emitJobs(namespace, roomId);
+  noticeMafia(namespace, roomId);
 };
 
 const votePlayer = (namespace: Namespace, roomId: string, voteInfo: Vote) => {

@@ -40,6 +40,7 @@ const RightSideContainer: FC<PropType> = ({ playerStateList, memoList, isNight, 
               userName={userName}
               guessJob={guessJob}
               isDead={playerStateList[idx].isDead}
+              isMafia={playerStateList[idx].isMafia}
             />
             <span>{userName}</span>
           </div>

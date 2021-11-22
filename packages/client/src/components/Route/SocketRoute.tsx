@@ -13,7 +13,7 @@ const SocketRoute: FC<Prop> = ({ exact = false, path, component, socket = false 
   if (!socket) {
     disconnectSocket();
   }
-
   return <Route exact={exact} path={path} component={component} />;
 };
+
 export default SocketRoute;

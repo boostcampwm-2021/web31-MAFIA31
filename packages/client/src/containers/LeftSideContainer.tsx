@@ -83,6 +83,9 @@ const LeftSideContainer: FC<PropType> = ({
             voteCount={voteCount}
             isVictim={victim === userName}
             isDead={playerStateList.find((player) => player.userName === userName)?.isDead || false}
+            isMafia={
+              playerStateList.find((player) => player.userName === userName)?.isMafia || false
+            }
             onClick={handleClick}
             myJob={myJob}
           />

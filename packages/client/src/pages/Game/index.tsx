@@ -42,6 +42,7 @@ const Game = () => {
   const initPlayerState: PlayerState[] = userList.map(({ userName }) => ({
     userName,
     isDead: false,
+    isMafia: false,
   }));
 
   const { playerStateList } = usePlayerState(initPlayerState);

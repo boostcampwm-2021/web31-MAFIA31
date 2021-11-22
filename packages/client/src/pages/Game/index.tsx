@@ -11,7 +11,6 @@ import { User } from '@mafia/domain/types/user';
 import { primaryDark, primaryLight, titleActive, white } from '@src/constants';
 import * as TOAST from '@src/constants/toast';
 import { PlayerInfo, Memo } from '@src/types';
-import { useUserInfo } from '@contexts/userInfo';
 import useGame from '@hooks/useGame';
 import useTimer from '@hooks/useTimer';
 import useVote from '@hooks/useVote';
@@ -29,10 +28,9 @@ interface locationType {
 
 const Game = () => {
   const { state } = useLocation<locationType>();
-  const { userInfo } = useUserInfo();
   const history = useHistory();
 
-  if (!state?.userList || !userInfo?.userName) {
+  if (!state?.userList) {
     history.push('/');
     return <></>;
   }

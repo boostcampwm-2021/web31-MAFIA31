@@ -43,6 +43,7 @@ const endGame = (
   updateStats(roomId);
 };
 
+
 const checkEnd = (roomId: string) => {
   if (RoomStore.get(roomId).length === 0) {
     return true;

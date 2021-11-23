@@ -39,6 +39,11 @@ class GameStore {
     GameStore.instance[roomId] = gameInfoList;
   }
 
+  static getSocketId(roomId: string, playerName: string | undefined) {
+    if (!playerName) return undefined;
+    return GameStore.get(roomId).find(({ userName }) => userName === playerName)?.socketId;
+  }
+
   static resetGame(roomId: string) {
     GameStore.instance[roomId] = [];
   }
@@ -88,9 +93,8 @@ class GameStore {
   }
 
   static getDashBoard(roomId: string): DashBoard {
-    const mafia = GameStore.instance[roomId].filter(
-      ({ isDead, job }) => !isDead && job === 'mafia',
-    ).length;
+    const mafia = GameStore.instance[roomId].filter(({ isDead, job }) => !isDead && job === 'mafia')
+      .length;
     const citizen = GameStore.instance[roomId].filter(
       ({ isDead, job }) => !isDead && job !== 'mafia',
     ).length;

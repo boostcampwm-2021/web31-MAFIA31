@@ -2,22 +2,23 @@ import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-import { primaryLight, primaryDark, white, titleActive } from '@constants/index';
+import { primaryLight, primaryDark, white, titleActive, grey1, grey2 } from '@constants/index';
 
 interface PropType {
   userName: string;
   profileImg: string;
   msg: string;
   isMyMsg: boolean;
+  isDead: boolean | undefined;
 }
 
-const ChatMsg: FC<PropType> = ({ userName, profileImg, msg, isMyMsg }) => (
+const ChatMsg: FC<PropType> = ({ userName, profileImg, msg, isMyMsg, isDead = false }) => (
   <div css={msgContainerStyle(isMyMsg)}>
     <div className="profile">
       <img css={profileImgStyle} src={profileImg} alt="profile" />
       <span>{userName}</span>
     </div>
-    <div css={msgStyle(isMyMsg)}>{msg}</div>
+    <div css={msgStyle(isMyMsg, isDead)}>{msg}</div>
   </div>
 );
 
@@ -54,14 +55,16 @@ const profileImgStyle = css`
   border: 2px solid ${titleActive};
 `;
 
-const msgStyle = (isMyMsg: boolean) => css`
+const msgStyle = (isMyMsg: boolean, isDead: boolean) => css`
   max-width: 65%;
   padding: 14px;
   font-size: 16px;
   line-height: 23px;
   border-radius: 20px;
-  color: ${isMyMsg ? white : titleActive};
-  background-color: ${isMyMsg ? primaryDark : primaryLight};
+  word-break: break-word;
+  color: ${isDead ? grey2 : isMyMsg ? white : titleActive};
+  border: ${isDead ? `1px solid ${isMyMsg ? primaryDark : grey1}` : 'none'};
+  background-color: ${isDead ? 'transparent' : isMyMsg ? primaryDark : primaryLight};
   border-top-right-radius: ${isMyMsg ? 0 : '20px'};
   border-bottom-left-radius: ${isMyMsg ? '20px' : 0};
 `;

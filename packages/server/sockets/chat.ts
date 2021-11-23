@@ -16,9 +16,8 @@ const chatSocketInit = (socket: Socket) => {
     if (state === undefined) return;
     if (state === ALIVE) {
       namespace.emit(PUBLISH_MESSAGE, chat);
-    }
-    if (state === DEAD) {
-      // TODO: 죽은 사람들 방으로 채팅 보내기
+    } else if (state === DEAD) {
+      namespace.to('dead').emit(PUBLISH_MESSAGE, chat);
     }
   });
 

@@ -4,6 +4,7 @@ import { FC, useMemo } from 'react';
 import { css } from '@emotion/react';
 import { white, titleActive, grey3, mafia } from '@constants/colors';
 import { VoteIcon } from '@components/Icon';
+import { BULLET_MP3, HEAL_MP3 } from '@constants/audio';
 
 interface PropType {
   isNight: boolean;
@@ -18,8 +19,6 @@ interface PropType {
   myJob: string;
   amIDead: boolean;
 }
-
-const BULLET_MP3 = '/assets/audios/bullet.mp3';
 
 const AbilityButton: FC<PropType> = ({
   isNight,
@@ -41,13 +40,20 @@ const AbilityButton: FC<PropType> = ({
 
   const handleClick = () => {
     onClick(userName);
-    setBulletAudio();
+    setAudio();
   };
 
-  const setBulletAudio = () => {
-    if (isNight && !amIDead && myJob === 'mafia') {
+  const setAudio = () => {
+    if (isNight && !amIDead) {
       const audio = new Audio();
-      audio.src = BULLET_MP3;
+      if (myJob === 'mafia') {
+        audio.src = BULLET_MP3;
+      } else if (myJob === 'doctor') {
+        audio.src = HEAL_MP3;
+      } else if (myJob === 'police') {
+        audio.src = HEAL_MP3;
+      }
+      audio.load();
       audio.play();
     }
   };

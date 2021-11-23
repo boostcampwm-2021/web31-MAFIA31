@@ -1,4 +1,6 @@
 import { PlayerInfo } from '@mafia/domain/types/user';
+import axios from 'axios';
+import { apiURL } from '../config/url.config.json';
 
 interface RoomStoreType {
   [roomId: string]: PlayerInfo[];
@@ -34,13 +36,17 @@ class RoomStore {
     RoomStore.instance[roomId].push(player);
   }
 
-  static removePlayer(roomId: string, socketId: string) {
+  static async removePlayer(roomId: string, socketId: string) {
     RoomStore.instance[roomId] = RoomStore.instance[roomId].filter(
       (user) => user.socketId !== socketId,
     );
 
     if (RoomStore.instance[roomId].length <= 0) {
       RoomStore.removeRoom(roomId);
+      await axios.put(`${apiURL}/rooms`, {
+        roomId: roomId.split('/')[1],
+        status: 'ready',
+      });
       return;
     }
     RoomStore.instance[roomId][0].isHost = true;

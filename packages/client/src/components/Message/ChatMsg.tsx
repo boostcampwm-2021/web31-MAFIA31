@@ -41,6 +41,13 @@ const msgContainerStyle = (isMyMsg: boolean) => css`
     max-width: 50px;
 
     span {
+      display: block;
+      overflow: hidden;
+      text-align: center;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+
+      width: 50px;
       font-size: 10px;
       line-height: 10px;
     }

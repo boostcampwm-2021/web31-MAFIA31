@@ -1,5 +1,5 @@
 import express from 'express';
-import BadRequest from '../../error/BadRequset';
+import BadRequestError from '../../error/BadRequsetError';
 import RoomService from './room.service';
 
 const checkRoomId = (roomId: string): boolean => {
@@ -19,11 +19,11 @@ const RoomController = {
   async getRoom(req: express.Request, res: express.Response, next: express.NextFunction) {
     const { roomId } = req.params;
     if (!roomId) {
-      next(new BadRequest('Request params not include roomId'));
+      next(new BadRequestError('Request params not include roomId'));
       return;
     }
     if (!checkRoomId(roomId)) {
-      next(new BadRequest('Request RoomId invalid.'));
+      next(new BadRequestError('Request RoomId invalid.'));
       return;
     }
 
@@ -37,11 +37,11 @@ const RoomController = {
   async addRoom(req: express.Request, res: express.Response, next: express.NextFunction) {
     const { roomId } = req.body.newRoom;
     if (!roomId) {
-      next(new BadRequest('Request body not include roomId.'));
+      next(new BadRequestError('Request body not include roomId.'));
       return;
     }
     if (!checkRoomId(roomId)) {
-      next(new BadRequest('RoomId is not valid.'));
+      next(new BadRequestError('RoomId is not valid.'));
       return;
     }
 
@@ -55,7 +55,7 @@ const RoomController = {
   async updateRoomStatus(req: express.Request, res: express.Response, next: express.NextFunction) {
     const { roomId, status } = req.body;
     if (!roomId || !status) {
-      next(new BadRequest('Request not include roomId or status'));
+      next(new BadRequestError('Request not include roomId or status'));
       return;
     }
 

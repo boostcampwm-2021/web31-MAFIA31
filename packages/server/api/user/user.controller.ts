@@ -1,6 +1,6 @@
 import { PlayerResult } from '@mafia/domain/types/game';
 import express from 'express';
-import BadRequest from '../../error/BadRequset';
+import BadRequestError from '../../error/BadRequsetError';
 import UserService from './user.service';
 
 const UserController = {
@@ -18,7 +18,7 @@ const UserController = {
   async getUser(req: express.Request, res: express.Response, next: express.NextFunction) {
     const { userName } = req.params;
     if (!userName) {
-      next(new BadRequest('Request not include userName'));
+      next(new BadRequestError('Request not include userName'));
       return;
     }
     try {

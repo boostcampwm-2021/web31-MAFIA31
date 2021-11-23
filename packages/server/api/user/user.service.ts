@@ -1,12 +1,12 @@
 import { PlayerResult } from '@mafia/domain/types/game';
-import BadRequest from '../../error/BadRequset';
+import BadRequestError from '../../error/BadRequsetError';
 import User from '../../models/User';
 
 const UserService = {
   async findOne(userName: string) {
     const user = await User.findOne({ userName });
     if (!user) {
-      throw new BadRequest('User Not Found');
+      throw new BadRequestError('User Not Found');
     }
     return user;
   },
@@ -18,7 +18,7 @@ const UserService = {
   },
   async update({ userName, job, result }: PlayerResult) {
     const user = await User.findOne({ userName });
-    if (!user) throw new BadRequest('User Not Found!');
+    if (!user) throw new BadRequestError('User Not Found!');
 
     const newJobStat = {
       ...user.jobStat,

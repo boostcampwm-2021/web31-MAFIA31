@@ -3,20 +3,25 @@ import { FC, useState } from 'react';
 import { css } from '@emotion/react';
 import { Image, ImageSizeList } from '@src/components/Image';
 import Header from '@src/templates/Header';
-import { grey4, primaryDark, primaryLight, titleActive, white } from '@src/constants';
+import { grey4, primaryDark, primaryLight } from '@src/constants';
 import { Achievement } from '@mafia/domain/types/achievement';
 import { AchievementCard } from '@src/components/Card';
+import { useUserInfo } from '@contexts/userInfo';
+import { Redirect } from 'react-router-dom';
 import dummmyAchievementList from './dummyData';
 
 const ACHIEVEMENT_PERCENTAGE_LABEL = '업적 달성률';
 const TOTAL_PERCENTAGE = 100;
 const PERCENTAGE_MULTIPLE = 2.8;
-const TITLE = '업적';
-const TROPHY_IMG_SRC = 'assets/images/trophy.png';
 
 const Profile: FC = () => {
-  const nickname = '닉네임';
-  const profileImgSrc = 'assets/images/mafia.png';
+  const { userInfo } = useUserInfo();
+  if (!userInfo) {
+    return <Redirect to="/" />;
+  }
+
+  const { userName, profileImg } = userInfo;
+
   const achievementPercent = 45;
   const [achievementList] = useState<Achievement[]>(dummmyAchievementList);
 
@@ -26,8 +31,8 @@ const Profile: FC = () => {
       <div css={profilePageBodyStyle}>
         <div css={leftSideStyle}>
           <div css={profileStyle}>
-            <Image size={ImageSizeList.LARGE} src={profileImgSrc} />
-            <span>{nickname}</span>
+            <Image size={ImageSizeList.LARGE} src={profileImg} />
+            <span>{userName}</span>
           </div>
           <div css={achievementStyle}>
             <div css={achievementLabelStyle}>
@@ -41,10 +46,6 @@ const Profile: FC = () => {
         </div>
 
         <div css={rightSideStyle}>
-          <div css={titleStyle}>
-            <img src={TROPHY_IMG_SRC} alt="profile" />
-            <h2>{TITLE}</h2>
-          </div>
           <div css={achievementListStyle}>
             {achievementList.map((e) => (
               <AchievementCard
@@ -153,20 +154,6 @@ const percentStyle = (achievementPercentage: number) => css`
     100% {
       width: ${achievementPercentage * PERCENTAGE_MULTIPLE}px;
     }
-  }
-`;
-
-const titleStyle = css`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  h2 {
-    font-weight: bold;
-    font-size: 50px;
-
-    text-shadow: ${white} -3px -3px, ${white} 3px -3px, ${white} -3px 3px, ${white} 3px 3px,
-      ${titleActive} 4px 4px 5px;
   }
 `;
 

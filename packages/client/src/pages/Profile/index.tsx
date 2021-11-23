@@ -9,6 +9,9 @@ import { AchievementCard } from '@src/components/Card';
 import { useUserInfo } from '@contexts/userInfo';
 import { Redirect } from 'react-router-dom';
 import JobStatContainer from '@src/containers/JobStatContainer';
+import { useQuery } from 'react-query';
+import axios from 'axios';
+import { Stat } from '@mafia/domain/types/game';
 import dummmyAchievementList from './dummyData';
 
 const ACHIEVEMENT_PERCENTAGE_LABEL = '업적 달성률';
@@ -22,6 +25,23 @@ const Profile: FC = () => {
   }
 
   const { userName, profileImg } = userInfo;
+
+  const url = `${process.env.REACT_APP_API_URL}/api/users/${userName}`;
+
+  const getUserStatData = async () => {
+    const { data } = await axios.get(url);
+    return data;
+  };
+  const { isLoading, data, error } = useQuery<any, Error>('user', getUserStatData);
+  if (isLoading) return <div>Loading</div>;
+  if (error) return <div>An error has occurred: {error.message}</div>;
+
+  const { playCnt } = data;
+  const winCnt: number = (Object.values(data.jobStat) as Stat[]).reduce(
+    (prev, curr) => prev + curr.winCnt,
+    0,
+  );
+  const winRate: number = Math.round((winCnt / playCnt) * 100);
 
   const achievementPercent = 45;
   const [achievementList] = useState<Achievement[]>(dummmyAchievementList);
@@ -37,6 +57,15 @@ const Profile: FC = () => {
           </div>
           <div css={achievementStyle}>
             <div css={achievementLabelStyle}>
+              <span>승률</span>
+              <span>{winRate}%</span>
+            </div>
+            <div css={achievementPercentStyle}>
+              <div css={percentStyle(winRate)} />
+            </div>
+          </div>
+          <div css={achievementStyle}>
+            <div css={achievementLabelStyle}>
               <span>{ACHIEVEMENT_PERCENTAGE_LABEL}</span>
               <span>{achievementPercent}%</span>
             </div>
@@ -47,7 +76,7 @@ const Profile: FC = () => {
         </div>
 
         <div css={rightSideStyle}>
-          <JobStatContainer />
+          <JobStatContainer jobStat={data.jobStat} />
           <div css={achievementListStyle}>
             {achievementList.map((e) => (
               <AchievementCard

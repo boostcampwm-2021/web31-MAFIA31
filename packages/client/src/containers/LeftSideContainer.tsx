@@ -1,13 +1,14 @@
-import React, { FC } from 'react';
-import Modal from 'react-modal';
+import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { useHistory } from 'react-router-dom';
 
+import useModal from '@hooks/useModal';
 import { PlayerState } from '@mafia/domain/types/game';
 import { titleActive, white, grey1 } from '@constants/index';
-import { AbilityButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { SettingIcon, RoomOutIcon } from '@components/Icon';
+import ConfirmModal from '@components/Modal/ConfirmModal';
+import { AbilityButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { RoomVote } from '@mafia/domain/types/vote';
 import { useUserInfo } from '@src/contexts/userInfo';
 
@@ -23,8 +24,6 @@ type PropType = {
   myJob: string;
 };
 
-Modal.setAppElement('#root');
-
 const LeftSideContainer: FC<PropType> = ({
   playerStateList,
   playerList,
@@ -38,7 +37,7 @@ const LeftSideContainer: FC<PropType> = ({
 }) => {
   const history = useHistory();
   const { userInfo } = useUserInfo();
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const { isModalOpen, openModal, closeModal } = useModal();
 
   const handleClick = (userName: string) => {
     const myState = playerStateList.find(
@@ -54,32 +53,19 @@ const LeftSideContainer: FC<PropType> = ({
 
   const roomOutHandler = () => {
     history.push('/rooms');
-  };
-
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
+    closeModal();
   };
 
   return (
     <div css={leftSideContainerStyle}>
-      <Modal
+      <ConfirmModal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
-        style={modalStyle}
-        contentLabel="Confirm Modal"
+        eventHandler={roomOutHandler}
+        closeModal={closeModal}
       >
-        <span>진행중인 게임을 포기하고 나가시겠습니까?</span>
-        <button type="button" onClick={roomOutHandler}>
-          예
-        </button>
-        <button type="button" onClick={closeModal}>
-          아니오
-        </button>
-      </Modal>
+        <p>진행중인 게임을 포기하고 나가시겠습니까?</p>
+      </ConfirmModal>
       <div css={Style}>
         <img
           src={isNight ? '/assets/images/moon.png' : '/assets/images/sun.png'}
@@ -202,17 +188,5 @@ const abilityListStyle = css`
   width: 100%;
   gap: 16px 4%;
 `;
-
-const modalStyle = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    padding: '3% 5%',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
 
 export default LeftSideContainer;

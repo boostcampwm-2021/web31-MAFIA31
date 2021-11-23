@@ -9,6 +9,7 @@ const applicationErrorHandler: ErrorRequestHandler = (
 ) => {
   if (err instanceof ApplicationError) {
     res.status(err.status).json({ error: err.message });
+    return;
   }
   next(err);
 };

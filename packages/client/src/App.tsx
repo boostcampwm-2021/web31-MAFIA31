@@ -21,8 +21,8 @@ const App = () => {
   const [cookies] = useCookies();
 
   useLayoutEffect(() => {
-    if (!userInfo?.userName && cookies.jwt) {
-      const token: { userName: string; profileImg: string } = jwtDecode(cookies.jwt);
+    if (!userInfo?.userName && cookies.token) {
+      const token: { userName: string; profileImg: string } = jwtDecode(cookies.token);
       setUserInfo({
         userName: token.userName,
         profileImg: token.profileImg,

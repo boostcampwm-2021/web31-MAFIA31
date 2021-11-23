@@ -1,7 +1,9 @@
 import { User } from '@mafia/domain/types/user';
 import axios from 'axios';
 import express from 'express';
+import * as jwt from 'jsonwebtoken';
 import { githubClientId, githubClientSecret } from '../../config/github.config.json';
+import { secret } from '../../config/jwt.config.json';
 import UserService from '../user/user.service';
 
 const getAccessToken = async (code: string) => {
@@ -33,7 +35,10 @@ const AuthController = {
         Authorization: `token ${accessToken}`,
       },
     });
+
     const user: User = { userName: data.login, profileImg: data.avatar_url };
+    const token = jwt.sign(user, secret, { expiresIn: '1h' });
+    res.cookie('jwt', token);
 
     try {
       await UserService.findOneOrCreate(data.login, data.avatar_url);

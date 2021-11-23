@@ -5,17 +5,13 @@ import { useQuery } from 'react-query';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import axios from 'axios';
-
 import { RoomCard } from '@src/components/Card';
 import { RoomInfo } from '@src/types';
-import disconnectSocket from '@src/utils/disconnectSocket';
 
 Modal.setAppElement('#root');
 
 const RoomContainer = () => {
-  disconnectSocket();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-
   const getRoomList = async () => {
     const url = `${process.env.REACT_APP_API_URL}/api/rooms`;
     const { data } = await axios.get(url);
@@ -48,11 +44,7 @@ const RoomContainer = () => {
         <span>이미 게임이 시작한 방입니다.</span>
       </Modal>
       {roomList!.map((roomInfo) => (
-        <Link
-          to={{ pathname: '/waiting', state: { roomInfo } }}
-          key={roomInfo.roomId}
-          onClick={(event) => enterRoomHandler(event, roomInfo.status)}
-        >
+        <Link to={{ pathname: '/waiting', search: roomInfo.roomId }} key={roomInfo.roomId} onClick={(event) => enterRoomHandler(event, roomInfo.status)}>
           <RoomCard roomInfo={roomInfo} />
         </Link>
       ))}

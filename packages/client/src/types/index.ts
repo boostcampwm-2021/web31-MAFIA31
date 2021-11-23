@@ -6,7 +6,6 @@ export interface RoomInfo {
   roomId: string;
   title: string;
   status: string;
-  host: string;
 }
 
 export interface PlayerInfo extends User {

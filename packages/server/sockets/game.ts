@@ -25,16 +25,6 @@ const updateRoomStatus = async (roomId: string, status: string) => {
   });
 };
 
-const checkEnd = (roomId: string) => {
-  if (RoomStore.get(roomId).length === 0) {
-    return true;
-  }
-
-  const { mafia, citizen } = GameStore.getDashBoard(roomId);
-
-  return mafia >= citizen || mafia === 0;
-};
-
 const updateStats = (roomId: string) => {
   const result = getGameResult(roomId);
   axios.post(`${apiURL}/users/stat`, {
@@ -51,6 +41,17 @@ const endGame = (
   clearInterval(interval);
   updateRoomStatus(roomId, 'ready');
   updateStats(roomId);
+};
+
+
+const checkEnd = (roomId: string) => {
+  if (RoomStore.get(roomId).length === 0) {
+    return true;
+  }
+
+  const { mafia, citizen } = GameStore.getDashBoard(roomId);
+
+  return mafia >= citizen || mafia === 0;
 };
 
 const changeTurn = (

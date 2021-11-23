@@ -4,7 +4,7 @@ import { citizen, mafia, primaryLight, white, titleActive } from '@constants/col
 import { ResultCard } from '@components/Card';
 import { ButtonSizeList, ButtonThemeList, DefaultButton } from '@src/components/Button';
 import { PlayerResult } from '@mafia/domain/types/game';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useHistory } from 'react-router-dom';
 import { useUserInfo } from '@src/contexts/userInfo';
 
 interface LocationState {
@@ -13,8 +13,15 @@ interface LocationState {
 
 const GameResult = () => {
   const location = useLocation<LocationState>();
-  const { playerResultList } = location.state;
+  const history = useHistory();
   const { userInfo } = useUserInfo();
+
+  if (!location.state) {
+    history.push('/');
+    return <></>;
+  }
+  const { playerResultList } = location.state;
+
   const myJob = playerResultList.find(
     (playerResult) => playerResult.userName === userInfo?.userName,
   )?.job;

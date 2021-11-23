@@ -4,42 +4,61 @@ import { PoliceInvestigation } from '@mafia/domain/types/game';
 import { Namespace, Socket } from 'socket.io';
 import GameStore from '../stores/GameStore';
 
-const VictimStore: Record<string, string> = {};
+interface VictimData {
+  prevVictim: string;
+  currVictim: string;
+}
+
+const VictimStore: Record<string, VictimData> = {};
 const SurvivorStore: Record<string, string> = {};
+
+const resetVictimStore = (roomId: string) => {
+  VictimStore[roomId] = { prevVictim: '', currVictim: '' };
+};
+
+const updateVictim = (roomId: string) => {
+  const { prevVictim, currVictim } = VictimStore[roomId];
+  const newGameInfoList = GameStore.get(roomId).map((player) =>
+    // eslint-disable-next-line no-nested-ternary
+    player.userName === prevVictim
+      ? { ...player, isDead: false }
+      : player.userName === currVictim
+      ? { ...player, isDead: true }
+      : player,
+  );
+  GameStore.set(roomId, newGameInfoList);
+};
 
 const publishVictim = (namespace: Namespace) => {
   const roomId = namespace.name;
-  const victim = VictimStore[roomId];
+  const { currVictim } = VictimStore[roomId];
   const survivor = SurvivorStore[roomId];
 
-  if (victim === survivor) {
+  if (currVictim === survivor) {
     namespace.emit(EVENT.PUBLISH_SURVIVOR, {
       userName: survivor,
       storyName: StoryName.PUBLISH_SURVIVOR,
     });
   } else {
     namespace.emit(EVENT.PUBLISH_VICTIM, {
-      userName: victim,
+      userName: currVictim,
       storyName: StoryName.PUBLISH_VICTIM,
     });
-    const newGameInfoList = GameStore.get(roomId).map((player) =>
-      player.userName === victim ? { ...player, isDead: true } : player,
-    );
-    GameStore.set(roomId, newGameInfoList);
   }
-
-  VictimStore[roomId] = '';
+  resetVictimStore(roomId);
   SurvivorStore[roomId] = '';
 };
 
 const abilitySocketInit = (socket: Socket) => {
   const { nsp: namespace } = socket;
   const roomId = namespace.name;
-  VictimStore[roomId] = '';
+  resetVictimStore(roomId);
 
   socket.on(EVENT.MAFIA_ABILITY, (mafiaPick: string) => {
-    VictimStore[roomId] = mafiaPick;
-    namespace.to('mafia').emit(EVENT.MAFIA_ABILITY, VictimStore[roomId]);
+    VictimStore[roomId].prevVictim = VictimStore[roomId].currVictim;
+    VictimStore[roomId].currVictim = mafiaPick;
+    namespace.to('mafia').emit(EVENT.MAFIA_ABILITY, VictimStore[roomId].currVictim);
+    updateVictim(roomId);
   });
 
   socket.on(EVENT.POLICE_ABILITY, (userName: string) => {

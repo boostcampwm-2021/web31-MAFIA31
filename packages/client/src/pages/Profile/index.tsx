@@ -8,6 +8,7 @@ import { Achievement } from '@mafia/domain/types/achievement';
 import { AchievementCard } from '@src/components/Card';
 import { useUserInfo } from '@contexts/userInfo';
 import { Redirect } from 'react-router-dom';
+import JobStatContainer from '@src/containers/JobStatContainer';
 import dummmyAchievementList from './dummyData';
 
 const ACHIEVEMENT_PERCENTAGE_LABEL = '업적 달성률';
@@ -46,6 +47,7 @@ const Profile: FC = () => {
         </div>
 
         <div css={rightSideStyle}>
+          <JobStatContainer />
           <div css={achievementListStyle}>
             {achievementList.map((e) => (
               <AchievementCard
@@ -158,7 +160,7 @@ const percentStyle = (achievementPercentage: number) => css`
 `;
 
 const achievementListStyle = css`
-  display: flex;
+  display: none;
   flex-wrap: wrap;
   justify-content: center;
   overflow-y: scroll;

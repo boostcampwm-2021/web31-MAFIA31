@@ -1,6 +1,8 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
+import Modal from 'react-modal';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import { useHistory } from 'react-router-dom';
 
 import { PlayerState } from '@mafia/domain/types/game';
 import { titleActive, white, grey1 } from '@constants/index';
@@ -21,6 +23,8 @@ type PropType = {
   myJob: string;
 };
 
+Modal.setAppElement('#root');
+
 const LeftSideContainer: FC<PropType> = ({
   playerStateList,
   playerList,
@@ -32,7 +36,10 @@ const LeftSideContainer: FC<PropType> = ({
   timer,
   myJob,
 }) => {
+  const history = useHistory();
   const { userInfo } = useUserInfo();
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
   const handleClick = (userName: string) => {
     const myState = playerStateList.find(
       ({ userName: playerName }) => playerName === userInfo?.userName,
@@ -45,8 +52,34 @@ const LeftSideContainer: FC<PropType> = ({
     }
   };
 
+  const roomOutHandler = () => {
+    history.push('/rooms');
+  };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div css={leftSideContainerStyle}>
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        style={modalStyle}
+        contentLabel="Confirm Modal"
+      >
+        <span>진행중인 게임을 포기하고 나가시겠습니까?</span>
+        <button type="button" onClick={roomOutHandler}>
+          예
+        </button>
+        <button type="button" onClick={closeModal}>
+          아니오
+        </button>
+      </Modal>
       <div css={Style}>
         <img
           src={isNight ? '/assets/images/moon.png' : '/assets/images/sun.png'}
@@ -65,7 +98,7 @@ const LeftSideContainer: FC<PropType> = ({
               icon={RoomOutIcon}
               size={ButtonSizeList.LARGE}
               theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
-              onClick={() => {}}
+              onClick={openModal}
             />
           </div>
         </div>
@@ -169,5 +202,17 @@ const abilityListStyle = css`
   width: 100%;
   gap: 16px 4%;
 `;
+
+const modalStyle = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    padding: '3% 5%',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+  },
+};
 
 export default LeftSideContainer;

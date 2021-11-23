@@ -3,14 +3,10 @@ import { useQuery } from 'react-query';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import axios from 'axios';
-
 import { RoomCard } from '@src/components/Card';
 import { RoomInfo } from '@src/types';
-import disconnectSocket from '@src/utils/disconnectSocket';
 
 const RoomContainer = () => {
-  disconnectSocket();
-
   const getRoomList = async () => {
     const url = `${process.env.REACT_APP_API_URL}/api/rooms`;
     const { data } = await axios.get(url);
@@ -25,7 +21,7 @@ const RoomContainer = () => {
   return (
     <div css={roomContainerStyle}>
       {roomList!.map((roomInfo) => (
-        <Link to={{ pathname: '/waiting', state: { roomInfo } }} key={roomInfo.roomId}>
+        <Link to={{ pathname: '/waiting', search: roomInfo.roomId }} key={roomInfo.roomId}>
           <RoomCard roomInfo={roomInfo} />
         </Link>
       ))}

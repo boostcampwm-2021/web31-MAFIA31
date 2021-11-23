@@ -15,19 +15,17 @@ interface locationType {
 }
 
 const Waiting = () => {
-  const { state } = useLocation<locationType>();
-  const { userInfo } = useUserInfo();
   const history = useHistory();
-
-  if (!state?.roomInfo || !userInfo?.userName) {
-    history.push('/');
-    return <></>;
-  }
-
-  useSocket(state.roomInfo.roomId);
-  const { userName: myName } = userInfo;
+  const { search } = useLocation<locationType>();
+  const { userInfo } = useUserInfo();
+  useSocket(search.replace(/\?/g, ''));
+  const { userName: myName } = userInfo!;
   const [isHost, setIsHost] = useState<boolean>();
   const { playerList, sendReady, sendGameStart, isAllReady } = useRoom();
+
+  if (!search.match(/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/)) {
+    history.push({ pathname: '/rooms' });
+  }
 
   const updateHost = () => {
     if (!playerList[0]) {
@@ -39,7 +37,7 @@ const Waiting = () => {
 
   useEffect(() => {
     updateHost();
-  }, [playerList]);
+  }, [playerList, myName]);
 
   return (
     <div css={pageStyle}>

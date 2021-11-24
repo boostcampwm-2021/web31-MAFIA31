@@ -10,8 +10,8 @@ import { useUserInfo } from '@contexts/userInfo';
 import { Redirect } from 'react-router-dom';
 import JobStatContainer from '@src/containers/JobStatContainer';
 import { useQuery } from 'react-query';
-import axios from 'axios';
 import { Stat } from '@mafia/domain/types/game';
+import apiClient from '@src/axios/apiClient';
 import dummmyAchievementList from './dummyData';
 
 const ACHIEVEMENT_PERCENTAGE_LABEL = '업적 달성률';
@@ -26,13 +26,13 @@ const Profile: FC = () => {
 
   const { userName, profileImg } = userInfo;
 
-  const url = `${process.env.REACT_APP_API_URL}/api/users/${userName}`;
-
   const getUserStatData = async () => {
-    const { data } = await axios.get(url);
+    const { data } = await apiClient.get(`/users/${userName}`);
     return data;
   };
   const { isLoading, data, error } = useQuery<any, Error>('user', getUserStatData);
+  const achievementPercent = 45;
+  const [achievementList] = useState<Achievement[]>(dummmyAchievementList);
   if (isLoading) return <div>Loading</div>;
   if (error) return <div>An error has occurred: {error.message}</div>;
 
@@ -42,9 +42,6 @@ const Profile: FC = () => {
     0,
   );
   const winRate: number = Math.round((winCnt / playCnt) * 100);
-
-  const achievementPercent = 45;
-  const [achievementList] = useState<Achievement[]>(dummmyAchievementList);
 
   return (
     <div css={profilePageStyle}>

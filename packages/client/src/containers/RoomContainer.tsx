@@ -4,11 +4,9 @@ import { useQuery } from 'react-query';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-import { RoomCard } from '@src/components/Card';
-import { RoomInfo } from '@src/types';
 import apiClient from '@src/axios/apiClient';
-import useModal from '@hooks/useModal';
 import { RoomInfo } from '@src/types';
+import useModal from '@hooks/useModal';
 import { RoomCard } from '@components/Card';
 import NoticeModal from '@components/Modal/NoticeModal';
 

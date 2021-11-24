@@ -31,3 +31,20 @@ export interface PoliceInvestigation {
   storyName: StoryName;
   isMafia: boolean;
 }
+
+export interface Stat {
+  killRate?: number;
+  winRate?: number;
+  cnt: number;
+  winCnt: number;
+  mvpCnt?: number;
+}
+
+export enum Job {
+  mafia = 'mafia',
+  citizen = 'citizen',
+  doctor = 'doctor',
+  police = 'police',
+}
+
+export type JobStat = Record<Job, Stat>;

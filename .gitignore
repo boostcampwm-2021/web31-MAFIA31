@@ -31,3 +31,4 @@ yarn-error.log*
 
 # rest client
 *.rest
+*.http

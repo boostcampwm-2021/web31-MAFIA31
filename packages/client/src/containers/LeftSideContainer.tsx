@@ -1,11 +1,14 @@
 import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
+import { useHistory } from 'react-router-dom';
 
+import useModal from '@hooks/useModal';
 import { PlayerState } from '@mafia/domain/types/game';
 import { titleActive, white, grey1 } from '@constants/index';
-import { AbilityButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { SettingIcon, RoomOutIcon } from '@components/Icon';
+import ConfirmModal from '@components/Modal/ConfirmModal';
+import { AbilityButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { RoomVote } from '@mafia/domain/types/vote';
 import { useUserInfo } from '@src/contexts/userInfo';
 
@@ -32,7 +35,10 @@ const LeftSideContainer: FC<PropType> = ({
   timer,
   myJob,
 }) => {
+  const history = useHistory();
   const { userInfo } = useUserInfo();
+  const { isModalOpen, openModal, closeModal } = useModal();
+
   const handleClick = (userName: string) => {
     const myState = playerStateList.find(
       ({ userName: playerName }) => playerName === userInfo?.userName,
@@ -45,8 +51,21 @@ const LeftSideContainer: FC<PropType> = ({
     }
   };
 
+  const roomOutHandler = () => {
+    history.push('/rooms');
+    closeModal();
+  };
+
   return (
     <div css={leftSideContainerStyle}>
+      <ConfirmModal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        eventHandler={roomOutHandler}
+        closeModal={closeModal}
+      >
+        <p>진행중인 게임을 포기하고 나가시겠습니까?</p>
+      </ConfirmModal>
       <div css={Style}>
         <img
           src={isNight ? '/assets/images/moon.png' : '/assets/images/sun.png'}
@@ -65,7 +84,7 @@ const LeftSideContainer: FC<PropType> = ({
               icon={RoomOutIcon}
               size={ButtonSizeList.LARGE}
               theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
-              onClick={() => {}}
+              onClick={openModal}
             />
           </div>
         </div>

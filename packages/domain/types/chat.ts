@@ -7,6 +7,7 @@ export interface Message {
 
 export enum StoryName {
   EXECUTION = 'EXECUTION',
+  NO_VOTE = 'NO_VOTE',
   PUBLISH_VICTIM = 'PUBLISH_VICTIM',
   NO_KILL = 'NO_KILL',
   PUBLISH_SURVIVOR = 'PUBLISH_SURVIVOR',

@@ -110,6 +110,9 @@ const LeftSideContainer: FC<PropType> = ({
             }
             onClick={handleClick}
             myJob={myJob}
+            amIDead={
+              playerStateList.find((user) => user.userName === userInfo?.userName)?.isDead || false
+            }
           />
         ))}
       </div>

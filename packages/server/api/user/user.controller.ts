@@ -1,35 +1,31 @@
 import { PlayerResult } from '@mafia/domain/types/game';
-import { Request, Response } from 'express';
+import express from 'express';
+import BadRequestError from '../../error/BadRequsetError';
 import UserService from './user.service';
 
 const UserController = {
-  async updateUsersStat(req: Request, res: Response) {
-    await Promise.all(
-      req.body.result.map((playerResult: PlayerResult) => UserService.update(playerResult)),
-    ).catch((error) => {
-      console.log(error);
-      if (error instanceof Error) {
-        res.status(400).json({ error: error.message });
-      }
-    });
-    res.status(200).json({ result: 'Success' });
+  async updateUsersStat(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+      await Promise.all(
+        req.body.result.map((playerResult: PlayerResult) => UserService.update(playerResult)),
+      );
+      res.status(200).json({ result: 'Success' });
+    } catch (error) {
+      next(error);
+    }
   },
 
-  async getUser(req: Request, res: Response) {
-    if (!req.params.userName) {
-      res.status(400).json({
-        error: 'Request not include userName',
-      });
+  async getUser(req: express.Request, res: express.Response, next: express.NextFunction) {
+    const { userName } = req.params;
+    if (!userName) {
+      next(new BadRequestError('Request not include userName'));
       return;
     }
     try {
       const stat = await UserService.findOne(req.params.userName);
       res.status(200).json(stat);
     } catch (error) {
-      console.log(error);
-      if (error instanceof Error) {
-        res.status(400).json({ error: error.message });
-      }
+      next(error);
     }
   },
 };

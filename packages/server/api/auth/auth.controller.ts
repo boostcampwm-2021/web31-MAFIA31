@@ -24,7 +24,7 @@ const getAccessToken = async (code: string) => {
 };
 
 const AuthController = {
-  async getUserInfo(req: express.Request, res: express.Response) {
+  async getUserInfo(req: express.Request, res: express.Response, next: express.NextFunction) {
     if (!req.query.code) return;
 
     const accessToken = await getAccessToken(req.query.code as string);
@@ -38,14 +38,13 @@ const AuthController = {
 
     const user: User = { userName: data.login, profileImg: data.avatar_url };
     const token = jwt.sign(user, secret, { expiresIn: '1h' });
-    res.cookie('jwt', token);
+    res.cookie('token', token);
 
     try {
       await UserService.findOneOrCreate(data.login, data.avatar_url);
       res.status(200).json(user);
     } catch (error) {
-      console.log(error);
-      res.status(400).json({ error });
+      next(error);
     }
   },
 };

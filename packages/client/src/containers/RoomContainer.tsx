@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { useQuery } from 'react-query';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import axios from 'axios';
 
+import { RoomCard } from '@src/components/Card';
+import { RoomInfo } from '@src/types';
+import apiClient from '@src/axios/apiClient';
 import useModal from '@hooks/useModal';
 import { RoomInfo } from '@src/types';
 import { RoomCard } from '@components/Card';
@@ -13,8 +15,7 @@ import NoticeModal from '@components/Modal/NoticeModal';
 const RoomContainer = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
   const getRoomList = async () => {
-    const url = `${process.env.REACT_APP_API_URL}/api/rooms`;
-    const { data } = await axios.get(url);
+    const { data } = await apiClient.get('/rooms');
     return data.roomList;
   };
 

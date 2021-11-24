@@ -11,7 +11,7 @@ const Callback = () => {
     const response = await fetch(url, { credentials: 'include' });
     const userData = await response.json();
     setUserInfo(userData);
-    history.goBack();
+    history.push('/');
   };
   const searchParams = new URLSearchParams(useLocation().search);
   const codeStr = searchParams.get('code');

@@ -1,81 +1,69 @@
 import express from 'express';
-import InternalServerError from '../../error/InternalServerError';
-import InvalidRoomIdError from '../../error/InvalidRoomIdError';
-import Room from '../../models/Room';
+import BadRequestError from '../../error/BadRequsetError';
+import RoomService from './room.service';
 
 const checkRoomId = (roomId: string): boolean => {
-  if (!roomId) {
-    return false;
-  }
-
   const regex = /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/;
-  if (!regex.test(roomId)) {
-    return false;
-  }
-
-  return true;
+  return !(!roomId || !regex.test(roomId));
 };
 
 const RoomController = {
-  async getRoomList(req: express.Request, res: express.Response) {
+  async getRoomList(req: express.Request, res: express.Response, next: express.NextFunction) {
     try {
-      const roomList = await Room.find({ status: 'ready' });
+      const roomList = await RoomService.find('ready');
       res.status(200).json({ roomList });
     } catch (error) {
-      res.status(400).json({ error });
+      next(error);
     }
   },
-  async getRoom(req: express.Request, res: express.Response) {
-    if (!req.params.roomId) {
-      res.status(400).json({
-        error: 'Request not include roomId',
-      });
+  async getRoom(req: express.Request, res: express.Response, next: express.NextFunction) {
+    const { roomId } = req.params;
+    if (!roomId) {
+      next(new BadRequestError('Request params not include roomId'));
+      return;
+    }
+    if (!checkRoomId(roomId)) {
+      next(new BadRequestError('Request RoomId invalid.'));
       return;
     }
 
     try {
-      const { roomId } = req.params;
-      const room = await Room.findOne({ roomId });
+      const room = await RoomService.findOne(roomId);
       res.status(200).json({ room });
     } catch (error) {
-      console.log(error);
-      res.status(400).json({ error });
+      next(error);
     }
   },
   async addRoom(req: express.Request, res: express.Response, next: express.NextFunction) {
-    try {
-      const { newRoom } = req.body;
-
-      if (!checkRoomId(newRoom.roomId)) {
-        throw new InvalidRoomIdError();
-      }
-
-      await Room.create(newRoom);
-      res.status(200).json(newRoom);
-    } catch (error) {
-      if (error instanceof InvalidRoomIdError) {
-        next(error);
-      }
-
-      next(new InternalServerError());
+    const { roomId } = req.body.newRoom;
+    if (!roomId) {
+      next(new BadRequestError('Request body not include roomId.'));
+      return;
     }
-  },
-  async updateRoomStatus(req: express.Request, res: express.Response) {
-    if (!req.body.roomId || !req.body.status) {
-      res.status(400).json({
-        error: 'Request not include roomId or status',
-      });
+    if (!checkRoomId(roomId)) {
+      next(new BadRequestError('RoomId is not valid.'));
       return;
     }
 
     try {
-      const { roomId } = req.body;
-      const { status } = req.body;
-      await Room.updateOne({ roomId }, { status });
+      const newRoom = await RoomService.create(roomId);
+      res.status(200).json(newRoom);
+    } catch (error) {
+      next(error);
+    }
+  },
+  async updateRoomStatus(req: express.Request, res: express.Response, next: express.NextFunction) {
+    const { roomId, status } = req.body;
+    if (!roomId || !status) {
+      next(new BadRequestError('Request not include roomId or status'));
+      return;
+    }
+
+    try {
+      await RoomService.updateOne(roomId, status);
       res.status(200).json({ result: 'Success' });
     } catch (error) {
-      console.log(error);
-      res.status(400).json({ error });
+      next(error);
     }
   },
 };

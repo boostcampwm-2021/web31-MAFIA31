@@ -3,9 +3,8 @@ import * as TIME from '@mafia/domain/constants/time';
 import { StoryName } from '@mafia/domain/types/chat';
 import { GameInfo, PlayerResult } from '@mafia/domain/types/game';
 import { Vote } from '@mafia/domain/types/vote';
-import axios from 'axios';
 import { Namespace, Socket } from 'socket.io';
-import { apiURL } from '../config/url.config.json';
+import apiClient from '../axios/apiClient';
 import { JOB_ARR } from '../constants/job';
 import GameStore from '../stores/GameStore';
 import RoomStore from '../stores/RoomStore';
@@ -19,15 +18,15 @@ const getGameResult = (roomId: string): PlayerResult[] => {
 };
 
 const updateRoomStatus = async (roomId: string, status: string) => {
-  await axios.put(`${apiURL}/rooms`, {
+  await apiClient.put('/rooms', {
     roomId: roomId.split('/')[1],
     status,
   });
 };
 
-const updateStats = (roomId: string) => {
+const updateStats = async (roomId: string) => {
   const result = getGameResult(roomId);
-  axios.post(`${apiURL}/users/stat`, {
+  await apiClient.post('/users/stat', {
     result,
   });
 };
@@ -42,7 +41,6 @@ const endGame = (
   updateRoomStatus(roomId, 'ready');
   updateStats(roomId);
 };
-
 
 const checkEnd = (roomId: string) => {
   if (RoomStore.get(roomId).length === 0) {

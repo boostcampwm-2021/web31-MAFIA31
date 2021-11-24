@@ -1,4 +1,5 @@
 export const JOIN = 'join';
+export const EXIT = 'exit';
 export const READY = 'ready';
 export const PUBLISH_READY = 'publish ready';
 

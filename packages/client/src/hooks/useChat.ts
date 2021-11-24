@@ -24,11 +24,13 @@ const useChat = () => {
     mafiaList?: string[];
   }) => {
     if (!storyName) return;
+    let storyType = STORY_DICTIONARY[storyName];
+
     if (storyName === 'EXECUTION' && !userName) {
-      return;
+      storyType = STORY_DICTIONARY.NO_VOTE;
     }
     if (storyName === 'PUBLISH_VICTIM' && !userName) {
-      return;
+      storyType = STORY_DICTIONARY.NO_KILL;
     }
     if (storyName === 'PUBLISH_SURVIVOR' && !userName) {
       return;
@@ -39,8 +41,6 @@ const useChat = () => {
     if (storyName === 'NOTICE_MAFIA' && !mafiaList) {
       return;
     }
-
-    const storyType = STORY_DICTIONARY[storyName];
 
     const story: Story = {
       id: Date.now().toString(),

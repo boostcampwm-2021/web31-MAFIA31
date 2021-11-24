@@ -1,6 +1,7 @@
 import * as EVENT from '@mafia/domain/constants/event';
 import { PlayerInfo, User } from '@mafia/domain/types/user';
 import { Namespace, Socket } from 'socket.io';
+import GameStore from '../stores/GameStore';
 import RoomStore from '../stores/RoomStore';
 import { abilitySocketInit } from './ability';
 import chatSocketInit from './chat';
@@ -48,7 +49,9 @@ const socketInit = (namespace: Namespace): void => {
     socket.on('disconnect', () => {
       console.log(`👋 ${socket.id} exit from ${roomId}.`);
       RoomStore.removePlayer(roomId, socket.id);
+      const exitPlayer = GameStore.diePlayer(roomId, socket.id);
       socket.nsp.emit(EVENT.JOIN, RoomStore.get(roomId));
+      socket.nsp.emit(EVENT.EXIT, { userName: exitPlayer });
     });
 
     chatSocketInit(socket);

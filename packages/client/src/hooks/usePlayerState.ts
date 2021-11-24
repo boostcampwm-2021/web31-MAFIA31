@@ -22,11 +22,13 @@ const usePlayerState = (initialValue: PlayerState[]) => {
   };
 
   useEffect(() => {
+    socketRef.current?.on(EVENT.EXIT, updatePlayerDead);
     socketRef.current?.on(EVENT.EXECUTION, updatePlayerDead);
     socketRef.current?.on(EVENT.PUBLISH_VICTIM, updatePlayerDead);
     socketRef.current?.on(EVENT.NOTICE_MAFIA, updatePlayerMafia);
 
     return () => {
+      socketRef.current?.off(EVENT.EXIT, updatePlayerDead);
       socketRef.current?.off(EVENT.EXECUTION, updatePlayerDead);
       socketRef.current?.off(EVENT.PUBLISH_VICTIM, updatePlayerDead);
       socketRef.current?.off(EVENT.NOTICE_MAFIA, updatePlayerMafia);

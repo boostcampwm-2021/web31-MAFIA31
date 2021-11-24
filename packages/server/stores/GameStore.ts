@@ -39,6 +39,11 @@ class GameStore {
     GameStore.instance[roomId] = gameInfoList;
   }
 
+  static getSocketId(roomId: string, playerName: string | undefined) {
+    if (!playerName) return undefined;
+    return GameStore.get(roomId).find(({ userName }) => userName === playerName)?.socketId;
+  }
+
   static resetGame(roomId: string) {
     GameStore.instance[roomId] = [];
   }

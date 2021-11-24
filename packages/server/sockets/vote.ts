@@ -24,8 +24,12 @@ const publishExecution = (namespace: Namespace, roomId: string) => {
       maxCount = voteCount;
     }
   });
-
   const excutedPlayer = maxCount === 0 || isSame ? undefined : maxPlayer;
+  const deadSocketId = GameStore.getSocketId(roomId, excutedPlayer);
+
+  if (deadSocketId) {
+    namespace.in(deadSocketId).socketsJoin('dead');
+  }
   GameStore.resetVote(roomId);
   GameStore.diePlayer(roomId, excutedPlayer || '');
   namespace.emit(EXECUTION, { userName: excutedPlayer, storyName: StoryName.EXECUTION });

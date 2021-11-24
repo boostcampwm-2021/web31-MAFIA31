@@ -40,6 +40,11 @@ const publishVictim = (namespace: Namespace) => {
       storyName: StoryName.PUBLISH_SURVIVOR,
     });
   } else {
+    const deadSocketId = GameStore.getSocketId(roomId, currVictim);
+    if (deadSocketId) {
+      namespace.in(deadSocketId).socketsJoin('dead');
+    }
+
     namespace.emit(EVENT.PUBLISH_VICTIM, {
       userName: currVictim,
       storyName: StoryName.PUBLISH_VICTIM,

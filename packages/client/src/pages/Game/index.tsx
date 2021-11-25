@@ -39,7 +39,7 @@ const Game = () => {
 
   const { userList } = state;
   const { playerStateList, memoList, initPlayerState, initMemo, updateMemo } = usePlayerState();
-  const { chatList, sendChat, sendNightChat } = useChat();
+  const { chatList, sendChat } = useChat();
   const { voteList, voteUser, initVote } = useVote();
   const { timer, isNight, voteSec } = useTimer();
   const { myJob } = useGame();
@@ -93,7 +93,7 @@ const Game = () => {
   }, [voteSec]);
 
   useLayoutEffect(() => {
-      init();
+    init();
   }, []);
 
   useEffect(() => {

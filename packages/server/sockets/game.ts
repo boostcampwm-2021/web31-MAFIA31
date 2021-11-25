@@ -9,7 +9,7 @@ import { JOB_ARR } from '../constants/job';
 import GameStore from '../stores/GameStore';
 import RoomStore from '../stores/RoomStore';
 import { publishVictim } from './ability';
-import { canVote, startVoteTime } from './vote';
+import { canVote, countCrossVote, startVoteTime } from './vote';
 
 const getGameResult = (roomId: string): PlayerResult[] => {
   const { mafia } = GameStore.getDashBoard(roomId);
@@ -162,6 +162,7 @@ const gameSocketInit = (socket: Socket): void => {
 
   socket.on(EVENT.GAME_START, () => startGame(namespace, roomId));
   socket.on(EVENT.VOTE, (voteInfo: Vote) => votePlayer(namespace, roomId, voteInfo));
+  countCrossVote(socket, roomId);
 };
 
 export default gameSocketInit;

@@ -21,24 +21,18 @@ import ChatContainer from '@containers/ChatContainer';
 import RightSideContainer from '@containers/RightSideContainer';
 import usePreventLeave from '@src/hooks/usePreventLeave';
 import usePlayerState from '@src/hooks/usePlayerState';
-import { GAME_DAY_MP3 } from '@constants/audio';
+import CrossVoteModal from '@src/components/Modal/CrossVoteModal';
+import useVoteModal from '@src/hooks/useVoteModal';
+import { useUserInfo } from '@src/contexts/userInfo';
 
 interface locationType {
   userList: PlayerInfo[];
 }
 
-const setAudio = () => {
-  const audio = new Audio();
-  audio.src = GAME_DAY_MP3;
-  audio.loop = true;
-  audio.volume = 0.5;
-  audio.load();
-  audio.play();
-};
-
 const Game = () => {
   const { state } = useLocation<locationType>();
   const history = useHistory();
+  const { userInfo } = useUserInfo();
 
   if (!state?.userList) {
     history.push('/');
@@ -60,6 +54,7 @@ const Game = () => {
   const { timer, isNight, voteSec } = useTimer();
   const { myJob } = useGame();
   const { emitAbility, victim, survivor } = useAbility(myJob);
+  const { isVoteModalOpen, closeVoteModal, maxVotePlayer, crossVote } = useVoteModal();
   usePreventLeave();
 
   const initMemo = (userList: User[]) => {
@@ -111,13 +106,27 @@ const Game = () => {
   }, [voteSec]);
 
   useEffect(() => {
+    setTimeout(closeVoteModal, 5000);
+  }, [isVoteModalOpen]);
+
+  useEffect(() => {
     init();
-    setAudio();
   }, []);
 
   return (
     <div css={gamePageStyle(isNight)}>
       <ToastContainer position="top-center" autoClose={7000} hideProgressBar />
+      <CrossVoteModal
+        amIDead={
+          playerStateList.find((user) => user.userName === userInfo?.userName)?.isDead || false
+        }
+        isOpen={isVoteModalOpen}
+        onRequestClose={closeVoteModal}
+        eventHandler={crossVote}
+        closeModal={closeVoteModal}
+      >
+        <p>{maxVotePlayer}을(를) 투표로 처형할까요?</p>
+      </CrossVoteModal>
       <LeftSideContainer
         playerStateList={playerStateList}
         playerList={voteList}

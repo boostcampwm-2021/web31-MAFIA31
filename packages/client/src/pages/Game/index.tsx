@@ -21,20 +21,10 @@ import ChatContainer from '@containers/ChatContainer';
 import RightSideContainer from '@containers/RightSideContainer';
 import usePreventLeave from '@src/hooks/usePreventLeave';
 import usePlayerState from '@src/hooks/usePlayerState';
-import { GAME_DAY_MP3 } from '@constants/audio';
 
 interface locationType {
   userList: PlayerInfo[];
 }
-
-const setAudio = () => {
-  const audio = new Audio();
-  audio.src = GAME_DAY_MP3;
-  audio.loop = true;
-  audio.volume = 0.5;
-  audio.load();
-  audio.play();
-};
 
 const Game = () => {
   const { state } = useLocation<locationType>();
@@ -112,7 +102,6 @@ const Game = () => {
 
   useEffect(() => {
     init();
-    setAudio();
   }, []);
 
   return (

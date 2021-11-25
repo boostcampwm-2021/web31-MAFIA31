@@ -1,8 +1,10 @@
 export interface Message {
   id: string;
   userName: string;
-  msg: string;
   profileImg: string;
+  msg: string;
+  isDead: boolean;
+  isMafia: boolean;
 }
 
 export enum StoryName {

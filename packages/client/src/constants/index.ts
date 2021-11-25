@@ -1,2 +1,2 @@
 export * from './colors';
-export { JOB_DICT } from './job';
+export { JOB_ARR, JOB_DICT } from './job';

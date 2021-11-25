@@ -14,7 +14,7 @@ type PropType = {
   onRequestClose: () => void;
 };
 
-export const ConfirmModal: FC<PropType> = ({
+const ConfirmModal: FC<PropType> = ({
   children,
   isOpen,
   onRequestClose,

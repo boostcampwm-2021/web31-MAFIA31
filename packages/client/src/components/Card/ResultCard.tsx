@@ -2,6 +2,8 @@ import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { white } from '@constants/colors';
+import { JOB_DICT } from '@src/constants';
+import { JOB_ARR } from '@src/constants/job';
 import { ImageSizeList, Image } from '../Image';
 
 interface PropType {
@@ -10,37 +12,14 @@ interface PropType {
   win: boolean;
 }
 
-interface JobTable {
-  [key: string]: { imgSrc: string; koreanName: string };
-}
-
-const jobTable: JobTable = {
-  mafia: {
-    imgSrc: 'assets/images/mafia.png',
-    koreanName: '마피아',
-  },
-  citizen: {
-    imgSrc: 'assets/images/citizen.png',
-    koreanName: '시민',
-  },
-  police: {
-    imgSrc: 'assets/images/police.png',
-    koreanName: '경찰',
-  },
-  doctor: {
-    imgSrc: 'assets/images/doctor.png',
-    koreanName: '의사',
-  },
-};
-
 const ResultCard: FC<PropType> = ({ userName, job, win }) => {
   const WINNER_STAMP_SRC = '/assets/icons/stamp-winner.png';
 
   return (
     <div css={resultCardStyle}>
-      <span className="job">{jobTable[job].koreanName}</span>
+      <span className="job">{JOB_ARR.find((el) => el.job === job)?.jobKr}</span>
       {win ? <img css={winnerStampStyle} src={WINNER_STAMP_SRC} alt="winner stamp" /> : <></>}
-      <Image size={ImageSizeList.SMALL} src={jobTable[job].imgSrc} />
+      <Image size={ImageSizeList.SMALL} src={JOB_DICT[job].imageSrc} />
       <span>{userName}</span>
     </div>
   );

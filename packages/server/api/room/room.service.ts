@@ -17,6 +17,10 @@ const RoomService = {
   async updateOne(roomId: string, status: string) {
     await Room.updateOne({ roomId }, { status });
   },
+  async deleteOne(roomId: string) {
+    const room = await Room.deleteOne({ roomId });
+    return room;
+  },
 };
 
 export default RoomService;

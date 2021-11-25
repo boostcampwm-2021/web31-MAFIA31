@@ -66,6 +66,20 @@ const RoomController = {
       next(error);
     }
   },
+  async deleteRoom(req: express.Request, res: express.Response, next: express.NextFunction) {
+    const { roomId } = req.params;
+    if (!roomId) {
+      next(new BadRequestError('Request not include roomId'));
+      return;
+    }
+
+    try {
+      const deletedRoom = await RoomService.deleteOne(roomId);
+      res.status(200).json(deletedRoom);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 export default RoomController;

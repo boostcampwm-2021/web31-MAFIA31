@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react';
 import { css } from '@emotion/react';
 import { useLocation, useHistory } from 'react-router-dom';
 import Header from '@src/templates/Header';
-import { RoomInfo } from '@src/types';
 import WaitingListContainer from '@src/containers/WaitingListContainer';
 import useSocket from '@hooks/useSocket';
 import useRoom from '@hooks/useRoom';
 import { useUserInfo } from '@src/contexts/userInfo';
 import { DefaultButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
+import { RoomInfo } from '@mafia/domain/types/room';
 
 interface locationType {
   roomInfo: RoomInfo;

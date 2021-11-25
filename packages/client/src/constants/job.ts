@@ -1,3 +1,9 @@
+interface Job {
+  job: string;
+  jobKr: string;
+  image: string;
+}
+
 interface JobDictionary {
   [job: string]: {
     title: string;
@@ -6,11 +12,20 @@ interface JobDictionary {
   };
 }
 
+export const JOB_ARR: Job[] = [
+  { job: 'mafia', jobKr: '마피아', image: 'assets/images/mafia.png' },
+  { job: 'police', jobKr: '경찰', image: 'assets/images/police.png' },
+  { job: 'doctor', jobKr: '의사', image: 'assets/images/doctor.png' },
+  { job: 'shaman', jobKr: '영매', image: 'assets/images/shaman.png' },
+  { job: 'citizen', jobKr: '시민', image: 'assets/images/citizen.png' },
+  { job: 'question', jobKr: '미정', image: 'assets/images/question.png' },
+];
+
 export const JOB_DICT: JobDictionary = {
   '': {
     title: 'loading',
     description: 'loading',
-    imageSrc: 'assets/images/user.png',
+    imageSrc: 'assets/images/loading.gif',
   },
   'mafia': {
     title: '마피아',

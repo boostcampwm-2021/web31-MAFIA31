@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import { useLocation, useHistory } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
@@ -6,11 +6,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { css } from '@emotion/react';
 
 import * as TIME from '@mafia/domain/constants/time';
-import { PlayerState } from '@mafia/domain/types/game';
-import { User } from '@mafia/domain/types/user';
 import { primaryDark, primaryLight, titleActive, white } from '@src/constants';
 import * as TOAST from '@src/constants/toast';
-import { PlayerInfo, Memo } from '@src/types';
+import { PlayerInfo } from '@src/types';
 import useGame from '@hooks/useGame';
 import useTimer from '@hooks/useTimer';
 import useVote from '@hooks/useVote';
@@ -21,24 +19,18 @@ import ChatContainer from '@containers/ChatContainer';
 import RightSideContainer from '@containers/RightSideContainer';
 import usePreventLeave from '@src/hooks/usePreventLeave';
 import usePlayerState from '@src/hooks/usePlayerState';
-import { GAME_DAY_MP3 } from '@constants/audio';
+import CrossVoteModal from '@src/components/Modal/CrossVoteModal';
+import useVoteModal from '@src/hooks/useVoteModal';
+import { useUserInfo } from '@src/contexts/userInfo';
 
 interface locationType {
   userList: PlayerInfo[];
 }
 
-const setAudio = () => {
-  const audio = new Audio();
-  audio.src = GAME_DAY_MP3;
-  audio.loop = true;
-  audio.volume = 0.5;
-  audio.load();
-  audio.play();
-};
-
 const Game = () => {
   const { state } = useLocation<locationType>();
   const history = useHistory();
+  const { userInfo } = useUserInfo();
 
   if (!state?.userList) {
     history.push('/');
@@ -46,27 +38,17 @@ const Game = () => {
   }
 
   const { userList } = state;
-
-  const initPlayerState: PlayerState[] = userList.map(({ userName }) => ({
-    userName,
-    isDead: false,
-    isMafia: false,
-  }));
-
-  const { playerStateList } = usePlayerState(initPlayerState);
-  const [memoList, setMemoList] = useState<Memo[]>([]);
+  const { playerStateList, memoList, initPlayerState, initMemo, updateMemo } = usePlayerState();
   const { chatList, sendChat, sendNightChat } = useChat();
   const { voteList, voteUser, initVote } = useVote();
   const { timer, isNight, voteSec } = useTimer();
   const { myJob } = useGame();
   const { emitAbility, victim, survivor } = useAbility(myJob);
+  const { isVoteModalOpen, closeVoteModal, maxVotePlayer, crossVote } = useVoteModal();
   usePreventLeave();
 
-  const initMemo = (userList: User[]) => {
-    setMemoList(userList.map(({ userName }) => ({ userName, guessJob: 'question' })));
-  };
-
   const init = () => {
+    initPlayerState(userList);
     initVote(userList);
     initMemo(userList);
   };
@@ -110,14 +92,28 @@ const Game = () => {
     viewToast(voteSec);
   }, [voteSec]);
 
-  useEffect(() => {
-    init();
-    setAudio();
+  useLayoutEffect(() => {
+      init();
   }, []);
+
+  useEffect(() => {
+    setTimeout(closeVoteModal, 5000);
+  }, [isVoteModalOpen]);
 
   return (
     <div css={gamePageStyle(isNight)}>
       <ToastContainer position="top-center" autoClose={7000} hideProgressBar />
+      <CrossVoteModal
+        amIDead={
+          playerStateList.find((user) => user.userName === userInfo?.userName)?.isDead || false
+        }
+        isOpen={isVoteModalOpen}
+        onRequestClose={closeVoteModal}
+        eventHandler={crossVote}
+        closeModal={closeVoteModal}
+      >
+        <p>{maxVotePlayer}을(를) 투표로 처형할까요?</p>
+      </CrossVoteModal>
       <LeftSideContainer
         playerStateList={playerStateList}
         playerList={voteList}
@@ -129,18 +125,13 @@ const Game = () => {
         isNight={isNight}
         myJob={myJob}
       />
-      <ChatContainer
-        playerStateList={playerStateList}
-        chatList={chatList}
-        sendChat={sendChat}
-        sendNightChat={sendNightChat}
-        isNight={isNight}
-      />
+      <ChatContainer chatList={chatList} sendChat={sendChat} isNight={isNight} />
       <RightSideContainer
         playerStateList={playerStateList}
         memoList={memoList}
         myJob={myJob}
         isNight={isNight}
+        updateMemo={updateMemo}
       />
     </div>
   );

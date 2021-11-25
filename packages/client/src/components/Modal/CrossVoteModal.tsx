@@ -9,19 +9,25 @@ import CustomModal from './CustomModal';
 type PropType = {
   children: ReactJSXElement;
   isOpen: boolean;
-  eventHandler: () => void;
+  eventHandler: any;
   closeModal: () => void;
   onRequestClose: () => void;
+  amIDead: boolean;
 };
 
-const ConfirmModal: FC<PropType> = ({
+export const CrossVoteModal: FC<PropType> = ({
   children,
   isOpen,
   onRequestClose,
   eventHandler,
   closeModal,
+  amIDead,
 }) => (
-  <CustomModal isOpen={isOpen} onRequestClose={onRequestClose} contentLabel="Confirm Modal">
+  <CustomModal
+    isOpen={amIDead ? false : isOpen}
+    onRequestClose={onRequestClose}
+    contentLabel="Confirm Modal"
+  >
     <>
       {children}
       <div css={buttonPairStyle}>
@@ -63,4 +69,4 @@ const buttonPairStyle = css`
   }
 `;
 
-export default ConfirmModal;
+export default CrossVoteModal;

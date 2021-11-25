@@ -2,23 +2,30 @@ import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-import { primaryLight, primaryDark, white, titleActive, grey1, grey2 } from '@constants/index';
+import {
+  primaryLight,
+  primaryDark,
+  white,
+  titleActive,
+  grey1,
+  grey2,
+  mafiaMyMessage,
+  mafiaOtherMessage,
+} from '@constants/index';
+import { Message } from '@mafia/domain/types/chat';
 
 interface PropType {
-  userName: string;
-  profileImg: string;
-  msg: string;
+  chat: Message;
   isMyMsg: boolean;
-  isDead: boolean | undefined;
 }
 
-const ChatMsg: FC<PropType> = ({ userName, profileImg, msg, isMyMsg, isDead = false }) => (
+const ChatMsg: FC<PropType> = ({ chat, isMyMsg }) => (
   <div css={msgContainerStyle(isMyMsg)}>
     <div className="profile">
-      <img css={profileImgStyle} src={profileImg} alt="profile" />
-      <span>{userName}</span>
+      <img css={profileImgStyle} src={chat.profileImg} alt="profile" />
+      <span>{chat.userName}</span>
     </div>
-    <div css={msgStyle(isMyMsg, isDead)}>{msg}</div>
+    <div css={msgStyle(isMyMsg, chat.isDead, chat.isMafia)}>{chat.msg}</div>
   </div>
 );
 
@@ -62,18 +69,32 @@ const profileImgStyle = css`
   border: 2px solid ${titleActive};
 `;
 
-const msgStyle = (isMyMsg: boolean, isDead: boolean) => css`
+const msgStyle = (isMyMsg: boolean, isDead: boolean, isMafia: boolean) => css`
   max-width: 65%;
   padding: 14px;
   font-size: 16px;
   line-height: 23px;
   border-radius: 20px;
+
+  border: 'none';
   word-break: break-word;
-  color: ${isDead ? grey2 : isMyMsg ? white : titleActive};
-  border: ${isDead ? `1px solid ${isMyMsg ? primaryDark : grey1}` : 'none'};
-  background-color: ${isDead ? 'transparent' : isMyMsg ? primaryDark : primaryLight};
+  color: ${isMyMsg ? white : titleActive};
   border-top-right-radius: ${isMyMsg ? 0 : '20px'};
   border-bottom-left-radius: ${isMyMsg ? '20px' : 0};
+  background-color: ${isMyMsg ? primaryDark : primaryLight};
+
+  ${isMafia ? mafiaMsgStyle(isMyMsg) : ''}
+  ${isDead ? deadMsgStyle(isMyMsg) : ''}
+`;
+
+const deadMsgStyle = (isMyMsg: boolean = false) => css`
+  color: ${grey2};
+  border: 1px solid ${isMyMsg ? primaryDark : grey1};
+  background-color: transparent;
+`;
+
+const mafiaMsgStyle = (isMyMsg: boolean = false) => css`
+  background-color: ${isMyMsg ? mafiaMyMessage : mafiaOtherMessage};
 `;
 
 export default ChatMsg;

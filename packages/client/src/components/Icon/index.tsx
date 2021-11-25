@@ -6,3 +6,5 @@ export { ReactComponent as SearchIcon } from './search.svg';
 export { ReactComponent as SlideLeftIcon } from './slide-left.svg';
 export { ReactComponent as SlideRightIcon } from './slide-right.svg';
 export { ReactComponent as LightLogoIcon } from './logo-light.svg';
+export { ReactComponent as AudioOnIcon } from './volume.svg';
+export { ReactComponent as AudioOffIcon } from './mute.svg';

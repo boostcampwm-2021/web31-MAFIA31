@@ -2,12 +2,6 @@
 import { StoryName } from '@mafia/domain/types/chat';
 import { User } from '@mafia/domain/types/user';
 
-export interface RoomInfo {
-  roomId: string;
-  title: string;
-  status: string;
-}
-
 export interface PlayerInfo extends User {
   userImg: string;
   voteFrom: string[];

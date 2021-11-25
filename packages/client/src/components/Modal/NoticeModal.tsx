@@ -9,7 +9,7 @@ type PropType = {
   onRequestClose: () => void;
 };
 
-export const NoticeModal: FC<PropType> = ({ children, isOpen, onRequestClose }) => (
+const NoticeModal: FC<PropType> = ({ children, isOpen, onRequestClose }) => (
   <CustomModal isOpen={isOpen} onRequestClose={onRequestClose} contentLabel="Notice Modal">
     {children}
   </CustomModal>

@@ -6,6 +6,8 @@ export const PUBLISH_READY = 'publish ready';
 export const VOTE_TIME = 'vote timer';
 export const VOTE = 'vote';
 export const PUBLISH_VOTE = 'publish vote';
+export const PUBLISH_MAX_VOTE = 'publish max vote';
+export const CROSS_VOTE = 'cross vote';
 export const EXECUTION = 'execution';
 
 export const MESSAGE = 'receive msg';

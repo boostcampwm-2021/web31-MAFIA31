@@ -4,23 +4,40 @@ import { css } from '@emotion/react';
 
 import { PlayerState } from '@mafia/domain/types/game';
 import { grey1, titleActive, white, JOB_DICT } from '@constants/index';
-import { SearchIcon } from '@components/Icon';
-import { MemoButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
-import { ImageSizeList, Image } from '@components/Image';
 import { Memo } from '@src/types';
-import { Modal } from '@src/components/Modal';
+import useModal from '@hooks/useModal';
+import { Modal } from '@components/Modal';
+import { SearchIcon } from '@components/Icon';
+import MemoModal from '@components/Modal/MemoModal';
+import { ImageSizeList, Image } from '@components/Image';
+import { MemoButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 
 type PropType = {
   playerStateList: PlayerState[];
   memoList: Memo[];
   isNight: boolean;
   myJob: string;
+  updateMemo: any;
 };
 
-const RightSideContainer: FC<PropType> = ({ playerStateList, memoList, isNight, myJob }) => {
+const RightSideContainer: FC<PropType> = ({
+  playerStateList,
+  memoList,
+  isNight,
+  myJob,
+  updateMemo,
+}) => {
+  const { isModalOpen, openModal, closeModal } = useModal();
+  const [selectedUser, setSelectedUser] = useState<string>('');
   const [showModal, setShowModal] = useState(false);
+
   const handleClick = () => {
     setShowModal((prev) => !prev);
+  };
+
+  const memoClickHandler = (userName: string) => {
+    setSelectedUser(userName);
+    openModal();
   };
 
   return (
@@ -34,13 +51,19 @@ const RightSideContainer: FC<PropType> = ({ playerStateList, memoList, isNight, 
       </div>
       <hr css={hrStyle} />
       <div css={memoListStyle}>
+        <MemoModal
+          isOpen={isModalOpen}
+          onRequestClose={closeModal}
+          eventHandler={updateMemo}
+          userName={selectedUser}
+        />
         {memoList.map(({ userName, guessJob }, idx) => (
           <div css={memoInfoStyle(isNight)} key={userName}>
             <MemoButton
               userName={userName}
               guessJob={guessJob}
               isDead={playerStateList[idx].isDead}
-              isMafia={playerStateList[idx].isMafia}
+              onClick={memoClickHandler}
             />
             <span>{userName}</span>
           </div>
@@ -118,10 +141,14 @@ const memoInfoStyle = (isNight: boolean) => css`
   flex-direction: column;
   align-items: center;
 
-  gap: 5px;
+  gap: 8px;
   width: 30%;
   font-size: 12px;
   color: ${isNight ? white : titleActive};
+
+  @media (min-width: 1441px) {
+    width: 22%;
+  }
 `;
 
 const searchButtonStyle = () => css`

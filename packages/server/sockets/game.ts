@@ -9,7 +9,7 @@ import { JOB_ARR } from '../constants/job';
 import GameStore from '../stores/GameStore';
 import RoomStore from '../stores/RoomStore';
 import { publishVictim } from './ability';
-import { canVote, startVoteTime } from './vote';
+import { canVote, countCrossVote, startVoteTime } from './vote';
 
 const getGameResult = (roomId: string): PlayerResult[] => {
   const { mafia } = GameStore.getDashBoard(roomId);
@@ -40,6 +40,7 @@ const endGame = (
   clearInterval(interval);
   updateRoomStatus(roomId, 'ready');
   updateStats(roomId);
+  GameStore.resetGame(roomId);
 };
 
 const checkEnd = (roomId: string) => {
@@ -107,7 +108,7 @@ const assignJobs = (roomId: string) => {
   const jobs = JOB_ARR[RoomStore.get(roomId).length];
   const mixedJobs = shuffle(jobs);
 
-  if (jobs.length <= 0) throw Error('잘못된 인원입니다.');
+  if (jobs.length <= 0) throw Error('잘못된 인원입니다.'); // TODO: 4명 이하는 안되는걸로 바꾸고 Error handler 추가
   const gameInfoList = RoomStore.get(roomId).map(
     ({ userName, socketId, profileImg }, idx): GameInfo => ({
       socketId,
@@ -161,6 +162,7 @@ const gameSocketInit = (socket: Socket): void => {
 
   socket.on(EVENT.GAME_START, () => startGame(namespace, roomId));
   socket.on(EVENT.VOTE, (voteInfo: Vote) => votePlayer(namespace, roomId, voteInfo));
+  countCrossVote(socket, roomId);
 };
 
 export default gameSocketInit;

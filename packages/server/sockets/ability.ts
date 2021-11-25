@@ -4,66 +4,42 @@ import { PoliceInvestigation } from '@mafia/domain/types/game';
 import { Namespace, Socket } from 'socket.io';
 import GameStore from '../stores/GameStore';
 
-interface VictimData {
-  prevVictim: string;
-  currVictim: string;
-}
-
-const VictimStore: Record<string, VictimData> = {};
-const SurvivorStore: Record<string, string> = {};
-
-const resetVictimStore = (roomId: string) => {
-  VictimStore[roomId] = { prevVictim: '', currVictim: '' };
-};
-
-const updateVictim = (roomId: string) => {
-  const { prevVictim, currVictim } = VictimStore[roomId];
-  const newGameInfoList = GameStore.get(roomId).map((player) =>
-    // eslint-disable-next-line no-nested-ternary
-    player.userName === prevVictim
-      ? { ...player, isDead: false }
-      : player.userName === currVictim
-      ? { ...player, isDead: true }
-      : player,
-  );
-  GameStore.set(roomId, newGameInfoList);
-};
-
 const publishVictim = (namespace: Namespace) => {
   const roomId = namespace.name;
-  const { currVictim } = VictimStore[roomId];
-  const survivor = SurvivorStore[roomId];
+  const victim = GameStore.getVictim(roomId);
+  const survivor = GameStore.getSurvivor(roomId);
 
-  if (currVictim === survivor) {
-    namespace.emit(EVENT.PUBLISH_SURVIVOR, {
-      userName: survivor,
-      storyName: StoryName.PUBLISH_SURVIVOR,
-    });
-  } else {
-    const deadSocketId = GameStore.getSocketId(roomId, currVictim);
+  GameStore.resetSelected(roomId);
+
+  if (victim === '' || victim !== survivor) {
+    const deadSocketId = GameStore.getSocketId(roomId, victim);
     if (deadSocketId) {
+      GameStore.diePlayer(roomId, victim);
       namespace.in(deadSocketId).socketsJoin('shaman');
     }
 
     namespace.emit(EVENT.PUBLISH_VICTIM, {
-      userName: currVictim,
+      userName: victim,
       storyName: StoryName.PUBLISH_VICTIM,
     });
+
+    return;
   }
-  resetVictimStore(roomId);
-  SurvivorStore[roomId] = '';
+
+  namespace.emit(EVENT.PUBLISH_SURVIVOR, {
+    userName: survivor,
+    storyName: StoryName.PUBLISH_SURVIVOR,
+  });
 };
 
 const abilitySocketInit = (socket: Socket) => {
   const { nsp: namespace } = socket;
   const roomId = namespace.name;
-  resetVictimStore(roomId);
+  GameStore.resetSelected(roomId);
 
-  socket.on(EVENT.MAFIA_ABILITY, (mafiaPick: string) => {
-    VictimStore[roomId].prevVictim = VictimStore[roomId].currVictim;
-    VictimStore[roomId].currVictim = mafiaPick;
-    namespace.to('mafia').emit(EVENT.MAFIA_ABILITY, VictimStore[roomId].currVictim);
-    updateVictim(roomId);
+  socket.on(EVENT.MAFIA_ABILITY, (userName: string) => {
+    GameStore.setVictim(roomId, userName);
+    namespace.to('mafia').emit(EVENT.MAFIA_ABILITY, GameStore.getVictim(roomId));
   });
 
   socket.on(EVENT.POLICE_ABILITY, (userName: string) => {
@@ -85,7 +61,7 @@ const abilitySocketInit = (socket: Socket) => {
   });
 
   socket.on(EVENT.DOCTOR_ABILITY, (userName: string) => {
-    SurvivorStore[roomId] = userName;
+    GameStore.setSurvivor(roomId, userName);
   });
 };
 

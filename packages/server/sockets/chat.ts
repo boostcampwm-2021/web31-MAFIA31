@@ -15,15 +15,22 @@ const chatSocketInit = (socket: Socket) => {
 
     if (state === undefined) return;
     if (state === ALIVE) {
-      namespace.emit(PUBLISH_MESSAGE, chat);
+      namespace.emit(PUBLISH_MESSAGE, { ...chat, isDead: false, isMafia: false });
     } else if (state === DEAD) {
-      namespace.to('shaman').emit(PUBLISH_MESSAGE, chat);
+      namespace.to('shaman').emit(PUBLISH_MESSAGE, { ...chat, isDead: true, isMafia: false });
     }
   });
 
-  socket.on(NIGHT_MESSAGE, ({ msg, roomName }) => {
-    console.log('night message', msg);
-    namespace.to(roomName).emit(PUBLISH_MESSAGE, msg);
+  socket.on(NIGHT_MESSAGE, (chat: Message) => {
+    const state = GameStore.getPlayerState(roomId, chat.userName);
+    const job = GameStore.getPlayerJob(roomId, chat.userName);
+
+    if (state === undefined) return;
+    if (state === DEAD) {
+      namespace.to('shaman').emit(PUBLISH_MESSAGE, { ...chat, isDead: true, isMafia: false });
+    } else if (state === ALIVE && job === 'mafia') {
+      namespace.to('mafia').emit(PUBLISH_MESSAGE, { ...chat, isDead: false, isMafia: true });
+    }
   });
 };
 

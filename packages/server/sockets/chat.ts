@@ -17,7 +17,7 @@ const chatSocketInit = (socket: Socket) => {
     if (state === ALIVE) {
       namespace.emit(PUBLISH_MESSAGE, { ...chat, isDead: false, isMafia: false });
     } else if (state === DEAD) {
-      namespace.to('dead').emit(PUBLISH_MESSAGE, { ...chat, isDead: true, isMafia: false });
+      namespace.to('shaman').emit(PUBLISH_MESSAGE, { ...chat, isDead: true, isMafia: false });
     }
   });
 
@@ -27,7 +27,7 @@ const chatSocketInit = (socket: Socket) => {
 
     if (state === undefined) return;
     if (state === DEAD) {
-      namespace.to('dead').emit(PUBLISH_MESSAGE, { ...chat, isDead: true, isMafia: false });
+      namespace.to('shaman').emit(PUBLISH_MESSAGE, { ...chat, isDead: true, isMafia: false });
     } else if (state === ALIVE && job === 'mafia') {
       namespace.to('mafia').emit(PUBLISH_MESSAGE, { ...chat, isDead: false, isMafia: true });
     }

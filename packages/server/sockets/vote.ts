@@ -56,7 +56,7 @@ const publishExecution = (namespace: Namespace, roomId: string) => {
   const deadSocketId = GameStore.getSocketId(roomId, excutedPlayer);
 
   if (deadSocketId) {
-    namespace.in(deadSocketId).socketsJoin('dead');
+    namespace.in(deadSocketId).socketsJoin('shaman');
   }
   GameStore.diePlayer(roomId, excutedPlayer || '');
   namespace.emit(EXECUTION, { userName: excutedPlayer, storyName: StoryName.EXECUTION });

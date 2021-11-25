@@ -12,6 +12,7 @@ type PropType = {
   eventHandler: any;
   closeModal: () => void;
   onRequestClose: () => void;
+  amIDead: boolean;
 };
 
 export const CrossVoteModal: FC<PropType> = ({
@@ -20,8 +21,13 @@ export const CrossVoteModal: FC<PropType> = ({
   onRequestClose,
   eventHandler,
   closeModal,
+  amIDead,
 }) => (
-  <CustomModal isOpen={isOpen} onRequestClose={onRequestClose} contentLabel="Confirm Modal">
+  <CustomModal
+    isOpen={amIDead ? false : isOpen}
+    onRequestClose={onRequestClose}
+    contentLabel="Confirm Modal"
+  >
     <>
       {children}
       <div css={buttonPairStyle}>

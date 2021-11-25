@@ -23,6 +23,7 @@ import usePreventLeave from '@src/hooks/usePreventLeave';
 import usePlayerState from '@src/hooks/usePlayerState';
 import CrossVoteModal from '@src/components/Modal/CrossVoteModal';
 import useVoteModal from '@src/hooks/useVoteModal';
+import { useUserInfo } from '@src/contexts/userInfo';
 
 interface locationType {
   userList: PlayerInfo[];
@@ -31,6 +32,7 @@ interface locationType {
 const Game = () => {
   const { state } = useLocation<locationType>();
   const history = useHistory();
+  const { userInfo } = useUserInfo();
 
   if (!state?.userList) {
     history.push('/');
@@ -115,6 +117,9 @@ const Game = () => {
     <div css={gamePageStyle(isNight)}>
       <ToastContainer position="top-center" autoClose={7000} hideProgressBar />
       <CrossVoteModal
+        amIDead={
+          playerStateList.find((user) => user.userName === userInfo?.userName)?.isDead || false
+        }
         isOpen={isVoteModalOpen}
         onRequestClose={closeVoteModal}
         eventHandler={crossVote}

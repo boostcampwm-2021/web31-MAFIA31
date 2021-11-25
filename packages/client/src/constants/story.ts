@@ -7,8 +7,8 @@ export const STORY_DICTIONARY: StoryDictionary = {
     type: 'execution',
   },
   NO_VOTE: {
-    msg: () => `오늘은 처형식이 없는 날이네요!`,
-    imgSrc: '/assets/images/citizen.png',
+    msg: () => `투표로 죽은 사람이 없는 날이네요!`,
+    imgSrc: '/assets/images/peaceful-day.mp4',
   },
   PUBLISH_VICTIM: {
     msg: (name) => `탕! ${name}이(가) 죽었어요!`,
@@ -16,18 +16,22 @@ export const STORY_DICTIONARY: StoryDictionary = {
   },
   NO_KILL: {
     msg: () => `오늘 밤은 총소리가 들리지 않았어요!`,
-    imgSrc: '/assets/images/citizen.png',
+    imgSrc: '/assets/images/peaceful-day.mp4',
   },
   PUBLISH_SURVIVOR: {
     msg: (name) => `의사의 활약으로 ${name}이(가) 마피아의 공격에서 살아남았습니다!`,
     imgSrc: '/assets/images/doctor-heal.mp4',
   },
-  POLICE_ABILITY: {
-    msg: (name, isMafia) => `${name}은(는) 마피아가 ${isMafia ? `맞습니다!` : `아닙니다!`}`,
-    imgSrc: '/assets/images/police.png',
+  POLICE_CATCH: {
+    msg: (name) => `${name}은(는) 마피아가 맞습니다!`,
+    imgSrc: '/assets/images/police-catch.mp4',
+  },
+  POLICE_WRONG: {
+    msg: (name) => `${name}은(는) 마피아가 아닙니다!`,
+    imgSrc: '/assets/images/police-wrong.mp4',
   },
   NOTICE_MAFIA: {
-    msg: (name, isMafia, mafiaList) => `${mafiaList?.join(', ')}은(는) 마피아 입니다.`,
+    msg: (_, mafiaList) => `${mafiaList?.join(', ')}은(는) 마피아 입니다.`,
     imgSrc: '/assets/images/mafia.png',
   },
 };

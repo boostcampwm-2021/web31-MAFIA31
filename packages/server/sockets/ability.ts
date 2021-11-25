@@ -1,6 +1,5 @@
 import * as EVENT from '@mafia/domain/constants/event';
 import { StoryName } from '@mafia/domain/types/chat';
-import { PoliceInvestigation } from '@mafia/domain/types/game';
 import { Namespace, Socket } from 'socket.io';
 import GameStore from '../stores/GameStore';
 
@@ -51,13 +50,18 @@ const abilitySocketInit = (socket: Socket) => {
     const isMafia: boolean =
       GameStore.get(namespace.name).find((el) => el.userName === userName)?.job === 'mafia';
 
-    const data: PoliceInvestigation = {
-      userName,
-      storyName: StoryName.POLICE_ABILITY,
-      isMafia,
-    };
+    if (isMafia) {
+      namespace.to('police').emit(EVENT.POLICE_ABILITY, {
+        userName,
+        storyName: StoryName.POLICE_CATCH,
+      });
+      return;
+    }
 
-    namespace.to('police').emit(EVENT.POLICE_ABILITY, data);
+    namespace.to('police').emit(EVENT.POLICE_ABILITY, {
+      userName,
+      storyName: StoryName.POLICE_WRONG,
+    });
   });
 
   socket.on(EVENT.DOCTOR_ABILITY, (userName: string) => {

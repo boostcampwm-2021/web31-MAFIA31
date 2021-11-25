@@ -29,7 +29,6 @@ export interface PlayerResult {
 export interface PoliceInvestigation {
   userName: string;
   storyName: StoryName;
-  isMafia: boolean;
 }
 
 export interface Stat {

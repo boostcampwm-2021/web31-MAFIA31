@@ -13,7 +13,6 @@ import { primaryLight, primaryDark, white, titleActive } from '@constants/index'
 interface PropType {
   chatList: (Message | Story)[];
   sendChat: any;
-  sendNightChat: any;
   isNight: boolean;
 }
 
@@ -21,7 +20,7 @@ function isStory(data: Message | Story): data is Story {
   return (data as Story).imgSrc !== undefined;
 }
 
-const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNight }) => {
+const ChatContainer: FC<PropType> = ({ chatList, sendChat, isNight }) => {
   const [inputValue, setInputValue] = useState('');
   const chatMsgsRef = useRef<HTMLDivElement>(null);
   const { userInfo } = useUserInfo();
@@ -36,11 +35,8 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNigh
       msg: inputValue,
       profileImg: userInfo?.profileImg,
     };
-    if (isNight) {
-      sendNightChat(message, 'mafia');
-    } else {
-      sendChat(message);
-    }
+
+    sendChat(message, isNight);
     setInputValue('');
   }, [inputValue, isNight]);
 

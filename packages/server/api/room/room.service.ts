@@ -1,3 +1,4 @@
+import { RoomInfo } from '@mafia/domain/types/room';
 import Room from '../../models/Room';
 
 const RoomService = {
@@ -9,8 +10,8 @@ const RoomService = {
     const room = await Room.findOne({ roomId });
     return room;
   },
-  async create(newRoomId: string) {
-    const room = await Room.create({ roomId: newRoomId });
+  async create(newRoom: RoomInfo) {
+    const room = await Room.create(newRoom);
     return room;
   },
   async updateOne(roomId: string, status: string) {

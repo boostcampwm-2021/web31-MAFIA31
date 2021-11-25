@@ -36,6 +36,7 @@ const RoomController = {
   },
   async addRoom(req: express.Request, res: express.Response, next: express.NextFunction) {
     const { roomId } = req.body.newRoom;
+
     if (!roomId) {
       next(new BadRequestError('Request body not include roomId.'));
       return;
@@ -44,9 +45,8 @@ const RoomController = {
       next(new BadRequestError('RoomId is not valid.'));
       return;
     }
-
     try {
-      const newRoom = await RoomService.create(roomId);
+      const newRoom = await RoomService.create(req.body.newRoom);
       res.status(200).json(newRoom);
     } catch (error) {
       next(error);

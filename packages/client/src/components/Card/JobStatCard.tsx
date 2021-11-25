@@ -4,6 +4,7 @@ import { Job, Stat } from '@mafia/domain/types/game';
 import { primaryDark, white } from '@src/constants';
 import { FC } from 'react';
 import { Image, ImageSizeList } from '../Image';
+import PieChart from '../Chart/PieChart';
 
 interface Props {
   job: Job;
@@ -17,8 +18,30 @@ const koreanJobName = {
   doctor: '의사',
 };
 
+const getBackgroundColor = (job: string): string => {
+  switch (job) {
+    case 'mafia':
+      return '#E95151';
+    case 'citizen':
+      return '#6EC436';
+    case 'police':
+      return '#016FC7';
+    case 'doctor':
+      return '#C7E6FF';
+    default:
+      return '#fff';
+  }
+};
+
 const JobStatCard: FC<Props> = ({ job, stat }) => {
   const imgSrc = `/assets/images/${job}.png`;
+
+  const backgroundColor = getBackgroundColor(job);
+
+  const data = [
+    { id: 'lose count', value: stat.cnt - stat.winCnt },
+    { id: 'win count', value: stat.winCnt },
+  ];
 
   return (
     <div css={JobStatCardStyle}>
@@ -36,6 +59,7 @@ const JobStatCard: FC<Props> = ({ job, stat }) => {
           <span>{`${Math.round((stat.winCnt / stat.cnt) * 100)} %`}</span>
         </div>
       </div>
+      <PieChart data={data} color={backgroundColor} />
     </div>
   );
 };
@@ -44,8 +68,9 @@ const JobStatCardStyle = css`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 24px;
 
-  min-width: 330px;
+  min-width: 370px;
   height: 160px;
   padding: 16px;
   border-radius: 20px;

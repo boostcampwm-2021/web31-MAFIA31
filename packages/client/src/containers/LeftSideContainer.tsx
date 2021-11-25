@@ -6,11 +6,13 @@ import { useHistory } from 'react-router-dom';
 import useModal from '@hooks/useModal';
 import { PlayerState } from '@mafia/domain/types/game';
 import { titleActive, white, grey1 } from '@constants/index';
-import { SettingIcon, RoomOutIcon } from '@components/Icon';
+import { RoomOutIcon, AudioOffIcon, AudioOnIcon } from '@components/Icon';
 import ConfirmModal from '@components/Modal/ConfirmModal';
 import { AbilityButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { RoomVote } from '@mafia/domain/types/vote';
 import { useUserInfo } from '@src/contexts/userInfo';
+import { GAME_DAY_MP3 } from '@constants/audio';
+import useAudio from '@src/hooks/useAudio';
 
 type PropType = {
   playerStateList: PlayerState[];
@@ -38,6 +40,7 @@ const LeftSideContainer: FC<PropType> = ({
   const history = useHistory();
   const { userInfo } = useUserInfo();
   const { isModalOpen, openModal, closeModal } = useModal();
+  const { playing, toggleAudio } = useAudio(GAME_DAY_MP3);
 
   const handleClick = (userName: string) => {
     const myState = playerStateList.find(
@@ -75,10 +78,10 @@ const LeftSideContainer: FC<PropType> = ({
           <span>ROOM NAME</span>
           <div css={roomIconButtonsStyle(isNight)}>
             <IconButton
-              icon={SettingIcon}
+              icon={playing ? AudioOffIcon : AudioOnIcon}
               size={ButtonSizeList.LARGE}
               theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
-              onClick={() => {}}
+              onClick={toggleAudio}
             />
             <IconButton
               icon={RoomOutIcon}

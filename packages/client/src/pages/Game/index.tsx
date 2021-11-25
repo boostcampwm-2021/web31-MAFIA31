@@ -108,7 +108,6 @@ const Game = () => {
           playerStateList.find((user) => user.userName === userInfo?.userName)?.isDead || false
         }
         isOpen={isVoteModalOpen}
-        onRequestClose={closeVoteModal}
         eventHandler={crossVote}
         closeModal={closeVoteModal}
       >

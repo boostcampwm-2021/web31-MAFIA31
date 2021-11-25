@@ -1,27 +1,31 @@
-import Modal from 'react-modal';
+import ReactModal from 'react-modal';
 import { FC } from 'react';
 import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
 
 import { titleActive } from '@constants/index';
 
-Modal.setAppElement('#root');
+ReactModal.setAppElement('#root');
 
 type PropType = {
   children: ReactJSXElement;
   isOpen: boolean;
   onRequestClose: () => void;
   contentLabel: string;
+  style?: { content?: any; overlay?: any };
 };
 
-export const CustomModal: FC<PropType> = ({ children, isOpen, onRequestClose, contentLabel }) => (
-  <Modal
+const CustomModal: FC<PropType> = ({ children, isOpen, onRequestClose, contentLabel, style }) => (
+  <ReactModal
     isOpen={isOpen}
     onRequestClose={onRequestClose}
-    style={modalStyle}
+    style={{
+      content: { ...modalStyle.content, ...style?.content },
+      overlay: { ...style?.overlay },
+    }}
     contentLabel={contentLabel}
   >
     {children}
-  </Modal>
+  </ReactModal>
 );
 
 const modalStyle = {
@@ -31,7 +35,6 @@ const modalStyle = {
     right: 'auto',
     bottom: 'auto',
     padding: '3% 5%',
-    marginRight: '-50%',
     color: `${titleActive}`,
     transform: 'translate(-50%, -50%)',
   },

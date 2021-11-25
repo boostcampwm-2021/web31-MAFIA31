@@ -5,6 +5,9 @@ import { Link, useHistory } from 'react-router-dom';
 import { DefaultButton, ButtonSizeList, ButtonThemeList } from '@src/components/Button';
 import { primaryDark } from '@src/constants';
 import { LightLogoIcon } from '@src/components/Icon';
+import useModal from '@src/hooks/useModal';
+import NoticeModal from '@src/components/Modal/NoticeModal';
+import RoomFormContainer from '@src/containers/RoomFormContainer';
 
 const CREATE_ROOM_BUTTON = '방 만들기';
 const EXIT_ROOM_BUTTON = '나가기';
@@ -18,13 +21,16 @@ interface Props {
 
 const Header: FC<Props> = ({ createRoom = false, exit = false, profilePage = false }) => {
   const history = useHistory();
-
+  const { isModalOpen, openModal, closeModal } = useModal();
   const goBack = () => {
     history.goBack();
   };
 
   return (
     <header css={headerStyle}>
+      <NoticeModal isOpen={isModalOpen} onRequestClose={closeModal}>
+        <RoomFormContainer />
+      </NoticeModal>
       <Link to="/rooms">
         <LightLogoIcon />
       </Link>
@@ -34,6 +40,7 @@ const Header: FC<Props> = ({ createRoom = false, exit = false, profilePage = fal
             text={CREATE_ROOM_BUTTON}
             size={ButtonSizeList.SMALL}
             theme={ButtonThemeList.LIGHT}
+            onClick={openModal}
           />
         ) : (
           <></>

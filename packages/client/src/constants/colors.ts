@@ -12,3 +12,5 @@ export const grey3 = '#D9DCE0';
 export const grey4 = '#F6F6F6';
 export const mafia = '#E95151';
 export const citizen = '#6DC436';
+export const mafiaMyMessage = '#C86262';
+export const mafiaOtherMessage = '#FAE4E4';

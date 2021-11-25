@@ -50,11 +50,13 @@ const buttonThemeStyle: themeOptions = {
   LIGHT: css`
     svg path {
       fill: ${white};
+      stroke: ${white};
     }
   `,
   DARK: css`
     svg path {
       fill: ${titleActive};
+      stroke: ${titleActive};
     }
   `,
 };

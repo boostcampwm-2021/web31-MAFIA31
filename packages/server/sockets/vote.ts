@@ -48,7 +48,8 @@ const publishMaxVote = (namespace: Namespace, roomId: string) => {
 const publishExecution = (namespace: Namespace, roomId: string) => {
   const playerList = GameStore.get(roomId);
   const crossVoteCnt = crossVoteCntStore[roomId].voteCnt;
-  if (crossVoteCnt < playerList.length) {
+  const alivePlayerList = playerList.filter((player) => !player.isDead);
+  if (crossVoteCnt < alivePlayerList.length / 2) {
     crossVoteCntStore[roomId].userName = undefined;
   }
   const excutedPlayer = crossVoteCntStore[roomId].userName;

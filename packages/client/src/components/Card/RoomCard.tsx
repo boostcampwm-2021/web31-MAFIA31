@@ -1,7 +1,7 @@
 import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { RoomInfo } from '@src/types';
+import { RoomInfo } from '@mafia/domain/types/room';
 import { primaryDark, titleActive } from '@src/constants';
 
 interface Prop {

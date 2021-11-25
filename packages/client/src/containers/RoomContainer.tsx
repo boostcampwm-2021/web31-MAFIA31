@@ -5,10 +5,10 @@ import { useQuery } from 'react-query';
 import { css } from '@emotion/react';
 
 import apiClient from '@src/axios/apiClient';
-import { RoomInfo } from '@src/types';
 import useModal from '@hooks/useModal';
 import { RoomCard } from '@components/Card';
 import NoticeModal from '@components/Modal/NoticeModal';
+import { RoomInfo } from '@mafia/domain/types/room';
 
 const RoomContainer = () => {
   const { isModalOpen, openModal, closeModal } = useModal();

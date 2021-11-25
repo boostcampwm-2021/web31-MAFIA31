@@ -16,7 +16,7 @@ export const JOB_ARR: Job[] = [
   { job: 'mafia', jobKr: '마피아', image: 'assets/images/mafia.png' },
   { job: 'police', jobKr: '경찰', image: 'assets/images/police.png' },
   { job: 'doctor', jobKr: '의사', image: 'assets/images/doctor.png' },
-  { job: 'medium', jobKr: '영매', image: 'assets/images/medium.png' },
+  { job: 'shaman', jobKr: '영매', image: 'assets/images/shaman.png' },
   { job: 'citizen', jobKr: '시민', image: 'assets/images/citizen.png' },
   { job: 'question', jobKr: '미정', image: 'assets/images/question.png' },
 ];
@@ -47,9 +47,9 @@ export const JOB_DICT: JobDictionary = {
     description: '밤에 임의의 한 명을 선택해 마피아인지 확인할 수 있습니다.',
     imageSrc: 'assets/images/police.png',
   },
-  'medium': {
+  'shaman': {
     title: '영매',
     description: '죽은 사람들의 채팅을 볼 수 있습니다.',
-    imageSrc: 'assets/images/medium.png',
+    imageSrc: 'assets/images/shaman.png',
   },
 };

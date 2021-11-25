@@ -3,7 +3,7 @@ import { FC, useState } from 'react';
 import { css } from '@emotion/react';
 import { Image, ImageSizeList } from '@src/components/Image';
 import Header from '@src/templates/Header';
-import { grey4, primaryDark } from '@src/constants';
+import { grey4, primaryDark, primaryDarkHover, white } from '@src/constants';
 import { Achievement } from '@mafia/domain/types/achievement';
 import { useUserInfo } from '@contexts/userInfo';
 import { Redirect } from 'react-router-dom';
@@ -84,17 +84,50 @@ const Profile: FC = () => {
         </div>
 
         <div css={rightSideStyle}>
-          {allTabs.map((tab, idx) => (
-            <button key={tab.name} type="button" onClick={() => changeTab(idx)}>
-              {tab.name}
-            </button>
-          ))}
-          {currentTab}
+          <div css={tabContainerStyle}>
+            {allTabs.map((tab, idx) => (
+              <button
+                css={tabButtonStyle}
+                key={tab.name}
+                type="button"
+                onClick={() => changeTab(idx)}
+                style={{
+                  backgroundColor: currentTab.name === tab.name ? primaryDarkHover : primaryDark,
+                }}
+              >
+                {tab.name}
+              </button>
+            ))}
+          </div>
+          {currentTab.content}
         </div>
       </div>
     </div>
   );
 };
+
+const tabContainerStyle = css`
+  display: flex;
+  justify-content: flex-start;
+  gap: 24px;
+  border-bottom: 6px solid ${primaryDark};
+`;
+
+const tabButtonStyle = css`
+  width: 100px;
+  height: 50px;
+  background-color: ${primaryDark};
+  color: ${white};
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  cursor: pointer;
+  &:hover {
+    background-color: ${primaryDarkHover};
+  }
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 29px;
+`;
 
 const profilePageStyle = css`
   height: 100vh;
@@ -129,7 +162,6 @@ const leftSideStyle = css`
 const rightSideStyle = css`
   display: flex;
   flex-direction: column;
-  align-items: center;
 
   gap: 40px;
   width: 60%;

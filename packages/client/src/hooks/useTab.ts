@@ -6,11 +6,11 @@ export interface Tab {
 }
 
 const useTab = (initialIndex: number, allTabs: Tab[]) => {
-  const [currentIndex, setCurrentIndex] = useState(initialIndex);
+  const [currentTabIndex, setCurrentTabIndex] = useState(initialIndex);
 
   return {
-    currentTab: allTabs[currentIndex].content,
-    changeTab: setCurrentIndex,
+    currentTab: allTabs[currentTabIndex],
+    changeTab: setCurrentTabIndex,
   };
 };
 

@@ -17,7 +17,7 @@ const chatSocketInit = (socket: Socket) => {
     if (state === ALIVE) {
       namespace.emit(PUBLISH_MESSAGE, chat);
     } else if (state === DEAD) {
-      namespace.to('dead').emit(PUBLISH_MESSAGE, chat);
+      namespace.to('shaman').emit(PUBLISH_MESSAGE, chat);
     }
   });
 

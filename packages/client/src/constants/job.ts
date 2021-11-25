@@ -32,4 +32,9 @@ export const JOB_DICT: JobDictionary = {
     description: '밤에 임의의 한 명을 선택해 마피아인지 확인할 수 있습니다.',
     imageSrc: 'assets/images/police.png',
   },
+  'shaman': {
+    title: '영매',
+    description: '죽은 사람들의 채팅을 볼 수 있습니다.',
+    imageSrc: 'assets/images/shaman.png',
+  },
 };

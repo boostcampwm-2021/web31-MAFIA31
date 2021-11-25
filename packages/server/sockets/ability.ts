@@ -42,7 +42,7 @@ const publishVictim = (namespace: Namespace) => {
   } else {
     const deadSocketId = GameStore.getSocketId(roomId, currVictim);
     if (deadSocketId) {
-      namespace.in(deadSocketId).socketsJoin('dead');
+      namespace.in(deadSocketId).socketsJoin('shaman');
     }
 
     namespace.emit(EVENT.PUBLISH_VICTIM, {

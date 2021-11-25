@@ -52,7 +52,7 @@ const Profile: FC = () => {
     (prev, curr) => prev + curr.winCnt,
     0,
   );
-  const winRate: number = Math.round((winCnt / playCnt) * 100);
+  const winRate: number = playCnt === 0 ? 0 : Math.round((winCnt / playCnt) * 100);
 
   return (
     <div css={profilePageStyle}>

@@ -59,7 +59,7 @@ const JobStatCard: FC<Props> = ({ job, stat }) => {
         </div>
         <div className="number">
           <span>승률</span>
-          <span>{`${Math.round((stat.winCnt / stat.cnt) * 100)} %`}</span>
+          <span>{`${stat.cnt === 0 ? 0 : Math.round((stat.winCnt / stat.cnt) * 100)} %`}</span>
         </div>
       </div>
       <PieChart data={data} color={backgroundColor} />

@@ -2,19 +2,22 @@
 import { css } from '@emotion/react';
 import { RoomInfo } from '@mafia/domain/types/room';
 import apiClient from '@src/axios/apiClient';
-import { primaryDark, white } from '@src/constants';
+import { primaryDark, primaryDarkHover, white } from '@src/constants';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 const RoomFormContainer = () => {
   const [roomName, setRoomName] = useState<string>('');
 
+  const roomId = uuidv4();
+  const newRoom: RoomInfo = {
+    roomId,
+    title: roomName,
+    status: 'ready',
+  };
+
   const handleOnClick = () => {
-    const newRoom: RoomInfo = {
-      roomId: uuidv4(),
-      title: roomName,
-      status: 'ready',
-    };
     apiClient.post('/rooms', { newRoom });
   };
 
@@ -28,9 +31,11 @@ const RoomFormContainer = () => {
           value={roomName}
           onChange={(e) => setRoomName(e.target.value)}
         />
-        <button type="button" onClick={handleOnClick}>
-          방 만들기
-        </button>
+        <Link to={{ pathname: '/waiting', search: roomId }}>
+          <button type="button" onClick={handleOnClick}>
+            방 만들기
+          </button>
+        </Link>
       </div>
     </div>
   );
@@ -60,7 +65,12 @@ const RoomFormStyle = css`
   button {
     background-color: ${primaryDark};
     color: ${white};
-    border-radius: 4px;
+    border-radius: 8px;
+    cursor: pointer;
+    &:hover {
+      background-color: ${primaryDarkHover};
+    }
+    height: 30px;
   }
 `;
 

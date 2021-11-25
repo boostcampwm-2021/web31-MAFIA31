@@ -5,16 +5,17 @@ import { primaryDark, white } from '@src/constants';
 import { Image, ImageSizeList } from '@components/Image';
 import ExecuteAnimation from '@src/animation/ExecuteAnimation';
 import { SEC } from '@mafia/domain/constants/time';
+import { Story } from '@src/types';
 
 interface PropType {
-  msg: string;
-  imgSrc: string;
-  type?: string;
+  story: Story;
 }
 
-const StoryMsg: FC<PropType> = ({ msg, imgSrc, type }) => {
+const StoryMsg: FC<PropType> = ({ story }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [disabled, setDisabled] = useState(false);
+  const { msg, imgSrc, type } = story;
+
   const handleClick = () => {
     if (!videoRef.current) return;
     setDisabled(true);
@@ -24,6 +25,7 @@ const StoryMsg: FC<PropType> = ({ msg, imgSrc, type }) => {
       setDisabled(false);
     }, videoRef.current.duration * SEC);
   };
+
   return (
     <button type="button" css={storyMsgStyle} onClick={handleClick} disabled={disabled}>
       <div css={storyTextStyle}>{msg}</div>

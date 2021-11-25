@@ -72,17 +72,17 @@ const useChat = () => {
     };
   }, [socketRef.current]);
 
-  const sendChat = (msg: Message): void => {
+  const sendChat = (msg: Message, isNight: boolean): void => {
     if (!msg.msg) return;
-    socketRef.current?.emit(EVENT.MESSAGE, msg);
+    if (!isNight) {
+      socketRef.current?.emit(EVENT.MESSAGE, msg);
+      return;
+    }
+
+    socketRef.current?.emit(EVENT.NIGHT_MESSAGE, msg);
   };
 
-  const sendNightChat = (msg: Message, roomName: string): void => {
-    if (!msg.msg) return;
-    socketRef.current?.emit(EVENT.NIGHT_MESSAGE, { msg, roomName });
-  };
-
-  return { chatList, sendChat, sendNightChat };
+  return { chatList, sendChat };
 };
 
 export default useChat;

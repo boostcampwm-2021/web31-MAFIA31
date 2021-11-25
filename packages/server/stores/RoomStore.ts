@@ -1,4 +1,5 @@
 import { PlayerInfo } from '@mafia/domain/types/user';
+import GameStore from './GameStore';
 import apiClient from '../axios/apiClient';
 
 interface RoomStoreType {
@@ -41,6 +42,7 @@ class RoomStore {
     );
 
     if (RoomStore.instance[roomId].length <= 0) {
+      GameStore.removeGameInfos(roomId);
       RoomStore.removeRoom(roomId);
       await apiClient.put(`/rooms`, {
         roomId: roomId.split('/')[1],

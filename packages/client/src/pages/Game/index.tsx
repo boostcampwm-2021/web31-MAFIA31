@@ -55,7 +55,7 @@ const Game = () => {
 
   const { playerStateList } = usePlayerState(initPlayerState);
   const [memoList, setMemoList] = useState<Memo[]>([]);
-  const { chatList, sendChat, sendNightChat } = useChat();
+  const { chatList, sendChat } = useChat();
   const { voteList, voteUser, initVote } = useVote();
   const { timer, isNight, voteSec } = useTimer();
   const { myJob } = useGame();
@@ -129,13 +129,7 @@ const Game = () => {
         isNight={isNight}
         myJob={myJob}
       />
-      <ChatContainer
-        playerStateList={playerStateList}
-        chatList={chatList}
-        sendChat={sendChat}
-        sendNightChat={sendNightChat}
-        isNight={isNight}
-      />
+      <ChatContainer chatList={chatList} sendChat={sendChat} isNight={isNight} />
       <RightSideContainer
         playerStateList={playerStateList}
         memoList={memoList}

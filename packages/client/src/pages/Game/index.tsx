@@ -21,6 +21,8 @@ import ChatContainer from '@containers/ChatContainer';
 import RightSideContainer from '@containers/RightSideContainer';
 import usePreventLeave from '@src/hooks/usePreventLeave';
 import usePlayerState from '@src/hooks/usePlayerState';
+import CrossVoteModal from '@src/components/Modal/CrossVoteModal';
+import useVoteModal from '@src/hooks/useVoteModal';
 
 interface locationType {
   userList: PlayerInfo[];
@@ -50,6 +52,7 @@ const Game = () => {
   const { timer, isNight, voteSec } = useTimer();
   const { myJob } = useGame();
   const { emitAbility, victim, survivor } = useAbility(myJob);
+  const { isVoteModalOpen, closeVoteModal, maxVotePlayer, crossVote } = useVoteModal();
   usePreventLeave();
 
   const initMemo = (userList: User[]) => {
@@ -101,12 +104,24 @@ const Game = () => {
   }, [voteSec]);
 
   useEffect(() => {
+    setTimeout(closeVoteModal, 5000);
+  }, [isVoteModalOpen]);
+
+  useEffect(() => {
     init();
   }, []);
 
   return (
     <div css={gamePageStyle(isNight)}>
       <ToastContainer position="top-center" autoClose={7000} hideProgressBar />
+      <CrossVoteModal
+        isOpen={isVoteModalOpen}
+        onRequestClose={closeVoteModal}
+        eventHandler={crossVote}
+        closeModal={closeVoteModal}
+      >
+        <p>{maxVotePlayer}을(를) 투표로 처형할까요?</p>
+      </CrossVoteModal>
       <LeftSideContainer
         playerStateList={playerStateList}
         playerList={voteList}

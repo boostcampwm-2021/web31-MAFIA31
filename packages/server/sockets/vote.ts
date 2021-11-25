@@ -27,6 +27,8 @@ const publishMaxVote = (namespace: Namespace, roomId: string) => {
   let maxPlayer = '';
   let maxCount = 0;
 
+  if (!playerList) return;
+
   playerList.forEach(({ userName, voteFrom }) => {
     const voteCount = voteFrom.size;
     if (voteCount === maxCount) {

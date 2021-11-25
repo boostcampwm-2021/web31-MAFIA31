@@ -2,7 +2,6 @@ import { FC, useRef, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { primaryDark, white } from '@src/constants';
-import { Image, ImageSizeList } from '@components/Image';
 import ExecuteAnimation from '@src/animation/ExecuteAnimation';
 import { SEC } from '@mafia/domain/constants/time';
 import { Story } from '@src/types';
@@ -28,76 +27,49 @@ const StoryMsg: FC<PropType> = ({ story }) => {
 
   return (
     <button type="button" css={storyMsgStyle} onClick={handleClick} disabled={disabled}>
-      <div css={storyTextStyle}>{msg}</div>
-      {imgSrc.includes('.mp4') ? (
-        <div css={storyVideoMask}>
-          <video css={storyVideoStyle} src={imgSrc} autoPlay ref={videoRef} />
-        </div>
-      ) : type === 'execution' ? (
-        <div css={backgroundStyle}>
+      <p css={storyTextStyle}>{msg}</p>
+      <div css={storyAnimationStyle}>
+        {type === 'execution' ? (
           <ExecuteAnimation />
-        </div>
-      ) : (
-        <Image size={ImageSizeList.STORY} src={imgSrc} />
-      )}
+        ) : (
+          <video css={storyVideoStyle} src={imgSrc} autoPlay ref={videoRef} />
+        )}
+      </div>
     </button>
   );
 };
 
-const storyVideoMask = css`
-  width: 27vw;
-  height: 20vh;
-  border-radius: 15px;
-  overflow: hidden;
-  background-color: ${white};
-`;
-
 const storyMsgStyle = css`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
   align-self: center;
-  padding: 33px 60px;
-  width: 80%;
-  min-width: 342px;
+
+  gap: 16px;
+  padding: 30px 60px;
+  width: 70%;
+  max-width: 500px;
   background: ${primaryDark};
   border-radius: 20px;
 `;
 
 const storyTextStyle = css`
-  padding-bottom: 16px;
-  min-width: 342px;
-  padding: 33px;
-  font-family: Noto Sans KR;
-  background: ${primaryDark};
-  color: ${white};
-  font-style: normal;
   font-weight: bold;
-  font-size: 24px;
-  line-height: 35px;
   text-align: center;
-  border-radius: 20px;
+  width: 100%;
+  font-size: 20px;
+  color: ${white};
 `;
 
-const backgroundStyle = css`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 342px;
-  height: 167px;
-  padding: 16px;
-  border-radius: 20px;
-  overflow-y: hidden;
-  img {
-    object-fit: contain;
-  }
+const storyAnimationStyle = css`
+  width: 100%;
+  border-radius: 15px;
+  overflow: hidden;
   background-color: ${white};
 `;
 
 const storyVideoStyle = css`
+  object-fit: scale-down;
   width: 100%;
-  height: 100%;
 `;
 
 export default StoryMsg;

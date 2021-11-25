@@ -3,15 +3,16 @@ import { FC, useState } from 'react';
 import { css } from '@emotion/react';
 import { Image, ImageSizeList } from '@src/components/Image';
 import Header from '@src/templates/Header';
-import { grey4, primaryDark, primaryLight } from '@src/constants';
+import { grey4, primaryDark, primaryDarkHover, white } from '@src/constants';
 import { Achievement } from '@mafia/domain/types/achievement';
-import { AchievementCard } from '@src/components/Card';
 import { useUserInfo } from '@contexts/userInfo';
 import { Redirect } from 'react-router-dom';
 import JobStatContainer from '@src/containers/JobStatContainer';
 import { useQuery } from 'react-query';
 import { Stat } from '@mafia/domain/types/game';
 import apiClient from '@src/axios/apiClient';
+import useTab, { Tab } from '@src/hooks/useTab';
+import AchievementListContainer from '@src/containers/AchievementListContainer';
 import dummmyAchievementList from './dummyData';
 
 const ACHIEVEMENT_PERCENTAGE_LABEL = '업적 달성률';
@@ -33,6 +34,16 @@ const Profile: FC = () => {
   const { isLoading, data, error } = useQuery<any, Error>('user', getUserStatData);
   const achievementPercent = 45;
   const [achievementList] = useState<Achievement[]>(dummmyAchievementList);
+
+  const allTabs: Tab[] = [
+    { name: '통계', content: data ? <JobStatContainer jobStat={data.jobStat} /> : <></> },
+    {
+      name: '업적',
+      content: data ? <AchievementListContainer achievementList={achievementList} /> : <></>,
+    },
+  ];
+  const { currentTab, changeTab } = useTab(0, allTabs);
+
   if (isLoading) return <div>Loading</div>;
   if (error) return <div>An error has occurred: {error.message}</div>;
 
@@ -73,23 +84,50 @@ const Profile: FC = () => {
         </div>
 
         <div css={rightSideStyle}>
-          <JobStatContainer jobStat={data.jobStat} />
-          <div css={achievementListStyle}>
-            {achievementList.map((e) => (
-              <AchievementCard
-                key={e.title}
-                title={e.title}
-                imgSrc={e.imgSrc}
-                isAccomplished={e.isAccomplished}
-                description={e.description}
-              />
+          <div css={tabContainerStyle}>
+            {allTabs.map((tab, idx) => (
+              <button
+                css={tabButtonStyle}
+                key={tab.name}
+                type="button"
+                onClick={() => changeTab(idx)}
+                style={{
+                  backgroundColor: currentTab.name === tab.name ? primaryDarkHover : primaryDark,
+                }}
+              >
+                {tab.name}
+              </button>
             ))}
           </div>
+          {currentTab.content}
         </div>
       </div>
     </div>
   );
 };
+
+const tabContainerStyle = css`
+  display: flex;
+  justify-content: flex-start;
+  gap: 24px;
+  border-bottom: 6px solid ${primaryDark};
+`;
+
+const tabButtonStyle = css`
+  width: 100px;
+  height: 50px;
+  background-color: ${primaryDark};
+  color: ${white};
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  cursor: pointer;
+  &:hover {
+    background-color: ${primaryDarkHover};
+  }
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 29px;
+`;
 
 const profilePageStyle = css`
   height: 100vh;
@@ -124,7 +162,6 @@ const leftSideStyle = css`
 const rightSideStyle = css`
   display: flex;
   flex-direction: column;
-  align-items: center;
 
   gap: 40px;
   width: 60%;
@@ -182,27 +219,6 @@ const percentStyle = (achievementPercentage: number) => css`
     100% {
       width: ${achievementPercentage * PERCENTAGE_MULTIPLE}px;
     }
-  }
-`;
-
-const achievementListStyle = css`
-  display: none;
-  flex-wrap: wrap;
-  justify-content: center;
-  overflow-y: scroll;
-  -ms-overflow-style: none;
-
-  gap: 35px;
-  padding: 40px 27px;
-  max-width: 820px;
-  max-height: 600px;
-  width: 100%;
-  height: 100%;
-  border-radius: 20px;
-  background-color: ${primaryLight};
-
-  ::-webkit-scrollbar {
-    display: none;
   }
 `;
 

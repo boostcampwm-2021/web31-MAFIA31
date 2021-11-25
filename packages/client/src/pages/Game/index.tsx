@@ -130,7 +130,6 @@ const Game = () => {
         myJob={myJob}
       />
       <ChatContainer
-        playerStateList={playerStateList}
         chatList={chatList}
         sendChat={sendChat}
         sendNightChat={sendNightChat}

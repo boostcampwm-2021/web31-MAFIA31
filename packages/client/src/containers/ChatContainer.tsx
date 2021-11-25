@@ -2,7 +2,6 @@ import React, { FC, useCallback, useState, useRef, useEffect } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-import { PlayerState } from '@mafia/domain/types/game';
 import { Message } from '@mafia/domain/types/chat';
 import { Story } from '@src/types';
 import { useUserInfo } from '@src/contexts/userInfo';
@@ -12,7 +11,6 @@ import { IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button'
 import { primaryLight, primaryDark, white, titleActive } from '@constants/index';
 
 interface PropType {
-  playerStateList: PlayerState[];
   chatList: (Message | Story)[];
   sendChat: any;
   sendNightChat: any;
@@ -23,13 +21,7 @@ function isStory(data: Message | Story): data is Story {
   return (data as Story).imgSrc !== undefined;
 }
 
-const ChatContainer: FC<PropType> = ({
-  playerStateList,
-  chatList,
-  sendChat,
-  sendNightChat,
-  isNight,
-}) => {
+const ChatContainer: FC<PropType> = ({ chatList, sendChat, sendNightChat, isNight }) => {
   const [inputValue, setInputValue] = useState('');
   const chatMsgsRef = useRef<HTMLDivElement>(null);
   const { userInfo } = useUserInfo();
@@ -75,16 +67,9 @@ const ChatContainer: FC<PropType> = ({
       <div css={chatMsgsStyle} ref={chatMsgsRef}>
         {chatList.map((el) =>
           isStory(el) ? (
-            <StoryMsg key={el.id} msg={el.msg} imgSrc={el.imgSrc} type={el.type} />
+            <StoryMsg key={el.id} story={el} />
           ) : (
-            <ChatMsg
-              key={el.id}
-              userName={el.userName}
-              profileImg={el.profileImg}
-              msg={el.msg}
-              isMyMsg={userInfo?.userName === el.userName}
-              isDead={playerStateList.find(({ userName }) => userName === el.userName)?.isDead}
-            />
+            <ChatMsg key={el.id} chat={el} isMyMsg={userInfo?.userName === el.userName} />
           ),
         )}
       </div>

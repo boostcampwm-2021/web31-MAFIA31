@@ -3,22 +3,20 @@ import { FC } from 'react';
 import { css } from '@emotion/react';
 
 import { primaryLight, primaryDark, white, titleActive, grey1, grey2 } from '@constants/index';
+import { Message } from '@mafia/domain/types/chat';
 
 interface PropType {
-  userName: string;
-  profileImg: string;
-  msg: string;
+  chat: Message;
   isMyMsg: boolean;
-  isDead: boolean | undefined;
 }
 
-const ChatMsg: FC<PropType> = ({ userName, profileImg, msg, isMyMsg, isDead = false }) => (
+const ChatMsg: FC<PropType> = ({ chat, isMyMsg }) => (
   <div css={msgContainerStyle(isMyMsg)}>
     <div className="profile">
-      <img css={profileImgStyle} src={profileImg} alt="profile" />
-      <span>{userName}</span>
+      <img css={profileImgStyle} src={chat.profileImg} alt="profile" />
+      <span>{chat.userName}</span>
     </div>
-    <div css={msgStyle(isMyMsg, isDead)}>{msg}</div>
+    <div css={msgStyle(isMyMsg, chat.isDead ?? false)}>{chat.msg}</div>
   </div>
 );
 

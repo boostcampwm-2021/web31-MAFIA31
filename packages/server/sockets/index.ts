@@ -8,9 +8,7 @@ import chatSocketInit from './chat';
 import gameSocketInit from './game';
 
 const readyPlayer = (socket: Socket, roomId: string, readyUserName: string) => {
-  console.log(readyUserName);
   const readyUser = RoomStore.get(roomId).find(({ userName }) => userName === readyUserName);
-  console.log(readyUser);
   if (!readyUser) return;
   readyUser.isReady = !readyUser.isReady;
   socket.nsp.emit(EVENT.PUBLISH_READY, RoomStore.get(roomId));

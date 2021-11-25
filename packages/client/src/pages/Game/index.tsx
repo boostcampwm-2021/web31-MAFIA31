@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import { useLocation, useHistory } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
@@ -6,11 +6,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { css } from '@emotion/react';
 
 import * as TIME from '@mafia/domain/constants/time';
-import { PlayerState } from '@mafia/domain/types/game';
-import { User } from '@mafia/domain/types/user';
 import { primaryDark, primaryLight, titleActive, white } from '@src/constants';
 import * as TOAST from '@src/constants/toast';
-import { PlayerInfo, Memo } from '@src/types';
+import { PlayerInfo } from '@src/types';
 import useGame from '@hooks/useGame';
 import useTimer from '@hooks/useTimer';
 import useVote from '@hooks/useVote';
@@ -46,15 +44,7 @@ const Game = () => {
   }
 
   const { userList } = state;
-
-  const initPlayerState: PlayerState[] = userList.map(({ userName }) => ({
-    userName,
-    isDead: false,
-    isMafia: false,
-  }));
-
-  const { playerStateList } = usePlayerState(initPlayerState);
-  const [memoList, setMemoList] = useState<Memo[]>([]);
+  const { playerStateList, memoList, initPlayerState, initMemo, updateMemo } = usePlayerState();
   const { chatList, sendChat, sendNightChat } = useChat();
   const { voteList, voteUser, initVote } = useVote();
   const { timer, isNight, voteSec } = useTimer();
@@ -62,11 +52,8 @@ const Game = () => {
   const { emitAbility, victim, survivor } = useAbility(myJob);
   usePreventLeave();
 
-  const initMemo = (userList: User[]) => {
-    setMemoList(userList.map(({ userName }) => ({ userName, guessJob: 'question' })));
-  };
-
   const init = () => {
+    initPlayerState(userList);
     initVote(userList);
     initMemo(userList);
   };
@@ -110,7 +97,7 @@ const Game = () => {
     viewToast(voteSec);
   }, [voteSec]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     init();
     setAudio();
   }, []);
@@ -141,6 +128,7 @@ const Game = () => {
         memoList={memoList}
         myJob={myJob}
         isNight={isNight}
+        updateMemo={updateMemo}
       />
     </div>
   );

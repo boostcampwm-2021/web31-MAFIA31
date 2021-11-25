@@ -16,6 +16,7 @@ const koreanJobName = {
   citizen: '시민',
   police: '경찰',
   doctor: '의사',
+  shaman: '영매',
 };
 
 const getBackgroundColor = (job: string): string => {
@@ -28,6 +29,8 @@ const getBackgroundColor = (job: string): string => {
       return '#016FC7';
     case 'doctor':
       return '#C7E6FF';
+    case 'shaman':
+      return '#BC82DD';
     default:
       return '#fff';
   }

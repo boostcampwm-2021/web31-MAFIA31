@@ -15,12 +15,10 @@ const useChat = () => {
   const updateStory = ({
     userName,
     storyName,
-    isMafia,
     mafiaList,
   }: {
     userName?: string;
     storyName: StoryName;
-    isMafia?: boolean;
     mafiaList?: string[];
   }) => {
     if (!storyName) return;
@@ -35,7 +33,10 @@ const useChat = () => {
     if (storyName === 'PUBLISH_SURVIVOR' && !userName) {
       return;
     }
-    if (storyName === 'POLICE_ABILITY' && !userName && !isMafia) {
+    if (storyName === 'POLICE_CATCH' && !userName) {
+      return;
+    }
+    if (storyName === 'POLICE_WRONG' && !userName) {
       return;
     }
     if (storyName === 'NOTICE_MAFIA' && !mafiaList) {
@@ -44,7 +45,7 @@ const useChat = () => {
 
     const story: Story = {
       id: Date.now().toString(),
-      msg: storyType?.msg(userName, isMafia, mafiaList),
+      msg: storyType?.msg(userName, mafiaList),
       imgSrc: storyType?.imgSrc,
       type: storyType?.type,
     };

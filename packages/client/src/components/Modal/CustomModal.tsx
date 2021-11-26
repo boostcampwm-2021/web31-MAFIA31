@@ -9,7 +9,7 @@ ReactModal.setAppElement('#root');
 type PropType = {
   children: ReactJSXElement;
   isOpen: boolean;
-  onRequestClose: () => void;
+  onRequestClose?: () => void;
   contentLabel: string;
   style?: { content?: any; overlay?: any };
 };

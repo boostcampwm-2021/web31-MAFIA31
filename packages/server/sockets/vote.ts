@@ -27,6 +27,8 @@ const publishMaxVote = (namespace: Namespace, roomId: string) => {
   let maxPlayer = '';
   let maxCount = 0;
 
+  if (!playerList) return;
+
   playerList.forEach(({ userName, voteFrom }) => {
     const voteCount = voteFrom.size;
     if (voteCount === maxCount) {
@@ -47,6 +49,8 @@ const publishMaxVote = (namespace: Namespace, roomId: string) => {
 
 const publishExecution = (namespace: Namespace, roomId: string) => {
   const playerList = GameStore.get(roomId);
+  if (!playerList) return;
+
   const crossVoteCnt = crossVoteCntStore[roomId].voteCnt;
   const alivePlayerList = playerList.filter((player) => !player.isDead);
   if (crossVoteCnt < alivePlayerList.length / 2) {

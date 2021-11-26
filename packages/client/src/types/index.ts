@@ -8,7 +8,7 @@ export interface PlayerInfo extends User {
 }
 
 export interface StoryContent {
-  msg: (name?: string, isMafia?: boolean, mafiaList?: string[]) => string;
+  msg: (name?: string, mafiaList?: string[]) => string;
   imgSrc: string;
   type?: string;
 }

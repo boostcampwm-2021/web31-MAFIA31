@@ -14,12 +14,11 @@ const ExecuteAnimation: FC = () => (
   </div>
 );
 const wrapperStyle = css`
+  position: relative;
   width: ${width}px;
   height: ${height}px;
-  position: relative;
-  background-image: url('/assets/images/citizen.png');
-  background-position: center;
-  background-repeat: no-repeat;
+  margin: 30px auto 20px;
+  background: url('/assets/images/citizen.png') no-repeat center;
   background-size: cover;
 `;
 const ringStyle = css`

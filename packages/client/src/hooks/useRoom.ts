@@ -21,7 +21,7 @@ const useRoom = () => {
       history.push({
         pathname: '/game',
         state: {
-          players: prev.map((player: User) => player),
+          players: prev.map(({ userName, profileImg }: User) => ({ userName, profileImg })),
         },
       });
       return prev;

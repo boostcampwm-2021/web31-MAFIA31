@@ -14,9 +14,6 @@ import LeftSideContainer from '@containers/LeftSideContainer';
 import ChatContainer from '@containers/ChatContainer';
 import RightSideContainer from '@containers/RightSideContainer';
 import usePreventLeave from '@src/hooks/usePreventLeave';
-import CrossVoteModal from '@src/components/Modal/CrossVoteModal';
-import useVoteModal from '@src/hooks/useVoteModal';
-import { useUserInfo } from '@src/contexts/userInfo';
 import { User } from '@mafia/domain/types/user';
 import useGame from '@src/hooks/useGame';
 import useLog from '@src/hooks/useLog';
@@ -28,7 +25,6 @@ interface locationType {
 const Game = () => {
   const { state } = useLocation<locationType>();
   const history = useHistory();
-  const { userInfo } = useUserInfo();
 
   if (!state.players) {
     history.push('/');
@@ -37,10 +33,9 @@ const Game = () => {
 
   const { players: initPlayers } = state;
   const { players, myJob, mafias, isNight, timer, voteSec } = useGame(initPlayers);
+  const { selected, emitAbility, getSelectedImg } = useAbility(isNight, voteSec, myJob);
   const { memos, updateMemo } = useMemo(initPlayers);
   const { logs, sendChat } = useLog();
-  const { selected, emitAbility, getSelectedImg } = useAbility(isNight, voteSec, myJob);
-  const { isVoteModalOpen, closeVoteModal, maxVotePlayer, crossVote } = useVoteModal();
   usePreventLeave();
 
   const viewToast = (condition: any) => {
@@ -82,21 +77,9 @@ const Game = () => {
     viewToast(voteSec.current);
   }, [voteSec.current]);
 
-  useEffect(() => {
-    setTimeout(closeVoteModal, 5000);
-  }, [isVoteModalOpen]);
-
   return (
     <div css={gamePageStyle(isNight)}>
       <ToastContainer position="top-center" autoClose={7000} hideProgressBar />
-      <CrossVoteModal
-        amIDead={players.find((user) => user.userName === userInfo?.userName)?.isDead || false}
-        isOpen={isVoteModalOpen}
-        eventHandler={crossVote}
-        closeModal={closeVoteModal}
-      >
-        <p>{maxVotePlayer}을(를) 투표로 처형할까요?</p>
-      </CrossVoteModal>
       <LeftSideContainer
         players={players}
         mafias={mafias}

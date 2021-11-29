@@ -12,6 +12,7 @@ import { useUserInfo } from '@src/contexts/userInfo';
 import { GAME_DAY_MP3 } from '@constants/audio';
 import useAudio from '@src/hooks/useAudio';
 import { Player, Selected } from '@src/types';
+import useVoteModal from '@src/hooks/useExecutionModal';
 
 type PropType = {
   players: Player[];
@@ -34,7 +35,17 @@ const LeftSideContainer: FC<PropType> = ({
 }) => {
   const history = useHistory();
   const { userInfo } = useUserInfo();
-  const { isModalOpen, openModal, closeModal } = useModal();
+  const {
+    isModalOpen: isRoomOutModalOpen,
+    openModal: openRoomOutModal,
+    closeModal: closeRoomOutModal,
+  } = useModal();
+  const {
+    isModalOpen: isExecutionModalOpen,
+    maxVotedPlayer,
+    closeModal: closeExecutionModal,
+    executionHandler,
+  } = useVoteModal();
   const { playing, updateLoop, toggle, pause } = useAudio(GAME_DAY_MP3);
 
   const amIDead = () =>
@@ -52,7 +63,7 @@ const LeftSideContainer: FC<PropType> = ({
 
   const roomOutHandler = () => {
     history.push('/rooms');
-    closeModal();
+    closeRoomOutModal();
   };
 
   useEffect(() => {
@@ -67,12 +78,19 @@ const LeftSideContainer: FC<PropType> = ({
   return (
     <div css={leftSideContainerStyle}>
       <ConfirmModal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
+        isOpen={isRoomOutModalOpen}
+        onRequestClose={closeRoomOutModal}
         eventHandler={roomOutHandler}
-        closeModal={closeModal}
+        closeModal={closeRoomOutModal}
       >
         <p>진행중인 게임을 포기하고 나가시겠습니까?</p>
+      </ConfirmModal>
+      <ConfirmModal
+        isOpen={amIDead() ? false : isExecutionModalOpen}
+        eventHandler={executionHandler}
+        closeModal={closeExecutionModal}
+      >
+        <p>{maxVotedPlayer}을(를) 투표로 처형할까요?</p>
       </ConfirmModal>
       <div css={Style}>
         <img
@@ -92,7 +110,7 @@ const LeftSideContainer: FC<PropType> = ({
               icon={RoomOutIcon}
               size={ButtonSizeList.LARGE}
               theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
-              onClick={openModal}
+              onClick={openRoomOutModal}
             />
           </div>
         </div>

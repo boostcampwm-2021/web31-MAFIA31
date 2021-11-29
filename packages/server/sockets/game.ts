@@ -6,6 +6,7 @@ import { Vote } from '@mafia/domain/types/vote';
 import { Namespace, Socket } from 'socket.io';
 import apiClient from '../axios/apiClient';
 import { JOB_ARR } from '../constants/job';
+import { STORY_DIC } from '../constants/story';
 import GameStore from '../stores/GameStore';
 import RoomStore from '../stores/RoomStore';
 import { publishVictim } from './ability';
@@ -136,9 +137,12 @@ const noticeMafia = (namespace: Namespace, roomId: string): void => {
       mafiaList.push(userName);
     }
   });
+
   namespace.to('mafia').emit(EVENT.NOTICE_MAFIA, {
-    storyName: StoryName.NOTICE_MAFIA,
-    mafiaList,
+    id: Date.now().toString(),
+    msg: STORY_DIC[StoryName.NOTICE_MAFIA].msg('', mafiaList),
+    imgSrc: STORY_DIC[StoryName.NOTICE_MAFIA].src,
+    type: STORY_DIC[StoryName.NOTICE_MAFIA].type,
   });
 };
 

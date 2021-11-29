@@ -29,10 +29,12 @@ const StoryMsg: FC<PropType> = ({ story }) => {
     <button type="button" css={storyMsgStyle} onClick={handleClick} disabled={disabled}>
       <p css={storyTextStyle}>{msg}</p>
       <div css={storyAnimationStyle}>
-        {type === 'execution' ? (
+        {type === 'css animation' ? (
           <ExecuteAnimation />
-        ) : (
+        ) : type === 'mp4 animation' ? (
           <video css={storyVideoStyle} src={imgSrc} autoPlay ref={videoRef} />
+        ) : (
+          <></>
         )}
       </div>
     </button>

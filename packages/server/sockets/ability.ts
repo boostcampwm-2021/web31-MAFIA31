@@ -51,7 +51,7 @@ const abilitySocketInit = (socket: Socket) => {
     namespace.to('mafia').emit(EVENT.MAFIA_ABILITY, GameStore.getVictim(roomId));
   });
 
-  socket.on(EVENT.PUBLISH_SUSPECT, (userName: string) => {
+  socket.on(EVENT.POLICE_ABILITY, (userName: string) => {
     if (!GameStore.getCanInvest()) {
       return;
     }
@@ -60,7 +60,6 @@ const abilitySocketInit = (socket: Socket) => {
     const isMafia: boolean =
       GameStore.get(namespace.name).find((el) => el.userName === userName)?.job === 'mafia';
     namespace.to('police').emit(EVENT.POLICE_ABILITY, userName);
-    namespace.to('police').emit(EVENT.PUBLISH_SUSPECT, userName);
 
     if (isMafia) {
       namespace.to('police').emit(EVENT.PUBLISH_STORY, getStory(StoryName.POLICE_CATCH, userName));

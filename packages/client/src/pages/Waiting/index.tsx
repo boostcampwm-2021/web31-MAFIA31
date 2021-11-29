@@ -1,56 +1,40 @@
-import { useEffect, useState } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { useLocation, useHistory } from 'react-router-dom';
-import Header from '@src/templates/Header';
-import WaitingListContainer from '@src/containers/WaitingListContainer';
+
+import { RoomInfo } from '@mafia/domain/types/room';
 import useSocket from '@hooks/useSocket';
 import useRoom from '@hooks/useRoom';
-import { useUserInfo } from '@src/contexts/userInfo';
+import Header from '@src/templates/Header';
+import WaitingListContainer from '@containers/WaitingListContainer';
 import { DefaultButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
-import { RoomInfo } from '@mafia/domain/types/room';
 
 interface locationType {
   roomInfo: RoomInfo;
 }
-
 const Waiting = () => {
-  const history = useHistory();
   const { search } = useLocation<locationType>();
-  const { userInfo } = useUserInfo();
-  useSocket(search.replace(/\?/g, ''));
-  const { userName: myName } = userInfo!;
-  const [isHost, setIsHost] = useState<boolean>();
-  const { playerList, sendReady, sendGameStart, isAllReady } = useRoom();
+  const history = useHistory();
 
   if (!search.match(/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/)) {
     history.push({ pathname: '/rooms' });
   }
 
-  const updateHost = () => {
-    if (!playerList[0]) {
-      setIsHost(false);
-      return;
-    }
-    setIsHost(playerList[0].isHost && myName === playerList[0].userName);
-  };
-
-  useEffect(() => {
-    updateHost();
-  }, [playerList, myName]);
+  useSocket(search.replace(/\?/g, ''));
+  const { players, isHost, sendReady, sendStart, isAllReady } = useRoom();
 
   return (
     <div css={pageStyle}>
       <Header exit />
       <div css={pageBodyStyle}>
-        <WaitingListContainer userList={playerList} />
+        <WaitingListContainer userList={players} />
         <div css={bottomBarStyle}>
           {isHost ? (
             <DefaultButton
               text="START"
               size={ButtonSizeList.MEDIUM}
               theme={ButtonThemeList.DARK}
-              onClick={sendGameStart}
+              onClick={sendStart}
               isDisabled={!isAllReady()}
             />
           ) : (

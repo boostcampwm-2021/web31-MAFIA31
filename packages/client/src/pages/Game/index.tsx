@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect } from 'react';
+import { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import { useLocation, useHistory } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
@@ -8,23 +8,21 @@ import { css } from '@emotion/react';
 import * as TIME from '@mafia/domain/constants/time';
 import { primaryDark, primaryLight, titleActive, white } from '@src/constants';
 import * as TOAST from '@src/constants/toast';
-import { PlayerInfo } from '@src/types';
-import useGame from '@hooks/useGame';
-import useTimer from '@hooks/useTimer';
-import useVote from '@hooks/useVote';
-import useChat from '@hooks/useChat';
+import useMemo from '@hooks/useMemo';
 import useAbility from '@hooks/useAbility';
 import LeftSideContainer from '@containers/LeftSideContainer';
 import ChatContainer from '@containers/ChatContainer';
 import RightSideContainer from '@containers/RightSideContainer';
 import usePreventLeave from '@src/hooks/usePreventLeave';
-import usePlayerState from '@src/hooks/usePlayerState';
 import CrossVoteModal from '@src/components/Modal/CrossVoteModal';
 import useVoteModal from '@src/hooks/useVoteModal';
 import { useUserInfo } from '@src/contexts/userInfo';
+import { User } from '@mafia/domain/types/user';
+import useGame from '@src/hooks/useGame';
+import useLog from '@src/hooks/useLog';
 
 interface locationType {
-  userList: PlayerInfo[];
+  players: User[];
 }
 
 const Game = () => {
@@ -32,26 +30,18 @@ const Game = () => {
   const history = useHistory();
   const { userInfo } = useUserInfo();
 
-  if (!state?.userList) {
+  if (!state.players) {
     history.push('/');
     return <></>;
   }
 
-  const { userList } = state;
-  const { playerStateList, memoList, initPlayerState, initMemo, updateMemo } = usePlayerState();
-  const { chatList, sendChat } = useChat();
-  const { voteList, voteUser, initVote } = useVote();
-  const { timer, isNight, voteSec } = useTimer();
-  const { myJob } = useGame();
-  const { emitAbility, victim, survivor } = useAbility(myJob);
+  const { players: initPlayers } = state;
+  const { players, myJob, mafias, isNight, timer, voteSec } = useGame(initPlayers);
+  const { memos, updateMemo } = useMemo(initPlayers);
+  const { logs, sendChat } = useLog();
+  const { selected, emitAbility, getSelectedImg } = useAbility(isNight, voteSec, myJob);
   const { isVoteModalOpen, closeVoteModal, maxVotePlayer, crossVote } = useVoteModal();
   usePreventLeave();
-
-  const init = () => {
-    initPlayerState(userList);
-    initVote(userList);
-    initMemo(userList);
-  };
 
   const viewToast = (condition: any) => {
     const NIGHT = true;
@@ -89,12 +79,8 @@ const Game = () => {
   }, [isNight]);
 
   useEffect(() => {
-    viewToast(voteSec);
-  }, [voteSec]);
-
-  useLayoutEffect(() => {
-    init();
-  }, []);
+    viewToast(voteSec.current);
+  }, [voteSec.current]);
 
   useEffect(() => {
     setTimeout(closeVoteModal, 5000);
@@ -104,9 +90,7 @@ const Game = () => {
     <div css={gamePageStyle(isNight)}>
       <ToastContainer position="top-center" autoClose={7000} hideProgressBar />
       <CrossVoteModal
-        amIDead={
-          playerStateList.find((user) => user.userName === userInfo?.userName)?.isDead || false
-        }
+        amIDead={players.find((user) => user.userName === userInfo?.userName)?.isDead || false}
         isOpen={isVoteModalOpen}
         eventHandler={crossVote}
         closeModal={closeVoteModal}
@@ -114,20 +98,18 @@ const Game = () => {
         <p>{maxVotePlayer}을(를) 투표로 처형할까요?</p>
       </CrossVoteModal>
       <LeftSideContainer
-        playerStateList={playerStateList}
-        playerList={voteList}
+        players={players}
+        mafias={mafias}
+        selected={selected}
         timer={timer}
-        voteUser={voteUser}
-        emitAbility={emitAbility}
-        victim={victim}
-        survivor={survivor}
         isNight={isNight}
-        myJob={myJob}
+        getSelectedImg={getSelectedImg}
+        emitAbility={emitAbility}
       />
-      <ChatContainer chatList={chatList} sendChat={sendChat} isNight={isNight} />
+      <ChatContainer chatList={logs} sendChat={sendChat} isNight={isNight} />
       <RightSideContainer
-        playerStateList={playerStateList}
-        memoList={memoList}
+        players={players}
+        memoList={memos}
         myJob={myJob}
         isNight={isNight}
         updateMemo={updateMemo}

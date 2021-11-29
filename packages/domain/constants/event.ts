@@ -10,9 +10,10 @@ export const PUBLISH_MAX_VOTE = 'publish max vote';
 export const CROSS_VOTE = 'cross vote';
 export const EXECUTION = 'execution';
 
-export const MESSAGE = 'receive msg';
-export const PUBLISH_MESSAGE = 'send msg';
-export const NIGHT_MESSAGE = 'send night msg';
+export const MESSAGE = 'receive message';
+export const PUBLISH_MESSAGE = 'publish message';
+export const PUBLISH_STORY = 'publish story';
+export const NIGHT_MESSAGE = 'publish night message';
 
 export const PUBLISH_JOB = 'publish job';
 export const GAME_START = 'game start';
@@ -25,6 +26,7 @@ export const TURN_CHANGE = 'turn change';
 export const MAFIA_ABILITY = 'mafia ability';
 export const PUBLISH_VICTIM = 'publish victim';
 export const POLICE_ABILITY = 'police ability';
+export const PUBLISH_SUSPECT = 'publish suspect';
 export const DOCTOR_ABILITY = 'doctor ability';
 export const PUBLISH_SURVIVOR = 'publish survivor';
 

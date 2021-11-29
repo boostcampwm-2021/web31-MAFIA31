@@ -2,11 +2,6 @@
 import { StoryName } from '@mafia/domain/types/chat';
 import { User } from '@mafia/domain/types/user';
 
-export interface PlayerInfo extends User {
-  userImg: string;
-  voteFrom: string[];
-}
-
 export interface StoryContent {
   msg: (name?: string, mafiaList?: string[]) => string;
   imgSrc: string;
@@ -25,4 +20,21 @@ export interface Story {
 export interface Memo {
   userName: string;
   guessJob: string;
+}
+
+export interface Event {
+  event: string;
+  handler: any;
+}
+
+export interface Player extends User {
+  isDead: boolean;
+  voteCount: number;
+}
+
+export interface Selected {
+  victim?: string;
+  survivor?: string;
+  suspect?: string;
+  candidate: string;
 }

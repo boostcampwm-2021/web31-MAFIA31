@@ -7,6 +7,13 @@ export interface Message {
   isMafia: boolean;
 }
 
+export interface Story {
+  id: string;
+  msg: string;
+  imgSrc: string;
+  type?: string;
+}
+
 export enum StoryName {
   EXECUTION = 'EXECUTION',
   NO_VOTE = 'NO_VOTE',

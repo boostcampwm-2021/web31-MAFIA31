@@ -75,12 +75,11 @@ class GameStore {
     return GameStore.get(roomId)?.find(({ userName }) => playerName === userName);
   }
 
-  static getVoteInfos(roomId: string): RoomVote[] {
-    return GameStore.instance[roomId].map(({ userName, profileImg, voteFrom }) => ({
-      userName,
-      profileImg,
-      voteCount: voteFrom.size,
-    }));
+  static getVoteInfos(roomId: string): RoomVote {
+    return GameStore.instance[roomId].reduce((prev: RoomVote, { userName, voteFrom }) => {
+      prev[userName] = voteFrom.size;
+      return prev;
+    }, {});
   }
 
   static getPlayerState(roomId: string, playerName: string) {

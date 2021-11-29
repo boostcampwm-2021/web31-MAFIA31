@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useState, useRef, useEffect } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
@@ -6,9 +6,9 @@ import { Message } from '@mafia/domain/types/chat';
 import { Story } from '@src/types';
 import { useUserInfo } from '@src/contexts/userInfo';
 import { SendIcon } from '@components/Icon';
-import { ChatMsg, StoryMsg } from '@components/Message';
 import { IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { primaryLight, primaryDark, white, titleActive } from '@constants/index';
+import ChatMsgList from '@src/lists/ChatMsgList';
 
 interface PropType {
   chatList: (Message | Story)[];
@@ -16,13 +16,8 @@ interface PropType {
   isNight: boolean;
 }
 
-function isStory(data: Message | Story): data is Story {
-  return (data as Story).imgSrc !== undefined;
-}
-
 const ChatContainer: FC<PropType> = ({ chatList, sendChat, isNight }) => {
   const [inputValue, setInputValue] = useState('');
-  const chatMsgsRef = useRef<HTMLDivElement>(null);
   const { userInfo } = useUserInfo();
 
   const canNightChat = () => true; // 밤에 채팅 보낼 수 있는 직업인지 확인
@@ -53,22 +48,9 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat, isNight }) => {
     sendMessage();
   }, [inputValue, isNight]);
 
-  useEffect(() => {
-    if (!chatMsgsRef.current) return;
-    chatMsgsRef.current.scrollTop = chatMsgsRef.current.scrollHeight;
-  }, [chatList]);
-
   return (
     <div css={chatContainerStyle}>
-      <div css={chatMsgsStyle} ref={chatMsgsRef}>
-        {chatList.map((el) =>
-          isStory(el) ? (
-            <StoryMsg key={el.id} story={el} />
-          ) : (
-            <ChatMsg key={el.id} chat={el} isMyMsg={userInfo?.userName === el.userName} />
-          ),
-        )}
-      </div>
+      <ChatMsgList chatList={chatList} />
       <form css={inputFormStyle(isNight)}>
         <input
           css={inputStyle(isNight)}
@@ -100,22 +82,6 @@ const chatContainerStyle = css`
   gap: 20px;
   color: ${titleActive};
   background-color: ${white};
-`;
-
-const chatMsgsStyle = css`
-  display: flex;
-  flex-direction: column;
-  overflow-y: scroll;
-  -ms-overflow-style: none;
-
-  width: 100%;
-  gap: 16px;
-  font-size: 16px;
-  line-height: 23px;
-
-  ::-webkit-scrollbar {
-    display: none;
-  }
 `;
 
 const inputFormStyle = (isNight: boolean) => css`

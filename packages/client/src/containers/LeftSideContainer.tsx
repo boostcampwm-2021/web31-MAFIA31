@@ -7,11 +7,11 @@ import useModal from '@hooks/useModal';
 import { titleActive, white, grey1 } from '@constants/index';
 import { RoomOutIcon, AudioOffIcon, AudioOnIcon } from '@components/Icon';
 import ConfirmModal from '@components/Modal/ConfirmModal';
-import { AbilityButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
-import { useUserInfo } from '@src/contexts/userInfo';
+import { IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { GAME_DAY_MP3 } from '@constants/audio';
 import useAudio from '@src/hooks/useAudio';
 import { Player, Selected } from '@src/types';
+import AbilityButtonList from '@src/lists/AbilityButtonList';
 
 type PropType = {
   players: Player[];
@@ -33,22 +33,9 @@ const LeftSideContainer: FC<PropType> = ({
   emitAbility,
 }) => {
   const history = useHistory();
-  const { userInfo } = useUserInfo();
+
   const { isModalOpen, openModal, closeModal } = useModal();
   const { playing, toggleAudio } = useAudio(GAME_DAY_MP3);
-
-  const amIDead = () =>
-    players.find(({ userName: playerName }) => playerName === userInfo?.userName)?.isDead;
-
-  const handleClick = (userName: string, isDead: boolean) => {
-    if (amIDead()) return;
-    emitAbility(userName, isDead);
-  };
-
-  const getStampImg = (userName: string, isDead: boolean) => {
-    if (amIDead()) return false;
-    return getSelectedImg(userName, isDead);
-  };
 
   const roomOutHandler = () => {
     history.push('/rooms');
@@ -93,18 +80,13 @@ const LeftSideContainer: FC<PropType> = ({
         <span>{timer}</span>
       </div>
       <hr css={hrStyle} />
-      <div css={abilityListStyle}>
-        {players.map((player) => (
-          <AbilityButton
-            key={player.userName}
-            player={player}
-            isMafia={mafias.includes(player.userName)}
-            selected={selected}
-            getStampImg={getStampImg}
-            onClick={handleClick}
-          />
-        ))}
-      </div>
+      <AbilityButtonList
+        players={players}
+        mafias={mafias}
+        selected={selected}
+        emitAbility={emitAbility}
+        getSelectedImg={getSelectedImg}
+      />
     </div>
   );
 };
@@ -171,14 +153,6 @@ const hrStyle = css`
   border: 0;
   margin: 24px 0;
   border-top: 1px solid ${grey1};
-`;
-
-const abilityListStyle = css`
-  display: flex;
-  flex-wrap: wrap;
-
-  width: 100%;
-  gap: 16px 4%;
 `;
 
 export default LeftSideContainer;

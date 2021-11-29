@@ -8,7 +8,7 @@ interface Prop {
   userList: PlayerInfo[];
 }
 
-const WaitingListContainer: FC<Prop> = ({ userList }) => (
+const WaitingList: FC<Prop> = ({ userList }) => (
   <div css={containerStyle}>
     {userList.map(({ userName, profileImg, isHost, isReady }) => (
       <div key={userName} css={wrapperStyle}>
@@ -56,4 +56,4 @@ const iconNone = css`
   display: none;
 `;
 
-export default WaitingListContainer;
+export default WaitingList;

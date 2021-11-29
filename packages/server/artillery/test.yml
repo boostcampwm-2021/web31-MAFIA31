@@ -1,0 +1,24 @@
+config:
+  target: "http://mafia31.kro.kr/123a2549-947d-4edf-af70-a75ac13e938c"
+  phases:
+    - duration: 60
+      arrivalRate: 10
+  processor: "./hooks/index.js"
+scenarios:
+  - name: "enter room and ready"
+    engine: "socketio"
+    flow:
+      - function: "getRandomName"
+      - emit:
+          namespace: "/123a2549-947d-4edf-af70-a75ac13e938c"
+          channel: "join"
+          data:
+            "userName": "{{ randomName }}"
+            "profileImg": "user.png"
+      - think: 3
+      - emit:
+          namespace: "/123a2549-947d-4edf-af70-a75ac13e938c"
+          channel: "ready"
+          data:
+            "userName": "{{ randomName }}"
+      - think: 25

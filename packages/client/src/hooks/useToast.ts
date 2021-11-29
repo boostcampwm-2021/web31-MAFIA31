@@ -8,7 +8,7 @@ const useToast = (isNight: boolean, voteSec: MutableRefObject<number | undefined
     const NIGHT = true;
     const DAY = false;
 
-    const toastOp = ((): [string | JSX.Element, any?] | undefined => {
+    const toastOp = ((): [string, any?] | undefined => {
       switch (condition) {
         case TIME.VOTE:
           return [TOAST.VOTE_START];

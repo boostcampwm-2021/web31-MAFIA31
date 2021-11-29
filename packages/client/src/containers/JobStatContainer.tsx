@@ -18,8 +18,8 @@ const JobStatContainer: FC<Props> = ({ jobStat }) => {
 
   return (
     <div css={JobStatContainerStyle}>
-      {Object.entries(jobStat!).map((el) => (
-        <JobStatCard job={el[0] as Job} stat={el[1]} key={el[0]} />
+      {Object.entries(jobStat!).map(([job, stat]) => (
+        <JobStatCard key={job} job={job as Job} stat={stat} />
       ))}
     </div>
   );

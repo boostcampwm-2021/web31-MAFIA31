@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "start:dev": "lerna run start:dev --stream",
-    "kill-port": "npx kill-port 3000 5000",
+    "kill-port": "npx kill-port 3000 5000 5001",
     "lint:fix-client": "eslint --fix ./packages/client/src/**/*.{ts,tsx}",
     "lint:fix-server": "eslint --fix ./packages/server/**/*.ts"
   }

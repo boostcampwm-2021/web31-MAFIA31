@@ -7,12 +7,12 @@ import { grey4, primaryDark, primaryDarkHover, white } from '@src/constants';
 import { Achievement } from '@mafia/domain/types/achievement';
 import { useUserInfo } from '@contexts/userInfo';
 import { Redirect } from 'react-router-dom';
-import JobStatContainer from '@src/containers/JobStatContainer';
 import { useQuery } from 'react-query';
 import { Stat } from '@mafia/domain/types/game';
 import apiClient from '@src/axios/apiClient';
 import useTab, { Tab } from '@src/hooks/useTab';
 import AchievementList from '@src/lists/AchievementListContainer';
+import JobStatList from '@src/lists/JobStatContainer';
 import dummmyAchievementList from './dummyData';
 
 const ACHIEVEMENT_PERCENTAGE_LABEL = '업적 달성률';
@@ -36,7 +36,7 @@ const Profile: FC = () => {
   const [achievementList] = useState<Achievement[]>(dummmyAchievementList);
 
   const allTabs: Tab[] = [
-    { name: '통계', content: data ? <JobStatContainer jobStat={data.jobStat} /> : <></> },
+    { name: '통계', content: data ? <JobStatList jobStat={data.jobStat} /> : <></> },
     {
       name: '업적',
       content: data ? <AchievementList achievementList={achievementList} /> : <></>,

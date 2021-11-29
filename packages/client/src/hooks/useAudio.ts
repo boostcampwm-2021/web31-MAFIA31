@@ -1,47 +1,39 @@
-import { useEffect, useLayoutEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
 
-const useAudio = (src: string) => {
-  const [audio] = useState(new Audio(src));
-  const [playing, setPlaying] = useState(true);
-  const history = useHistory();
+const useAudio = (src: string = '') => {
+  const audio = useRef(new Audio(src));
+  const [playing, setPlaying] = useState<boolean>(false);
 
-  const toggleAudio = () => setPlaying((prev) => !prev);
+  const load = () => audio.current?.load();
+  const play = () => audio.current?.play();
+  const pause = () => audio.current?.pause();
 
-  useLayoutEffect(() => {
-    audio.volume = 0.1;
-    audio.loop = true;
-    audio.play();
+  const updateAudio = (src: string) => {
+    audio.current.src = src;
+  };
+  const updateLoop = (isLoop: boolean) => {
+    audio.current.loop = isLoop;
+  };
+  const toggle = () => {
+    setPlaying((prev) => !prev);
+  };
+  const toggleSound = () => {
+    if (playing) {
+      play();
+    } else {
+      pause();
+    }
+  };
+
+  useEffect(() => {
+    audio.current.volume = 0.1;
   }, []);
 
   useEffect(() => {
-    const playPromise = audio.play();
-    if (playPromise !== undefined) {
-      playPromise.then(() => {
-        if (!playing) {
-          audio.pause();
-        }
-      });
-    }
+    toggleSound();
   }, [playing]);
 
-  useEffect(() => {
-    const unlisten = history.listen(() => setPlaying(false));
-    return unlisten;
-  }, []);
-
-  useEffect(
-    () =>
-      history.listen(() => {
-        const playPromise = audio.play();
-        if (playPromise !== undefined) {
-          audio.pause();
-        }
-      }),
-    [history],
-  );
-
-  return { playing, toggleAudio };
+  return { playing, updateAudio, updateLoop, toggle, load, play, pause };
 };
 
 export default useAudio;

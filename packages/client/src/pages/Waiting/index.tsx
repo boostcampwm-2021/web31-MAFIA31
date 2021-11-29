@@ -6,8 +6,8 @@ import { RoomInfo } from '@mafia/domain/types/room';
 import useSocket from '@hooks/useSocket';
 import useRoom from '@hooks/useRoom';
 import Header from '@src/templates/Header';
-import WaitingListContainer from '@containers/WaitingListContainer';
 import { DefaultButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
+import WaitingList from '@src/lists/WaitingListContainer';
 
 interface locationType {
   roomInfo: RoomInfo;
@@ -27,7 +27,7 @@ const Waiting = () => {
     <div css={pageStyle}>
       <Header exit />
       <div css={pageBodyStyle}>
-        <WaitingListContainer userList={players} />
+        <WaitingList userList={players} />
         <div css={bottomBarStyle}>
           {isHost ? (
             <DefaultButton

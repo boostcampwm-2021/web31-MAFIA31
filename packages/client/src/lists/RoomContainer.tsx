@@ -10,7 +10,7 @@ import { RoomCard } from '@components/Card';
 import NoticeModal from '@components/Modal/NoticeModal';
 import { RoomInfo } from '@mafia/domain/types/room';
 
-const RoomContainer = () => {
+const RoomList = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
   const getRoomList = async () => {
     const { data } = await apiClient.get('/rooms');
@@ -29,7 +29,7 @@ const RoomContainer = () => {
   if (error) return <div>An error has occurred: {error.message}</div>;
 
   return (
-    <div css={roomContainerStyle}>
+    <div css={roomListStyle}>
       <NoticeModal isOpen={isModalOpen} onRequestClose={closeModal}>
         <p>이미 게임이 시작한 방입니다.</p>
       </NoticeModal>
@@ -46,7 +46,7 @@ const RoomContainer = () => {
   );
 };
 
-const roomContainerStyle = css`
+const roomListStyle = css`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
@@ -67,4 +67,4 @@ const roomContainerStyle = css`
   }
 `;
 
-export default RoomContainer;
+export default RoomList;

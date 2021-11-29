@@ -2,9 +2,8 @@ import { FC, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-import { PlayerState } from '@mafia/domain/types/game';
+import { Player, Memo } from '@src/types';
 import { grey1, titleActive, white, JOB_DICT } from '@constants/index';
-import { Memo } from '@src/types';
 import useModal from '@hooks/useModal';
 import { Modal } from '@components/Modal';
 import { SearchIcon } from '@components/Icon';
@@ -13,20 +12,14 @@ import { ImageSizeList, Image } from '@components/Image';
 import { MemoButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 
 type PropType = {
-  playerStateList: PlayerState[];
+  players: Player[];
   memoList: Memo[];
   isNight: boolean;
   myJob: string;
   updateMemo: any;
 };
 
-const RightSideContainer: FC<PropType> = ({
-  playerStateList,
-  memoList,
-  isNight,
-  myJob,
-  updateMemo,
-}) => {
+const RightSideContainer: FC<PropType> = ({ players, memoList, isNight, myJob, updateMemo }) => {
   const { isModalOpen, openModal, closeModal } = useModal();
   const [selectedUser, setSelectedUser] = useState<string>('');
   const [showModal, setShowModal] = useState(false);
@@ -62,7 +55,7 @@ const RightSideContainer: FC<PropType> = ({
             <MemoButton
               userName={userName}
               guessJob={guessJob}
-              isDead={playerStateList[idx].isDead}
+              isDead={players[idx].isDead}
               onClick={memoClickHandler}
             />
             <span>{userName}</span>

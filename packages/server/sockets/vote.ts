@@ -1,8 +1,14 @@
 import * as EVENT from '@mafia/domain/constants/event';
-import { EXECUTION, PUBLISH_MAX_VOTE, PUBLISH_VOTE } from '@mafia/domain/constants/event';
+import {
+  EXECUTION,
+  PUBLISH_MAX_VOTE,
+  PUBLISH_STORY,
+  PUBLISH_VOTE,
+} from '@mafia/domain/constants/event';
 import * as TIME from '@mafia/domain/constants/time';
 import { StoryName } from '@mafia/domain/types/chat';
 import { Namespace, Socket } from 'socket.io';
+import { STORY_DIC } from '../constants/story';
 import GameStore from '../stores/GameStore';
 
 interface crossVotePlayer {
@@ -43,8 +49,17 @@ const publishMaxVote = (namespace: Namespace, roomId: string) => {
 
   GameStore.resetVote(roomId);
   crossVoteCntStore[roomId] = { userName: maxVotePlayer, voteCnt: 0 };
-  namespace.emit(PUBLISH_MAX_VOTE, maxVotePlayer);
   namespace.emit(PUBLISH_VOTE, GameStore.getVoteInfos(roomId));
+  namespace.emit(PUBLISH_MAX_VOTE, maxVotePlayer);
+};
+
+const getStory = (storyName: StoryName, name: string = '') => {
+  return {
+    id: Date.now().toString(),
+    msg: STORY_DIC[storyName].msg(name),
+    imgSrc: STORY_DIC[storyName].src,
+    type: STORY_DIC[storyName].type,
+  };
 };
 
 const publishExecution = (namespace: Namespace, roomId: string) => {
@@ -56,14 +71,22 @@ const publishExecution = (namespace: Namespace, roomId: string) => {
   if (crossVoteCnt < alivePlayerList.length / 2) {
     crossVoteCntStore[roomId].userName = undefined;
   }
-  const excutedPlayer = crossVoteCntStore[roomId].userName;
-  const deadSocketId = GameStore.getSocketId(roomId, excutedPlayer);
+  const executedPlayer = crossVoteCntStore[roomId].userName;
 
+  if (!executedPlayer) {
+    namespace.emit(PUBLISH_STORY, getStory(StoryName.NO_VOTE));
+    crossVoteCntStore[roomId] = { userName: '', voteCnt: 0 };
+    return;
+  }
+
+  const deadSocketId = GameStore.getSocketId(roomId, executedPlayer);
   if (deadSocketId) {
     namespace.in(deadSocketId).socketsJoin('shaman');
   }
-  GameStore.diePlayer(roomId, excutedPlayer || '');
-  namespace.emit(EXECUTION, { userName: excutedPlayer, storyName: StoryName.EXECUTION });
+
+  GameStore.diePlayer(roomId, executedPlayer!);
+  namespace.emit(EXECUTION, executedPlayer);
+  namespace.emit(PUBLISH_STORY, getStory(StoryName.EXECUTION, executedPlayer));
   crossVoteCntStore[roomId] = { userName: '', voteCnt: 0 };
 };
 

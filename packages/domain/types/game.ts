@@ -40,10 +40,11 @@ export interface Stat {
 }
 
 export enum Job {
-  mafia = 'mafia',
-  citizen = 'citizen',
-  doctor = 'doctor',
-  police = 'police',
+  MAFIA = 'mafia',
+  CITIZEN = 'citizen',
+  DOCTOR = 'doctor',
+  POLICE = 'police',
+  SHAMAN = 'shaman',
 }
 
 export type JobStat = Record<Job, Stat>;

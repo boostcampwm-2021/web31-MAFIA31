@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { useHistory } from 'react-router-dom';
@@ -35,7 +35,7 @@ const LeftSideContainer: FC<PropType> = ({
   const history = useHistory();
   const { userInfo } = useUserInfo();
   const { isModalOpen, openModal, closeModal } = useModal();
-  const { playing, toggleAudio } = useAudio(GAME_DAY_MP3);
+  const { playing, updateLoop, toggle, pause } = useAudio(GAME_DAY_MP3);
 
   const amIDead = () =>
     players.find(({ userName: playerName }) => playerName === userInfo?.userName)?.isDead;
@@ -54,6 +54,15 @@ const LeftSideContainer: FC<PropType> = ({
     history.push('/rooms');
     closeModal();
   };
+
+  useEffect(() => {
+    updateLoop(true);
+    toggle();
+
+    return () => {
+      pause();
+    };
+  }, []);
 
   return (
     <div css={leftSideContainerStyle}>
@@ -74,10 +83,10 @@ const LeftSideContainer: FC<PropType> = ({
           <span>ROOM NAME</span>
           <div css={roomIconButtonsStyle(isNight)}>
             <IconButton
-              icon={playing ? AudioOffIcon : AudioOnIcon}
+              icon={playing ? AudioOnIcon : AudioOffIcon}
               size={ButtonSizeList.LARGE}
               theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
-              onClick={toggleAudio}
+              onClick={toggle}
             />
             <IconButton
               icon={RoomOutIcon}

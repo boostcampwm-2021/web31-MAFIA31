@@ -5,6 +5,7 @@ import { Socket } from 'socket.io-client';
 const useSocketEvent = (
   socket: MutableRefObject<Socket<any, any> | undefined>,
   events: Event[],
+  dependency: any[] = [],
 ) => {
   const attachEvents = () => {
     if (!socket.current) return;
@@ -22,7 +23,7 @@ const useSocketEvent = (
     return () => {
       detachEvents();
     };
-  }, [socket.current]);
+  }, [socket.current, ...dependency]);
 };
 
 export default useSocketEvent;

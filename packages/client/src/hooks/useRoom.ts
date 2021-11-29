@@ -17,21 +17,19 @@ const useRoom = () => {
 
   const updatePlayers = (newPlayerList: PlayerInfo[]) => setPlayers(newPlayerList);
   const startGame = () => {
-    setPlayers((prev) => {
-      history.push({
-        pathname: '/game',
-        state: {
-          players: prev.map(({ userName, profileImg }: User) => ({ userName, profileImg })),
-        },
-      });
-      return prev;
+    history.push({
+      pathname: '/game',
+      state: {
+        players: players.map(({ userName, profileImg }: User) => ({ userName, profileImg })),
+      },
     });
   };
 
   const joinEvent: Event = { event: EVENT.JOIN, handler: updatePlayers };
   const readyEvent: Event = { event: EVENT.PUBLISH_READY, handler: updatePlayers };
   const startEvent: Event = { event: EVENT.PUBLISH_GAME_START, handler: startGame };
-  useSocketEvent(socketRef, [joinEvent, readyEvent, startEvent]);
+  useSocketEvent(socketRef, [joinEvent, readyEvent]);
+  useSocketEvent(socketRef, [startEvent], [players]);
 
   const isAllReady = () => !players.some(({ isReady }) => !isReady);
   const sendReady = () => socketRef.current?.emit(EVENT.READY, { userName: userInfo?.userName });

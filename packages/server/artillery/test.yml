@@ -1,8 +1,8 @@
 config:
   target: "http://mafia31.kro.kr/123a2549-947d-4edf-af70-a75ac13e938c"
   phases:
-    - duration: 30
-      arrivalRate: 5
+    - duration: 60
+      arrivalRate: 10
   processor: "./hooks/index.js"
 scenarios:
   - name: "enter room and ready"

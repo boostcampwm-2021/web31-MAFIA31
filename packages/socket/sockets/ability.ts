@@ -4,14 +4,12 @@ import { Namespace, Socket } from 'socket.io';
 import { STORY_DIC } from '../constants/story';
 import GameStore from '../stores/GameStore';
 
-const getStory = (storyName: StoryName, name: string = '') => {
-  return {
-    id: Date.now().toString(),
-    msg: STORY_DIC[storyName].msg(name),
-    imgSrc: STORY_DIC[storyName].src,
-    type: STORY_DIC[storyName].type,
-  };
-};
+const getStory = (storyName: StoryName, name: string = '') => ({
+  id: Date.now().toString(),
+  msg: STORY_DIC[storyName].msg(name),
+  imgSrc: STORY_DIC[storyName].src,
+  type: STORY_DIC[storyName].type,
+});
 
 const publishVictim = (namespace: Namespace) => {
   const roomId = namespace.name;

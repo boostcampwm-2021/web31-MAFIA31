@@ -1,19 +1,16 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { Image, ImageSizeList } from '@src/components/Image';
 import Header from '@src/templates/Header';
-import { grey4, primaryDark, primaryDarkHover, white } from '@src/constants';
-import { Achievement } from '@mafia/domain/types/achievement';
+import { grey4, primaryDark } from '@src/constants';
+
 import { useUserInfo } from '@contexts/userInfo';
 import { Redirect } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { Stat } from '@mafia/domain/types/game';
 import apiClient from '@src/axios/apiClient';
-import useTab, { Tab } from '@src/hooks/useTab';
-import AchievementList from '@src/lists/AchievementListContainer';
-import JobStatList from '@src/lists/JobStatContainer';
-import dummmyAchievementList from './dummyData';
+import TabContainer from '@src/containers/TabContainer';
 
 const ACHIEVEMENT_PERCENTAGE_LABEL = '업적 달성률';
 const TOTAL_PERCENTAGE = 100;
@@ -33,16 +30,6 @@ const Profile: FC = () => {
   };
   const { isLoading, data, error } = useQuery<any, Error>('user', getUserStatData);
   const achievementPercent = 45;
-  const [achievementList] = useState<Achievement[]>(dummmyAchievementList);
-
-  const allTabs: Tab[] = [
-    { name: '통계', content: data ? <JobStatList jobStat={data.jobStat} /> : <></> },
-    {
-      name: '업적',
-      content: data ? <AchievementList achievementList={achievementList} /> : <></>,
-    },
-  ];
-  const { currentTab, changeTab } = useTab(0, allTabs);
 
   if (isLoading) return <div>Loading</div>;
   if (error) return <div>An error has occurred: {error.message}</div>;
@@ -83,51 +70,11 @@ const Profile: FC = () => {
           </div>
         </div>
 
-        <div css={rightSideStyle}>
-          <div css={tabContainerStyle}>
-            {allTabs.map((tab, idx) => (
-              <button
-                css={tabButtonStyle}
-                key={tab.name}
-                type="button"
-                onClick={() => changeTab(idx)}
-                style={{
-                  backgroundColor: currentTab.name === tab.name ? primaryDarkHover : primaryDark,
-                }}
-              >
-                {tab.name}
-              </button>
-            ))}
-          </div>
-          {currentTab.content}
-        </div>
+        <TabContainer data={data} />
       </div>
     </div>
   );
 };
-
-const tabContainerStyle = css`
-  display: flex;
-  justify-content: flex-start;
-  gap: 24px;
-  border-bottom: 6px solid ${primaryDark};
-`;
-
-const tabButtonStyle = css`
-  width: 100px;
-  height: 50px;
-  background-color: ${primaryDark};
-  color: ${white};
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-  cursor: pointer;
-  &:hover {
-    background-color: ${primaryDarkHover};
-  }
-  font-weight: bold;
-  font-size: 20px;
-  line-height: 29px;
-`;
 
 const profilePageStyle = css`
   height: 100vh;
@@ -157,18 +104,6 @@ const leftSideStyle = css`
   justify-content: center;
 
   gap: 50px;
-`;
-
-const rightSideStyle = css`
-  display: flex;
-  flex-direction: column;
-
-  gap: 40px;
-  width: 60%;
-
-  @media (max-width: 1024px) {
-    width: 90%;
-  }
 `;
 
 const profileStyle = css`

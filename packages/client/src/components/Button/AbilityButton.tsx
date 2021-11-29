@@ -1,111 +1,68 @@
 /* eslint-disable no-nested-ternary */
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { white, titleActive, grey3, mafia } from '@constants/colors';
 import { VoteIcon } from '@components/Icon';
-import { BULLET_MP3, HEAL_MP3 } from '@constants/audio';
+import { Player, Selected } from '@src/types';
 
 interface PropType {
-  isNight: boolean;
-  userImg: string;
-  userName: string;
-  voteCount: number;
-  isDead: boolean;
+  player: Player;
   isMafia: boolean;
-  isVictim: boolean;
-  isSurvivor: boolean;
+  selected: Selected;
+  getStampImg: any;
   onClick: any;
-  myJob: string;
-  amIDead: boolean;
 }
 
-const AbilityButton: FC<PropType> = ({
-  isNight,
-  userImg,
-  userName,
-  voteCount,
-  isDead,
-  isMafia,
-  isVictim,
-  isSurvivor,
-  onClick,
-  myJob,
-  amIDead,
-}) => {
+const AbilityButton: FC<PropType> = ({ player, isMafia, selected, getStampImg, onClick }) => {
+  const { userName, profileImg, isDead, voteCount } = player;
+  const [stamp, setStamp] = useState<string>('');
+
+  const updateStamp = () => {
+    setStamp(getStampImg(userName, isDead));
+  };
+
   const iconList = () => {
     const arr = Array.from({ length: voteCount }, (_, idx) => idx);
     return arr.map((e) => <VoteIcon key={e} />);
   };
 
   const handleClick = () => {
-    onClick(userName);
-    setAudio();
+    onClick(userName, isDead);
   };
 
-  const setAudio = () => {
-    if (isNight && !amIDead) {
-      const audio = new Audio();
-      if (myJob === 'mafia') {
-        audio.src = BULLET_MP3;
-      } else if (myJob === 'doctor') {
-        audio.src = HEAL_MP3;
-      } else if (myJob === 'police') {
-        audio.src = HEAL_MP3;
-      }
-      audio.load();
-      audio.play();
-    }
-  };
-
-  let abilityState = <></>;
-  if (isNight && isVictim) {
-    abilityState = <img src="/assets/images/bullet.png" alt="bullet" />;
-  } else if (isNight && isSurvivor) {
-    abilityState = <img src="/assets/images/healthcare.png" alt="cure" />;
-  } else if (!isNight && voteCount) {
-    abilityState = <div>{useMemo(() => iconList(), [voteCount])}</div>;
-  }
+  useEffect(() => {
+    updateStamp();
+  }, [selected]);
 
   return (
-    <button
-      type="button"
-      css={isNight ? buttonStyleNight(isDead) : buttonStyleDay(isDead)}
-      onClick={handleClick}
-    >
-      <img src={userImg} alt="profile_img" css={userImgStyle} />
+    <button type="button" css={buttonStyle(isDead)} onClick={handleClick}>
+      <img src={profileImg} alt="profile" css={userImgStyle} />
       <div css={voteInfoStyle(isMafia)}>
         <span>{userName}</span>
-        {abilityState}
+        {voteCount ? <div>{iconList()}</div> : <></>}
       </div>
+      {!stamp ? (
+        <></>
+      ) : (
+        <img src={`/assets/images/${stamp}.png`} alt="skill icon" css={abilityStyle} />
+      )}
     </button>
   );
 };
 
-const buttonStyleNight = (isDead: boolean) => css`
+const buttonStyle = (isDead: boolean) => css`
+  cursor: pointer;
+  position: relative;
   display: flex;
   align-items: center;
-  cursor: pointer;
-  background-color: ${isDead ? grey3 : white};
-  box-shadow: 1px 2px 4px rgba(78, 65, 109, 0.25);
 
-  padding: 12px;
   width: 48%;
   min-height: 75px;
+  padding: 12px;
   border-radius: 15px;
-`;
-
-const buttonStyleDay = (isDead: boolean) => css`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
   background-color: ${isDead ? grey3 : white};
   box-shadow: 1px 2px 4px rgba(78, 65, 109, 0.25);
-
-  padding: 12px;
-  width: 48%;
-  min-height: 75px;
-  border-radius: 15px;
 `;
 
 const userImgStyle = css`
@@ -136,29 +93,28 @@ const voteInfoStyle = (isMafia: boolean) => css`
     width: 100%;
     padding: 0 10px;
   }
+`;
 
-  img {
-    width: 30px;
-    height: 30px;
+const abilityStyle = css`
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  left: calc(50% - 5px);
+  animation: pulse 0.1s forwards;
 
-    animation-name: pulse;
-    animation-duration: 0.1s;
-    animation-fill-mode: forwards;
-
-    @keyframes pulse {
-      0% {
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.5;
-        transform-origin: 50% 50%;
-        transform: rotate(0.2turn) scale(5);
-        transition: all 0.3s ease-out;
-      }
-      100% {
-        opacity: 1;
-        transform: rotate(-0.05turn) scale(1);
-      }
+  @keyframes pulse {
+    0% {
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.5;
+      transform-origin: 50% 50%;
+      transform: rotate(0.2turn) scale(5);
+      transition: all 0.3s ease-out;
+    }
+    100% {
+      opacity: 1;
+      transform: rotate(-0.05turn) scale(1);
     }
   }
 `;

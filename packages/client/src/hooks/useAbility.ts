@@ -3,17 +3,10 @@ import * as EVENT from '@mafia/domain/constants/event';
 import * as TIME from '@mafia/domain/constants/time';
 import { useSocketContext } from '@src/contexts/socket';
 import { useUserInfo } from '@src/contexts/userInfo';
-import { Event } from '@src/types';
+import { Event, Selected } from '@src/types';
 import { MutableRefObject, useEffect, useState } from 'react';
 import useAudio from './useAudioo';
 import useSocketEvent from './useSocketEvent';
-
-interface Selected {
-  victim?: string;
-  survivor?: string;
-  suspect?: string;
-  candidate: string;
-}
 
 const useAbility = (
   isNight: boolean,

@@ -4,54 +4,50 @@ import { css } from '@emotion/react';
 import { useHistory } from 'react-router-dom';
 
 import useModal from '@hooks/useModal';
-import { PlayerState } from '@mafia/domain/types/game';
 import { titleActive, white, grey1 } from '@constants/index';
 import { RoomOutIcon, AudioOffIcon, AudioOnIcon } from '@components/Icon';
 import ConfirmModal from '@components/Modal/ConfirmModal';
 import { AbilityButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
-import { RoomVote } from '@mafia/domain/types/vote';
 import { useUserInfo } from '@src/contexts/userInfo';
 import { GAME_DAY_MP3 } from '@constants/audio';
 import useAudio from '@src/hooks/useAudio';
+import { Player, Selected } from '@src/types';
 
 type PropType = {
-  playerStateList: PlayerState[];
-  playerList: RoomVote[];
+  players: Player[];
+  mafias: string[];
+  selected: Selected;
   timer: string;
-  voteUser: any;
-  emitAbility: any;
-  victim: string;
-  survivor: string;
   isNight: boolean;
-  myJob: string;
+  getSelectedImg: any;
+  emitAbility: any;
 };
 
 const LeftSideContainer: FC<PropType> = ({
-  playerStateList,
-  playerList,
-  voteUser,
-  emitAbility,
-  isNight,
-  victim,
-  survivor,
+  players,
+  mafias,
+  selected,
   timer,
-  myJob,
+  isNight,
+  getSelectedImg,
+  emitAbility,
 }) => {
   const history = useHistory();
   const { userInfo } = useUserInfo();
   const { isModalOpen, openModal, closeModal } = useModal();
   const { playing, toggleAudio } = useAudio(GAME_DAY_MP3);
 
-  const handleClick = (userName: string) => {
-    const myState = playerStateList.find(
-      ({ userName: playerName }) => playerName === userInfo?.userName,
-    );
-    if (!myState || myState.isDead) return;
-    if (isNight) {
-      emitAbility(userName);
-    } else {
-      voteUser(userName);
-    }
+  const amIDead = () =>
+    players.find(({ userName: playerName }) => playerName === userInfo?.userName)?.isDead;
+
+  const handleClick = (userName: string, isDead: boolean) => {
+    if (amIDead()) return;
+    emitAbility(userName, isDead);
+  };
+
+  const getStampImg = (userName: string, isDead: boolean) => {
+    if (amIDead()) return false;
+    return getSelectedImg(userName, isDead);
   };
 
   const roomOutHandler = () => {
@@ -98,24 +94,14 @@ const LeftSideContainer: FC<PropType> = ({
       </div>
       <hr css={hrStyle} />
       <div css={abilityListStyle}>
-        {playerList.map(({ profileImg, userName, voteCount }) => (
+        {players.map((player) => (
           <AbilityButton
-            key={userName}
-            isNight={isNight}
-            userImg={profileImg}
-            userName={userName}
-            voteCount={voteCount}
-            isVictim={victim === userName}
-            isSurvivor={survivor === userName}
-            isDead={playerStateList.find((player) => player.userName === userName)?.isDead || false}
-            isMafia={
-              playerStateList.find((player) => player.userName === userName)?.isMafia || false
-            }
+            key={player.userName}
+            player={player}
+            isMafia={mafias.includes(player.userName)}
+            selected={selected}
+            getStampImg={getStampImg}
             onClick={handleClick}
-            myJob={myJob}
-            amIDead={
-              playerStateList.find((user) => user.userName === userInfo?.userName)?.isDead || false
-            }
           />
         ))}
       </div>

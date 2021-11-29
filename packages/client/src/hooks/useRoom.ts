@@ -1,49 +1,58 @@
 import * as EVENT from '@mafia/domain/constants/event';
-import { PlayerInfo } from '@mafia/domain/types/user';
+import { PlayerInfo, User } from '@mafia/domain/types/user';
 import { useSocketContext } from '@src/contexts/socket';
 import { useUserInfo } from '@src/contexts/userInfo';
+import { Event } from '@src/types';
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import useSocketEvent from './useSocketEvent';
 
 const useRoom = () => {
-  const { socketRef } = useSocketContext();
-  const [playerList, setPlayerList] = useState<PlayerInfo[]>([]);
-  const { userInfo } = useUserInfo();
   const history = useHistory();
+  const { socketRef } = useSocketContext();
+  const { userInfo } = useUserInfo();
 
-  const updatePlayerList = (newPlayerList: PlayerInfo[]) => setPlayerList(newPlayerList);
-  const pushGamePage = () => {
-    setPlayerList((prev) => {
+  const [isHost, setIsHost] = useState<boolean>(false);
+  const [players, setPlayers] = useState<PlayerInfo[]>([]);
+
+  const updatePlayers = (newPlayerList: PlayerInfo[]) => setPlayers(newPlayerList);
+  const startGame = () => {
+    setPlayers((prev) => {
       history.push({
         pathname: '/game',
         state: {
-          userList: prev.map(({ userName, profileImg }) => ({ userName, profileImg })),
+          players: prev.map((player: User) => player),
         },
       });
       return prev;
     });
   };
 
-  useEffect(() => {
-    socketRef.current?.on(EVENT.JOIN, updatePlayerList);
-    socketRef.current?.on(EVENT.PUBLISH_READY, updatePlayerList);
-    socketRef.current?.on(EVENT.PUBLISH_GAME_START, pushGamePage);
+  const joinEvent: Event = { event: EVENT.JOIN, handler: updatePlayers };
+  const readyEvent: Event = { event: EVENT.PUBLISH_READY, handler: updatePlayers };
+  const startEvent: Event = { event: EVENT.PUBLISH_GAME_START, handler: startGame };
+  useSocketEvent(socketRef, [joinEvent, readyEvent, startEvent]);
 
-    return () => {
-      socketRef.current?.off(EVENT.JOIN);
-      socketRef.current?.off(EVENT.PUBLISH_READY);
-      socketRef.current?.off(EVENT.PUBLISH_GAME_START);
-    };
-  }, [socketRef.current]);
-
-  const isAllReady = () => !playerList.some(({ isReady }) => !isReady);
+  const isAllReady = () => !players.some(({ isReady }) => !isReady);
   const sendReady = () => socketRef.current?.emit(EVENT.READY, { userName: userInfo?.userName });
-  const sendGameStart = () => {
+  const sendStart = () => {
     if (!isAllReady()) return;
     socketRef.current?.emit(EVENT.GAME_START);
   };
 
-  return { playerList, sendReady, sendGameStart, isAllReady };
+  const updateHost = () => {
+    if (!players[0]) {
+      setIsHost(false);
+      return;
+    }
+    setIsHost(players[0].isHost && userInfo?.userName === players[0].userName);
+  };
+
+  useEffect(() => {
+    updateHost();
+  }, [players, userInfo?.userName]);
+
+  return { players, isHost, sendReady, sendStart, isAllReady };
 };
 
 export default useRoom;

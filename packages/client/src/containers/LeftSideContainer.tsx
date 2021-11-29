@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { useHistory } from 'react-router-dom';
@@ -11,7 +11,9 @@ import { IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button'
 import { GAME_DAY_MP3 } from '@constants/audio';
 import useAudio from '@src/hooks/useAudio';
 import { Player, Selected } from '@src/types';
+import useExecutionModal from '@src/hooks/useExecutionModal';
 import AbilityButtonList from '@src/lists/AbilityButtonList';
+import { useUserInfo } from '@src/contexts/userInfo';
 
 type PropType = {
   players: Player[];
@@ -34,23 +36,56 @@ const LeftSideContainer: FC<PropType> = ({
 }) => {
   const history = useHistory();
 
-  const { isModalOpen, openModal, closeModal } = useModal();
-  const { playing, toggleAudio } = useAudio(GAME_DAY_MP3);
+  const { userInfo } = useUserInfo();
+
+  const {
+    isModalOpen: isRoomOutModalOpen,
+    openModal: openRoomOutModal,
+    closeModal: closeRoomOutModal,
+  } = useModal();
+
+  const {
+    isModalOpen: isExecutionModalOpen,
+    maxVotedPlayer,
+    closeModal: closeExecutionModal,
+    executionHandler,
+  } = useExecutionModal();
+
+  const { playing, updateLoop, toggle, pause } = useAudio(GAME_DAY_MP3);
 
   const roomOutHandler = () => {
     history.push('/rooms');
-    closeModal();
+    closeRoomOutModal();
   };
+
+  const amIDead = () =>
+    players.find(({ userName: playerName }) => playerName === userInfo?.userName)?.isDead;
+
+  useEffect(() => {
+    updateLoop(true);
+    toggle();
+
+    return () => {
+      pause();
+    };
+  }, []);
 
   return (
     <div css={leftSideContainerStyle}>
       <ConfirmModal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
+        isOpen={isRoomOutModalOpen}
+        onRequestClose={closeRoomOutModal}
         eventHandler={roomOutHandler}
-        closeModal={closeModal}
+        closeModal={closeRoomOutModal}
       >
         <p>진행중인 게임을 포기하고 나가시겠습니까?</p>
+      </ConfirmModal>
+      <ConfirmModal
+        isOpen={amIDead() ? false : isExecutionModalOpen}
+        eventHandler={executionHandler}
+        closeModal={closeExecutionModal}
+      >
+        <p>{maxVotedPlayer}을(를) 투표로 처형할까요?</p>
       </ConfirmModal>
       <div css={Style}>
         <img
@@ -61,16 +96,16 @@ const LeftSideContainer: FC<PropType> = ({
           <span>ROOM NAME</span>
           <div css={roomIconButtonsStyle(isNight)}>
             <IconButton
-              icon={playing ? AudioOffIcon : AudioOnIcon}
+              icon={playing ? AudioOnIcon : AudioOffIcon}
               size={ButtonSizeList.LARGE}
               theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
-              onClick={toggleAudio}
+              onClick={toggle}
             />
             <IconButton
               icon={RoomOutIcon}
               size={ButtonSizeList.LARGE}
               theme={isNight ? ButtonThemeList.LIGHT : ButtonThemeList.DARK}
-              onClick={openModal}
+              onClick={openRoomOutModal}
             />
           </div>
         </div>
@@ -86,6 +121,7 @@ const LeftSideContainer: FC<PropType> = ({
         selected={selected}
         emitAbility={emitAbility}
         getSelectedImg={getSelectedImg}
+        amIDead={amIDead() ?? false}
       />
     </div>
   );

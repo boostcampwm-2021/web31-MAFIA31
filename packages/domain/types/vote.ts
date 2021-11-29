@@ -3,6 +3,4 @@ export interface Vote {
   to: string;
 }
 
-export interface RoomVote {
-  [userName: string]: number;
-}
+export type RoomVote = Record<string, number>;

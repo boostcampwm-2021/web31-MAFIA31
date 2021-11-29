@@ -11,7 +11,7 @@ type PropType = {
   isOpen: boolean;
   eventHandler: () => void;
   closeModal: () => void;
-  onRequestClose: () => void;
+  onRequestClose?: () => void;
 };
 
 const ConfirmModal: FC<PropType> = ({

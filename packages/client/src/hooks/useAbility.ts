@@ -54,7 +54,10 @@ const useAbility = (
           case 'mafia':
             return EVENT.MAFIA_ABILITY;
           case 'police':
-            return EVENT.POLICE_ABILITY;
+            if (!selected.suspect) {
+              return EVENT.POLICE_ABILITY;
+            }
+            return '';
           case 'doctor':
             return EVENT.DOCTOR_ABILITY;
           default:

@@ -5,7 +5,7 @@ import { Event } from '@src/types';
 import { useEffect, useState } from 'react';
 import useSocketEvent from './useSocketEvent';
 
-const useVoteModal = () => {
+const useExecutionModal = () => {
   const { socketRef } = useSocketContext();
   const { isModalOpen, openModal, closeModal } = useModal();
   const [maxVotedPlayer, setMaxVotedPlayer] = useState('');
@@ -31,4 +31,4 @@ const useVoteModal = () => {
   return { isModalOpen, maxVotedPlayer, closeModal, executionHandler };
 };
 
-export default useVoteModal;
+export default useExecutionModal;

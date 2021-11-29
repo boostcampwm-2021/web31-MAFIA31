@@ -1,14 +1,14 @@
 import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import RoomContainer from '@src/containers/RoomContainer';
 import Header from '@src/templates/Header';
+import RoomList from '@src/lists/RoomContainer';
 
 const Rooms: FC = () => (
   <div css={roomsPageStyle}>
     <Header createRoom profilePage />
     <div css={roomsPageBodyStyle}>
-      <RoomContainer />
+      <RoomList />
     </div>
   </div>
 );

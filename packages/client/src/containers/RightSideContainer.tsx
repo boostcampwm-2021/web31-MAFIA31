@@ -4,12 +4,11 @@ import { css } from '@emotion/react';
 
 import { Player, Memo } from '@src/types';
 import { grey1, titleActive, white, JOB_DICT } from '@constants/index';
-import useModal from '@hooks/useModal';
 import { Modal } from '@components/Modal';
 import { SearchIcon } from '@components/Icon';
-import MemoModal from '@components/Modal/MemoModal';
 import { ImageSizeList, Image } from '@components/Image';
-import { MemoButton, IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
+import { IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
+import MemoList from '@src/lists/MemoList';
 
 type PropType = {
   players: Player[];
@@ -20,17 +19,10 @@ type PropType = {
 };
 
 const RightSideContainer: FC<PropType> = ({ players, memoList, isNight, myJob, updateMemo }) => {
-  const { isModalOpen, openModal, closeModal } = useModal();
-  const [selectedUser, setSelectedUser] = useState<string>('');
   const [showModal, setShowModal] = useState(false);
 
   const handleClick = () => {
     setShowModal((prev) => !prev);
-  };
-
-  const memoClickHandler = (userName: string) => {
-    setSelectedUser(userName);
-    openModal();
   };
 
   return (
@@ -43,25 +35,7 @@ const RightSideContainer: FC<PropType> = ({ players, memoList, isNight, myJob, u
         </div>
       </div>
       <hr css={hrStyle} />
-      <div css={memoListStyle}>
-        <MemoModal
-          isOpen={isModalOpen}
-          onRequestClose={closeModal}
-          eventHandler={updateMemo}
-          userName={selectedUser}
-        />
-        {memoList.map(({ userName, guessJob }, idx) => (
-          <div css={memoInfoStyle(isNight)} key={userName}>
-            <MemoButton
-              userName={userName}
-              guessJob={guessJob}
-              isDead={players[idx].isDead}
-              onClick={memoClickHandler}
-            />
-            <span>{userName}</span>
-          </div>
-        ))}
-      </div>
+      <MemoList players={players} memoList={memoList} isNight={isNight} updateMemo={updateMemo} />
       <hr css={hrStyle} />
       {showModal ? (
         <div css={modalWrapperStyle}>
@@ -119,29 +93,6 @@ const hrStyle = css`
   border: 0;
   margin: 24px 0;
   border-top: 1px solid ${grey1};
-`;
-
-const memoListStyle = css`
-  display: flex;
-  flex-wrap: wrap;
-
-  width: 100%;
-  gap: 8px 5%;
-`;
-
-const memoInfoStyle = (isNight: boolean) => css`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  gap: 8px;
-  width: 30%;
-  font-size: 12px;
-  color: ${isNight ? white : titleActive};
-
-  @media (min-width: 1441px) {
-    width: 22%;
-  }
 `;
 
 const searchButtonStyle = () => css`

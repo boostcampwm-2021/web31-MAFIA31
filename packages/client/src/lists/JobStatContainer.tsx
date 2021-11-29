@@ -10,14 +10,14 @@ interface Props {
   jobStat: JobStat;
 }
 
-const JobStatContainer: FC<Props> = ({ jobStat }) => {
+const JobStatList: FC<Props> = ({ jobStat }) => {
   const { userInfo } = useUserInfo();
   if (!userInfo) {
     return <Redirect to="/" />;
   }
 
   return (
-    <div css={JobStatContainerStyle}>
+    <div css={JobStatListStyle}>
       {Object.entries(jobStat!).map(([job, stat]) => (
         <JobStatCard key={job} job={job as Job} stat={stat} />
       ))}
@@ -25,7 +25,7 @@ const JobStatContainer: FC<Props> = ({ jobStat }) => {
   );
 };
 
-const JobStatContainerStyle = css`
+const JobStatListStyle = css`
   display: flex;
   overflow-x: scroll;
 
@@ -34,4 +34,4 @@ const JobStatContainerStyle = css`
   padding: 16px;
 `;
 
-export default JobStatContainer;
+export default JobStatList;

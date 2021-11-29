@@ -46,13 +46,6 @@ const GameResult = () => {
         ))}
       </div>
       <div css={buttonDivStyle}>
-        <DefaultButton
-          size={ButtonSizeList.MEDIUM}
-          theme={ButtonThemeList.DARK}
-          imageSrc="/assets/icons/back.svg"
-          text="돌아가기"
-          onClick={() => {}}
-        />
         <Link to="/rooms">
           <DefaultButton
             size={ButtonSizeList.MEDIUM}

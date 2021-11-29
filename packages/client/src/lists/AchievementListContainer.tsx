@@ -8,7 +8,8 @@ import { FC } from 'react';
 interface Props {
   achievementList: Achievement[];
 }
-const AchievementListContainer: FC<Props> = ({ achievementList }) => (
+
+const AchievementList: FC<Props> = ({ achievementList }) => (
   <div css={achievementListStyle}>
     {achievementList.map((e) => (
       <AchievementCard
@@ -43,4 +44,4 @@ const achievementListStyle = css`
   }
 `;
 
-export default AchievementListContainer;
+export default AchievementList;

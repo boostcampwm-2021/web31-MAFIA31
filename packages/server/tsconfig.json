@@ -1,18 +1,18 @@
 {
   "compilerOptions": {
-    "lib": ["es2016","esnext.asynciterable"], /* 컴파일에 포함될 라이브러리 */
-    "types": ["node"], /* 타입 정의가 포함될 이름의 목록 */
-    "target": "es2016", /* 타겟의 ECMASCript 버전 */
-    "module": "commonjs", /* 모듈 코드 생성 지정 */
-    "moduleResolution": "node", /* 모듈 해석 방법 */
-    "outDir": "./dist", /* 결과물 디렉토리 */
-    "strict": true, /* 엄격한 타입 검사 옵션 활성화 */
-    "emitDecoratorMetadata": true, /* 소스에 데코레이터 선언에 대한 설계-타입 메타 데이터를 보냄 */
-    "experimentalDecorators": true, /* ES 데코레이터에  활성화 */
-    "sourceMap": true,  /* 소스맵 사용 */
-    "allowSyntheticDefaultImports": true, /* default export가 없는 모듈에서 default imports를 허용 */
-    "esModuleInterop": true, /* 'require'와 'import' 호환 */
-    "skipLibCheck": true, /* 모든 선언 파일(*.d.ts)의 타입 검사 생략 */
-    "resolveJsonModule": true, /* .json 확장자로 import된 모듈을 포함 */
-  },
+    "lib": ["es2016", "esnext.asynciterable"],
+    "types": ["node"],
+    "target": "es2016",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "strict": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true
+  }
 }

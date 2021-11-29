@@ -5,7 +5,7 @@ import { useSocketContext } from '@src/contexts/socket';
 import { useUserInfo } from '@src/contexts/userInfo';
 import { Event, Selected } from '@src/types';
 import { MutableRefObject, useEffect, useState } from 'react';
-import useAudio from './useAudioo';
+import useAudio from './useAudio';
 import useSocketEvent from './useSocketEvent';
 
 const useAbility = (

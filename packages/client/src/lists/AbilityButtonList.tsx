@@ -3,7 +3,6 @@ import { FC } from 'react';
 import { css } from '@emotion/react';
 import { Player, Selected } from '@src/types';
 import { AbilityButton } from '@src/components/Button';
-import { useUserInfo } from '@src/contexts/userInfo';
 
 interface PropType {
   players: Player[];
@@ -11,6 +10,7 @@ interface PropType {
   selected: Selected;
   emitAbility: any;
   getSelectedImg: any;
+  amIDead: boolean;
 }
 
 const AbilityButtonList: FC<PropType> = ({
@@ -19,19 +19,15 @@ const AbilityButtonList: FC<PropType> = ({
   selected,
   emitAbility,
   getSelectedImg,
+  amIDead,
 }) => {
-  const { userInfo } = useUserInfo();
-
-  const amIDead = () =>
-    players.find(({ userName: playerName }) => playerName === userInfo?.userName)?.isDead;
-
   const handleClick = (userName: string, isDead: boolean) => {
-    if (amIDead()) return;
+    if (amIDead) return;
     emitAbility(userName, isDead);
   };
 
   const getStampImg = (userName: string, isDead: boolean) => {
-    if (amIDead()) return false;
+    if (amIDead) return false;
     return getSelectedImg(userName, isDead);
   };
 

@@ -33,7 +33,7 @@ const JOB_COUNT: JobCount[] = [
   { mafia: 3, citizen: 3, police: 1, doctor: 1, shaman: 1 },
   { mafia: 3, citizen: 4, police: 1, doctor: 1, shaman: 1 },
   { mafia: 3, citizen: 5, police: 1, doctor: 1, shaman: 1 },
-  { mafia: 4, citizen: 5, police: 1, doctor: 1, shaman: 1 },
+  { mafia: 3, citizen: 6, police: 1, doctor: 1, shaman: 1 },
 ];
 
 const JOB_ARR: string[][] = JOB_COUNT.map((cnt) => createJobCountArr(cnt));

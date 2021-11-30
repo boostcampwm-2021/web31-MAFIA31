@@ -32,36 +32,22 @@ const updateStats = async (roomId: string) => {
   });
 };
 
-const endGame = (
-  namespace: Namespace,
-  roomId: string,
-  interval: ReturnType<typeof setInterval>,
-) => {
+const endGame = (namespace: Namespace, roomId: string) => {
   namespace.emit(EVENT.GAME_OVER, getGameResult(roomId));
-  clearInterval(interval);
+  GameStore.clearTimer(roomId);
   updateRoomStatus(roomId, 'ready');
   updateStats(roomId);
   GameStore.resetGame(roomId);
 };
 
 const checkEnd = (roomId: string) => {
-  if (RoomStore.get(roomId).length === 0) {
-    return true;
-  }
-
   const { mafia, citizen } = GameStore.getDashBoard(roomId);
-
   return mafia >= citizen || mafia === 0;
 };
 
-const changeTurn = (
-  namespace: Namespace,
-  roomId: string,
-  interval: ReturnType<typeof setInterval>,
-  isNight: boolean,
-) => {
+const changeTurn = (namespace: Namespace, roomId: string, isNight: boolean) => {
   if (checkEnd(roomId)) {
-    endGame(namespace, roomId, interval);
+    endGame(namespace, roomId);
     return;
   }
 
@@ -99,8 +85,9 @@ const startTimer = (namespace: Namespace, roomId: string) => {
       counter = TIME.DAY_DURATION + 1;
     }
 
-    changeTurn(namespace, roomId, gameTimer, isNight);
+    changeTurn(namespace, roomId, isNight);
   }, TIME.SEC);
+  GameStore.setTimer(roomId, gameTimer);
 };
 
 const shuffle = (arr: string[]) => arr.sort(() => Math.random() - 0.5);

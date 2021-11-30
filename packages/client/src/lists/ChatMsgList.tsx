@@ -7,25 +7,25 @@ import { Story } from '@src/types';
 import { FC, useEffect, useRef } from 'react';
 
 interface PropType {
-  chatList: (Message | Story)[];
+  logs: (Message | Story)[];
 }
 
 function isStory(data: Message | Story): data is Story {
   return (data as Story).imgSrc !== undefined;
 }
 
-const ChatMsgList: FC<PropType> = ({ chatList }) => {
+const ChatMsgList: FC<PropType> = ({ logs }) => {
   const chatMsgsRef = useRef<HTMLDivElement>(null);
   const { userInfo } = useUserInfo();
 
   useEffect(() => {
     if (!chatMsgsRef.current) return;
     chatMsgsRef.current.scrollTop = chatMsgsRef.current.scrollHeight;
-  }, [chatList]);
+  }, [logs]);
 
   return (
     <div css={chatMsgsStyle} ref={chatMsgsRef}>
-      {chatList.map((el) =>
+      {logs.map((el) =>
         isStory(el) ? (
           <StoryMsg key={el.id} story={el} />
         ) : (

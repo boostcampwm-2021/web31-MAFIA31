@@ -2,23 +2,21 @@ import React, { FC, useCallback, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-import { Message } from '@mafia/domain/types/chat';
-import { Story } from '@src/types';
 import { useUserInfo } from '@src/contexts/userInfo';
 import { SendIcon } from '@components/Icon';
 import { IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { primaryLight, primaryDark, white, titleActive } from '@constants/index';
 import ChatMsgList from '@src/lists/ChatMsgList';
+import useLog from '@src/hooks/useLog';
 
 interface PropType {
-  chatList: (Message | Story)[];
-  sendChat: any;
   isNight: boolean;
 }
 
-const ChatContainer: FC<PropType> = ({ chatList, sendChat, isNight }) => {
+const ChatContainer: FC<PropType> = ({ isNight }) => {
   const [inputValue, setInputValue] = useState('');
   const { userInfo } = useUserInfo();
+  const { logs, sendChat } = useLog();
 
   const canNightChat = () => true; // 밤에 채팅 보낼 수 있는 직업인지 확인
   const sendMessage = useCallback(() => {
@@ -53,7 +51,7 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat, isNight }) => {
 
   return (
     <div css={chatContainerStyle}>
-      <ChatMsgList chatList={chatList} />
+      <ChatMsgList logs={logs} />
       <form css={inputFormStyle(isNight)}>
         <input
           css={inputStyle(isNight)}

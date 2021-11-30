@@ -13,7 +13,6 @@ import { User } from '@mafia/domain/types/user';
 import useGame from '@src/hooks/useGame';
 import useAbility from '@hooks/useAbility';
 import useToast from '@src/hooks/useToast';
-import useLog from '@src/hooks/useLog';
 
 interface locationType {
   players: User[];
@@ -31,7 +30,6 @@ const Game = () => {
   const { players: initPlayers } = state;
   const { players, myJob, mafias, isNight, voteSec } = useGame(initPlayers);
   const { selected, emitAbility, getSelectedImg } = useAbility(isNight, voteSec, myJob);
-  const { logs, sendChat } = useLog();
   useToast(isNight, voteSec);
   usePreventLeave();
 
@@ -46,7 +44,7 @@ const Game = () => {
         getSelectedImg={getSelectedImg}
         emitAbility={emitAbility}
       />
-      <ChatContainer chatList={logs} sendChat={sendChat} isNight={isNight} />
+      <ChatContainer isNight={isNight} />
       <RightSideContainer
         players={players}
         myJob={myJob}

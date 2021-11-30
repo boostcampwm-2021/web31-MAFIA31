@@ -14,7 +14,7 @@ import useGame from '@src/hooks/useGame';
 import useAbility from '@hooks/useAbility';
 import useToast from '@src/hooks/useToast';
 import useLog from '@src/hooks/useLog';
-import useMemo from '@hooks/useMemo';
+import useJobMemo from '@src/hooks/useJobMemo';
 
 interface locationType {
   players: User[];
@@ -32,7 +32,7 @@ const Game = () => {
   const { players: initPlayers } = state;
   const { players, myJob, mafias, isNight, voteSec } = useGame(initPlayers);
   const { selected, emitAbility, getSelectedImg } = useAbility(isNight, voteSec, myJob);
-  const { memos, updateMemo } = useMemo(initPlayers);
+  const { memos, updateMemo } = useJobMemo(initPlayers);
   const { logs, sendChat } = useLog();
   useToast(isNight, voteSec);
   usePreventLeave();

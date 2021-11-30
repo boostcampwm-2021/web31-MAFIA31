@@ -6,7 +6,7 @@ import { Event, Memo } from '@src/types';
 import { useEffect, useState } from 'react';
 import useSocketEvent from './useSocketEvent';
 
-const useGame = (initValue: User[]) => {
+const useJobMemo = (initValue: User[]) => {
   const { socketRef } = useSocketContext();
   const { userInfo } = useUserInfo();
   const [memos, setMemos] = useState<Memo[]>([]);
@@ -42,4 +42,4 @@ const useGame = (initValue: User[]) => {
   return { memos, updateMemo };
 };
 
-export default useGame;
+export default useJobMemo;

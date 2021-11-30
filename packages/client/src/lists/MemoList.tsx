@@ -3,18 +3,20 @@ import { FC, useState } from 'react';
 import { css } from '@emotion/react';
 import MemoModal from '@src/components/Modal/MemoModal';
 import useModal from '@src/hooks/useModal';
-import { Memo, Player } from '@src/types';
+import { Player } from '@src/types';
 import { titleActive, white } from '@src/constants';
 import { MemoButton } from '@src/components/Button';
+import useJobMemo from '@src/hooks/useJobMemo';
+import { User } from '@mafia/domain/types/user';
 
 interface PropType {
+  initPlayers: User[];
   players: Player[];
-  memoList: Memo[];
   isNight: boolean;
-  updateMemo: any;
 }
 
-const MemoList: FC<PropType> = ({ players, memoList, isNight, updateMemo }) => {
+const MemoList: FC<PropType> = ({ initPlayers, players, isNight }) => {
+  const { jobMemos, updateJobMemos } = useJobMemo(initPlayers);
   const { isModalOpen, openModal, closeModal } = useModal();
   const [selectedUser, setSelectedUser] = useState<string>('');
   const memoClickHandler = (userName: string) => {
@@ -27,10 +29,10 @@ const MemoList: FC<PropType> = ({ players, memoList, isNight, updateMemo }) => {
       <MemoModal
         isOpen={isModalOpen}
         onRequestClose={closeModal}
-        eventHandler={updateMemo}
+        eventHandler={updateJobMemos}
         userName={selectedUser}
       />
-      {memoList.map(({ userName, guessJob }, idx) => (
+      {jobMemos.map(({ userName, guessJob }, idx) => (
         <div css={memoInfoStyle(isNight)} key={userName}>
           <MemoButton
             userName={userName}

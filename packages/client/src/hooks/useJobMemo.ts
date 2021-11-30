@@ -9,21 +9,21 @@ import useSocketEvent from './useSocketEvent';
 const useJobMemo = (initValue: User[]) => {
   const { socketRef } = useSocketContext();
   const { userInfo } = useUserInfo();
-  const [memos, setMemos] = useState<Memo[]>([]);
+  const [jobMemos, setJobMemos] = useState<Memo[]>([]);
 
-  const updateMemo = (playerName: string, job: string) => {
-    setMemos((prev) =>
+  const updateJobMemos = (playerName: string, job: string) => {
+    setJobMemos((prev) =>
       prev.map((user) => (user.userName === playerName ? { ...user, guessJob: job } : user)),
     );
   };
 
   const updateJob = ({ job }: { job: string }) => {
-    updateMemo(userInfo?.userName ?? '', job);
+    updateJobMemos(userInfo?.userName ?? '', job);
   };
 
   const updateMafias = ({ mafiaList: mafias }: { mafiaList: string[] }) => {
     if (!mafias) return;
-    mafias.forEach((mafia) => updateMemo(mafia, 'mafia'));
+    mafias.forEach((mafia) => updateJobMemos(mafia, 'mafia'));
   };
 
   const myJobMemoEvent: Event = { event: EVENT.PUBLISH_JOB, handler: updateJob };
@@ -32,14 +32,14 @@ const useJobMemo = (initValue: User[]) => {
 
   const initMemo = () => {
     const newMemos = initValue.map(({ userName }) => ({ userName, guessJob: 'question' }));
-    setMemos(newMemos);
+    setJobMemos(newMemos);
   };
 
   useEffect(() => {
     initMemo();
   }, []);
 
-  return { memos, updateMemo };
+  return { jobMemos, updateJobMemos };
 };
 
 export default useJobMemo;

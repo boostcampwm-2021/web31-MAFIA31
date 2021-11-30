@@ -49,7 +49,7 @@ const socketInit = (namespace: Namespace): void => {
       RoomStore.removePlayer(roomId, socket.id);
       const exitPlayer = GameStore.diePlayer(roomId, socket.id);
       socket.nsp.emit(EVENT.JOIN, RoomStore.get(roomId));
-      socket.nsp.emit(EVENT.EXIT, { userName: exitPlayer });
+      socket.nsp.emit(EVENT.EXIT, exitPlayer);
     });
 
     chatSocketInit(socket);

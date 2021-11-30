@@ -48,6 +48,9 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat, isNight }) => {
     sendMessage();
   }, [inputValue, isNight]);
 
+  const updateInputMsg = ({ target }: React.ChangeEvent<HTMLInputElement>) =>
+    setInputValue(target.value);
+
   return (
     <div css={chatContainerStyle}>
       <ChatMsgList chatList={chatList} />
@@ -56,7 +59,7 @@ const ChatContainer: FC<PropType> = ({ chatList, sendChat, isNight }) => {
           css={inputStyle(isNight)}
           placeholder="메세지를 입력하세요"
           value={inputValue}
-          onChange={({ target }) => setInputValue(target.value)}
+          onChange={updateInputMsg}
           onKeyPress={handleKeyPress}
         />
         <IconButton

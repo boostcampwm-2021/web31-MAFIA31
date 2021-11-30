@@ -30,7 +30,7 @@ const Game = () => {
   }
 
   const { players: initPlayers } = state;
-  const { players, myJob, mafias, isNight, timer, voteSec } = useGame(initPlayers);
+  const { players, myJob, mafias, isNight, voteSec } = useGame(initPlayers);
   const { selected, emitAbility, getSelectedImg } = useAbility(isNight, voteSec, myJob);
   const { memos, updateMemo } = useMemo(initPlayers);
   const { logs, sendChat } = useLog();
@@ -44,7 +44,6 @@ const Game = () => {
         players={players}
         mafias={mafias}
         selected={selected}
-        timer={timer}
         isNight={isNight}
         getSelectedImg={getSelectedImg}
         emitAbility={emitAbility}

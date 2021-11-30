@@ -22,8 +22,8 @@ interface Props {
 const Header: FC<Props> = ({ createRoom = false, exit = false, profilePage = false }) => {
   const history = useHistory();
   const { isModalOpen, openModal, closeModal } = useModal();
-  const goBack = () => {
-    history.goBack();
+  const goRooms = () => {
+    history.push('/rooms');
   };
 
   return (
@@ -50,7 +50,7 @@ const Header: FC<Props> = ({ createRoom = false, exit = false, profilePage = fal
             text={EXIT_ROOM_BUTTON}
             size={ButtonSizeList.SMALL}
             theme={ButtonThemeList.LIGHT}
-            onClick={goBack}
+            onClick={goRooms}
           />
         ) : (
           <></>

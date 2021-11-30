@@ -13,6 +13,10 @@ interface SurvivorStore {
   [roomId: string]: string;
 }
 
+interface TimerStore {
+  [roomId: string]: NodeJS.Timer;
+}
+
 interface DashBoard {
   mafia: number;
   citizen: number;
@@ -22,6 +26,7 @@ class GameStore {
   static instance: GameStoreType = {};
   static victims: VictimStore = {};
   static survivors: SurvivorStore = {};
+  static timers: TimerStore = {};
 
   private static canInvest: boolean = true;
 
@@ -63,6 +68,14 @@ class GameStore {
 
   static setSurvivor(roomId: string, survivor: string) {
     GameStore.survivors[roomId] = survivor;
+  }
+
+  static setTimer(roomId: string, timer: NodeJS.Timer) {
+    GameStore.timers[roomId] = timer;
+  }
+
+  static getTimer(roomId: string) {
+    return GameStore.timers[roomId];
   }
 
   static getSocketId(roomId: string, playerName: string | undefined) {
@@ -119,6 +132,10 @@ class GameStore {
       voteFrom: new Set(),
     }));
     GameStore.set(roomId, resetVoteGameInfo);
+  }
+
+  static clearTimer(roomId: string) {
+    clearInterval(GameStore.getTimer(roomId));
   }
 
   static voteUser(roomId: string, voteInfo: Vote): boolean {

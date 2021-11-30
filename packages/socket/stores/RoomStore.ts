@@ -32,14 +32,21 @@ class RoomStore {
       ({ socketId, userName }) => socketId === player.socketId || userName === player.userName,
     );
 
-    if (existingPlayer) return; // TODO: throw Error() 발생시켜주고, client에서는 Redirect 시켜주기!
-    RoomStore.instance[roomId].push(player);
+    if (existingPlayer) {
+      existingPlayer.socketId = player.socketId;
+      existingPlayer.isReady = player.isReady;
+      existingPlayer.isHost = player.isHost;
+    } else {
+      RoomStore.instance[roomId].push(player);
+    }
   }
 
   static async removePlayer(roomId: string, socketId: string) {
+    console.log(socketId);
     RoomStore.instance[roomId] = RoomStore.instance[roomId].filter(
       (user) => user.socketId !== socketId,
     );
+    console.log(RoomStore.instance[roomId]);
 
     if (RoomStore.instance[roomId].length <= 0) {
       GameStore.clearTimer(roomId);

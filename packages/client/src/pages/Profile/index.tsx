@@ -1,4 +1,3 @@
-import { FC } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import Header from '@src/templates/Header';
@@ -10,7 +9,7 @@ import apiClient from '@src/axios/apiClient';
 import TabContainer from '@src/containers/TabContainer';
 import ProfileLeftSideContainer from '@src/containers/ProfileLeftSideContainer';
 
-const Profile: FC = () => {
+const Profile = () => {
   const { userInfo } = useUserInfo();
   if (!userInfo) {
     return <Redirect to="/" />;

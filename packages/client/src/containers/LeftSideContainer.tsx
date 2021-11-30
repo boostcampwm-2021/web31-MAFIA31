@@ -14,7 +14,7 @@ import { Player, Selected } from '@src/types';
 import useExecutionModal from '@src/hooks/useExecutionModal';
 import AbilityButtonList from '@src/lists/AbilityButtonList';
 import { useUserInfo } from '@src/contexts/userInfo';
-import Timer from '@src/components/Timer/Timer';
+import Timer from '@src/components/Timer';
 
 type PropType = {
   players: Player[];

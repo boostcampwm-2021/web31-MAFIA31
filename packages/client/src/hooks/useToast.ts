@@ -1,9 +1,20 @@
+import useTimer from '@hooks/useTimer';
+import * as EVENT from '@mafia/domain/constants/event';
 import * as TIME from '@mafia/domain/constants/time';
 import * as TOAST from '@src/constants/toast';
-import { MutableRefObject, useEffect } from 'react';
+import { useSocketContext } from '@src/contexts/socket';
+import { Event } from '@src/types';
+import { useEffect } from 'react';
 import { toast } from 'react-toastify';
+import useSocketEvent from './useSocketEvent';
 
-const useToast = (isNight: boolean, voteSec: MutableRefObject<number | undefined>) => {
+const useToast = (isNight: boolean) => {
+  const { socketRef } = useSocketContext();
+  const { seconds: voteSec, updateTimer: updateVoteTimer } = useTimer();
+
+  const voteTimeEvent: Event = { event: EVENT.VOTE_TIME, handler: updateVoteTimer };
+  useSocketEvent(socketRef, [voteTimeEvent]);
+
   const viewToast = (condition: any) => {
     const NIGHT = true;
     const DAY = false;
@@ -34,8 +45,6 @@ const useToast = (isNight: boolean, voteSec: MutableRefObject<number | undefined
     if (toastOp === undefined) return;
     toast(...toastOp);
   };
-
-  useEffect(() => {}, []);
 
   useEffect(() => {
     viewToast(isNight);

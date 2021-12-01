@@ -17,9 +17,10 @@ export interface Story {
   type?: string;
 }
 
-export interface Memo {
+export interface JobMemo {
   userName: string;
   guessJob: string;
+  isDead: boolean;
 }
 
 export interface Event {

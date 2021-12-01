@@ -1,6 +1,4 @@
-import { ToastContainer } from 'react-toastify';
 import { useLocation, useHistory } from 'react-router-dom';
-import 'react-toastify/dist/ReactToastify.css';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
@@ -11,8 +9,7 @@ import RightSideContainer from '@containers/RightSideContainer';
 import usePreventLeave from '@src/hooks/usePreventLeave';
 import { User } from '@mafia/domain/types/user';
 import useGame from '@src/hooks/useGame';
-import useAbility from '@hooks/useAbility';
-import useToast from '@src/hooks/useToast';
+import Toast from '@components/Toast';
 
 interface locationType {
   players: User[];
@@ -29,30 +26,20 @@ const Game = () => {
   }
 
   const { players: initPlayers, roomName } = state;
-  const { players, myJob, mafias, isNight, voteSec } = useGame(initPlayers);
-  const { selected, emitAbility, getSelectedImg } = useAbility(isNight, voteSec, myJob);
-  useToast(isNight, voteSec);
+  const { myJob, isNight } = useGame();
   usePreventLeave();
 
   return (
     <div css={gamePageStyle(isNight)}>
-      <ToastContainer position="top-center" autoClose={7000} hideProgressBar />
+      <Toast isNight={isNight} />
       <LeftSideContainer
-        players={players}
-        mafias={mafias}
-        selected={selected}
+        initPlayers={initPlayers}
         isNight={isNight}
-        getSelectedImg={getSelectedImg}
-        emitAbility={emitAbility}
+        myJob={myJob}
         roomName={roomName}
       />
       <ChatContainer isNight={isNight} />
-      <RightSideContainer
-        players={players}
-        myJob={myJob}
-        isNight={isNight}
-        initPlayers={initPlayers}
-      />
+      <RightSideContainer myJob={myJob} isNight={isNight} initPlayers={initPlayers} />
     </div>
   );
 };

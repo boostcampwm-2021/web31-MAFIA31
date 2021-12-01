@@ -1,3 +1,4 @@
+import { useState, useLayoutEffect } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -8,44 +9,60 @@ import useRoom from '@hooks/useRoom';
 import Header from '@src/templates/Header';
 import { DefaultButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import WaitingList from '@src/lists/WaitingListContainer';
+import apiClient from '@src/axios/apiClient';
 
 interface locationType {
   roomInfo: RoomInfo;
 }
 const Waiting = () => {
   const { search } = useLocation<locationType>();
+  const [roomName, setRoomName] = useState('');
   const history = useHistory();
-
-  if (!search.match(/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/)) {
+  const roomId = search.replace(/\?/g, '');
+  if (!roomId.match(/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/)) {
     history.push({ pathname: '/rooms' });
   }
 
-  useSocket(search.replace(/\?/g, ''));
+  const getRoomInfo = async () => {
+    const { data } = await apiClient.get(`/rooms/${roomId}`);
+    setRoomName(data.title);
+  };
+
+  useLayoutEffect(() => {
+    getRoomInfo();
+  }, []);
+
+  useSocket(roomId);
   const { players, isHost, sendReady, sendStart, isAllReady } = useRoom();
 
   return (
     <div css={pageStyle}>
       <Header exit />
       <div css={pageBodyStyle}>
-        <WaitingList userList={players} />
         <div css={bottomBarStyle}>
-          {isHost ? (
-            <DefaultButton
-              text="START"
-              size={ButtonSizeList.MEDIUM}
-              theme={ButtonThemeList.DARK}
-              onClick={sendStart}
-              isDisabled={!isAllReady()}
-            />
-          ) : (
-            <DefaultButton
-              text="READY"
-              size={ButtonSizeList.MEDIUM}
-              theme={ButtonThemeList.DARK}
-              onClick={sendReady}
-            />
-          )}
+          <div css={pageTitleStyle}>
+            {roomName} <img css={iconMarginStyle} src="/assets/icons/link.png" alt="link" />
+          </div>
+          <div>
+            {isHost ? (
+              <DefaultButton
+                text="START"
+                size={ButtonSizeList.MEDIUM}
+                theme={ButtonThemeList.DARK}
+                onClick={sendStart}
+                isDisabled={!isAllReady()}
+              />
+            ) : (
+              <DefaultButton
+                text="READY"
+                size={ButtonSizeList.MEDIUM}
+                theme={ButtonThemeList.DARK}
+                onClick={sendReady}
+              />
+            )}
+          </div>
         </div>
+        <WaitingList userList={players} />
       </div>
     </div>
   );
@@ -53,6 +70,17 @@ const Waiting = () => {
 
 const pageStyle = css`
   height: 100vh;
+`;
+
+const pageTitleStyle = css`
+  font-family: Noto Sans KR;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 32px;
+  line-height: 46px;
+  display: flex;
+  align-items: center;
+  text-align: center;
 `;
 
 const pageBodyStyle = css`
@@ -67,8 +95,14 @@ const pageBodyStyle = css`
 
 const bottomBarStyle = css`
   display: flex;
-  justify-content: flex-end;
-  width: 100%;
+  justify-content: space-between;
+  width: 50vw;
+  margin-top: 3vh;
+  margin-bottom: 3vh;
 `;
 
+const iconMarginStyle = css`
+  margin-left: 15px;
+  margin-right: 15px;
+`;
 export default Waiting;

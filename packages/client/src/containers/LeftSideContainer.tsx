@@ -1,20 +1,18 @@
-import { FC, useEffect } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { useHistory } from 'react-router-dom';
 
 import useModal from '@hooks/useModal';
 import { titleActive, white, grey1 } from '@constants/index';
 import { RoomOutIcon, AudioOffIcon, AudioOnIcon } from '@components/Icon';
-import ConfirmModal from '@components/Modal/ConfirmModal';
 import { IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { GAME_DAY_MP3 } from '@constants/audio';
 import useAudio from '@src/hooks/useAudio';
 import { Player, Selected } from '@src/types';
-import useExecutionModal from '@src/hooks/useExecutionModal';
 import AbilityButtonList from '@src/lists/AbilityButtonList';
 import { useUserInfo } from '@src/contexts/userInfo';
 import Timer from '@src/components/Timer';
+import GamePageModalContainer from './GamePageModalContainer';
 
 type PropType = {
   players: Player[];
@@ -33,8 +31,6 @@ const LeftSideContainer: FC<PropType> = ({
   getSelectedImg,
   emitAbility,
 }) => {
-  const history = useHistory();
-
   const { userInfo } = useUserInfo();
 
   const {
@@ -43,22 +39,12 @@ const LeftSideContainer: FC<PropType> = ({
     closeModal: closeRoomOutModal,
   } = useModal();
 
-  const {
-    isModalOpen: isExecutionModalOpen,
-    maxVotedPlayer,
-    closeModal: closeExecutionModal,
-    executionHandler,
-  } = useExecutionModal();
-
   const { playing, updateLoop, toggle, pause } = useAudio(GAME_DAY_MP3);
 
-  const roomOutHandler = () => {
-    history.push('/rooms');
-    closeRoomOutModal();
-  };
-
-  const amIDead = () =>
-    players.find(({ userName: playerName }) => playerName === userInfo?.userName)?.isDead;
+  const amIDead = useCallback(
+    () => players.find(({ userName: playerName }) => playerName === userInfo?.userName)?.isDead,
+    [players],
+  );
 
   useEffect(() => {
     updateLoop(true);
@@ -71,21 +57,11 @@ const LeftSideContainer: FC<PropType> = ({
 
   return (
     <div css={leftSideContainerStyle}>
-      <ConfirmModal
-        isOpen={isRoomOutModalOpen}
-        onRequestClose={closeRoomOutModal}
-        eventHandler={roomOutHandler}
-        closeModal={closeRoomOutModal}
-      >
-        <p>진행중인 게임을 포기하고 나가시겠습니까?</p>
-      </ConfirmModal>
-      <ConfirmModal
-        isOpen={amIDead() ? false : isExecutionModalOpen}
-        eventHandler={executionHandler}
-        closeModal={closeExecutionModal}
-      >
-        <p>{maxVotedPlayer}을(를) 투표로 처형할까요?</p>
-      </ConfirmModal>
+      <GamePageModalContainer
+        amIDead={amIDead}
+        isRoomOutModalOpen={isRoomOutModalOpen}
+        closeRoomOutModal={closeRoomOutModal}
+      />
       <div css={Style}>
         <img
           src={isNight ? '/assets/images/moon.png' : '/assets/images/sun.png'}

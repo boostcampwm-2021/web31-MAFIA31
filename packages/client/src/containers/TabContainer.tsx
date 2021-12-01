@@ -5,7 +5,7 @@ import { primaryDark, primaryDarkHover, white } from '@src/constants';
 import useTab, { Tab } from '@src/hooks/useTab';
 import { Achievement } from '@mafia/domain/types/achievement';
 import dummmyAchievementList from '@src/pages/Profile/dummyData';
-import JobStatList from '@src/lists/JobStatContainer';
+import JobStatList from '@src/lists/JobStatList';
 import AchievementList from '@src/lists/AchievementListContainer';
 
 interface PropType {

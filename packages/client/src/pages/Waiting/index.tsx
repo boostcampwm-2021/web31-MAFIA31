@@ -7,7 +7,7 @@ import useSocket from '@hooks/useSocket';
 import useRoom from '@hooks/useRoom';
 import Header from '@src/templates/Header';
 import { DefaultButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
-import WaitingList from '@src/lists/WaitingListContainer';
+import WaitingList from '@src/lists/WaitingList';
 
 interface locationType {
   roomInfo: RoomInfo;

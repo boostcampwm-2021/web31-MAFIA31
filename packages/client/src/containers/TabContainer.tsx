@@ -7,6 +7,7 @@ import { Achievement } from '@mafia/domain/types/achievement';
 import dummmyAchievementList from '@src/pages/Profile/dummyData';
 import JobStatList from '@src/lists/JobStatList';
 import AchievementList from '@src/lists/AchievementListContainer';
+import LineChartContainer from './LineChartContainer';
 
 interface PropType {
   data: any;
@@ -16,7 +17,16 @@ const TabContainer: FC<PropType> = ({ data }) => {
   const [achievementList] = useState<Achievement[]>(dummmyAchievementList);
 
   const allTabs: Tab[] = [
-    { name: '통계', content: data ? <JobStatList jobStat={data.jobStat} /> : <></> },
+    {
+      name: '통계',
+      content: data ? (
+        <>
+          <JobStatList jobStat={data.jobStat} /> <LineChartContainer />{' '}
+        </>
+      ) : (
+        <></>
+      ),
+    },
     {
       name: '업적',
       content: data ? <AchievementList achievementList={achievementList} /> : <></>,
@@ -59,7 +69,7 @@ const tabContainerStyle = css`
 
   gap: 40px;
   width: 60%;
-
+  height: 70vh;
   @media (max-width: 1024px) {
     width: 90%;
   }

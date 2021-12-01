@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import useSocketEvent from './useSocketEvent';
 
-const useRoom = () => {
+const useRoom = (roomName: string) => {
   const history = useHistory();
   const { socketRef } = useSocketContext();
   const { userInfo } = useUserInfo();
@@ -20,6 +20,7 @@ const useRoom = () => {
     history.push({
       pathname: '/game',
       state: {
+        roomName,
         players: players.map(({ userName, profileImg }: User) => ({ userName, profileImg })),
       },
     });

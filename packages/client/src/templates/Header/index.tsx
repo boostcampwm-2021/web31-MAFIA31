@@ -8,6 +8,7 @@ import { LightLogoIcon } from '@src/components/Icon';
 import useModal from '@src/hooks/useModal';
 import NoticeModal from '@src/components/Modal/NoticeModal';
 import RoomFormContainer from '@src/containers/RoomFormContainer';
+import SkeletonDefaultButton from '@src/components/Skeleton/SkeletonDefaultButton';
 
 const CREATE_ROOM_BUTTON = '방 만들기';
 const EXIT_ROOM_BUTTON = '나가기';
@@ -17,9 +18,15 @@ interface Props {
   createRoom?: boolean;
   exit?: boolean;
   profilePage?: boolean;
+  skeleton?: boolean;
 }
 
-const Header: FC<Props> = ({ createRoom = false, exit = false, profilePage = false }) => {
+const Header: FC<Props> = ({
+  createRoom = false,
+  exit = false,
+  profilePage = false,
+  skeleton = false,
+}) => {
   const history = useHistory();
   const { isModalOpen, openModal, closeModal } = useModal();
   const goRooms = () => {
@@ -63,6 +70,14 @@ const Header: FC<Props> = ({ createRoom = false, exit = false, profilePage = fal
               theme={ButtonThemeList.LIGHT}
             />
           </Link>
+        ) : (
+          <></>
+        )}
+        {skeleton ? (
+          <>
+            <SkeletonDefaultButton size={ButtonSizeList.SMALL} />
+            <SkeletonDefaultButton size={ButtonSizeList.SMALL} />
+          </>
         ) : (
           <></>
         )}

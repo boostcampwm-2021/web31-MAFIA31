@@ -2,23 +2,23 @@ import { FC, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-import { Player, Memo } from '@src/types';
+import { Player } from '@src/types';
 import { grey1, titleActive, white, JOB_DICT } from '@constants/index';
 import { Modal } from '@components/Modal';
 import { SearchIcon } from '@components/Icon';
 import { ImageSizeList, Image } from '@components/Image';
 import { IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import MemoList from '@src/lists/MemoList';
+import { User } from '@mafia/domain/types/user';
 
 type PropType = {
   players: Player[];
-  memoList: Memo[];
   isNight: boolean;
   myJob: string;
-  updateMemo: any;
+  initPlayers: User[];
 };
 
-const RightSideContainer: FC<PropType> = ({ players, memoList, isNight, myJob, updateMemo }) => {
+const RightSideContainer: FC<PropType> = ({ initPlayers, players, isNight, myJob }) => {
   const [showModal, setShowModal] = useState(false);
 
   const handleClick = () => {
@@ -35,7 +35,7 @@ const RightSideContainer: FC<PropType> = ({ players, memoList, isNight, myJob, u
         </div>
       </div>
       <hr css={hrStyle} />
-      <MemoList players={players} memoList={memoList} isNight={isNight} updateMemo={updateMemo} />
+      <MemoList players={players} isNight={isNight} initPlayers={initPlayers} />
       <hr css={hrStyle} />
       {showModal ? (
         <div css={modalWrapperStyle}>

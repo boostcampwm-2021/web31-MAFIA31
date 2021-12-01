@@ -16,7 +16,6 @@ const useGame = (initValue: User[]) => {
   const [players, setPlayers] = useState<Player[]>([]);
   const [mafias, setMafias] = useState<string[]>([]);
   const [myJob, setMyJob] = useState<string>('');
-  const { timer, updateTimer } = useTimer();
   const { seconds: voteSec, updateTimer: updateVoteTimer } = useTimer();
 
   const updateMyJob = ({ job }: { job: string }) => {
@@ -65,9 +64,8 @@ const useGame = (initValue: User[]) => {
   useSocketEvent(socketRef, [executionEvent, killEvent, voteEvent, exitEvent]);
 
   const turnEvent: Event = { event: EVENT.TURN_CHANGE, handler: updateIsNight };
-  const timerEvent: Event = { event: EVENT.TIMER, handler: updateTimer };
   const voteTimeEvent: Event = { event: EVENT.VOTE_TIME, handler: updateVoteTimer };
-  useSocketEvent(socketRef, [turnEvent, timerEvent, voteTimeEvent]);
+  useSocketEvent(socketRef, [turnEvent, voteTimeEvent]);
 
   const initPlayers = () => {
     const newPlayers: Player[] = initValue.map((user: User) => ({
@@ -82,7 +80,7 @@ const useGame = (initValue: User[]) => {
     initPlayers();
   }, []);
 
-  return { players, myJob, mafias, isNight, timer, voteSec };
+  return { players, myJob, mafias, isNight, voteSec };
 };
 
 export default useGame;

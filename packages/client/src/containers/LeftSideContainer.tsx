@@ -14,12 +14,12 @@ import { Player, Selected } from '@src/types';
 import useExecutionModal from '@src/hooks/useExecutionModal';
 import AbilityButtonList from '@src/lists/AbilityButtonList';
 import { useUserInfo } from '@src/contexts/userInfo';
+import Timer from '@src/components/Timer';
 
 type PropType = {
   players: Player[];
   mafias: string[];
   selected: Selected;
-  timer: string;
   isNight: boolean;
   getSelectedImg: any;
   emitAbility: any;
@@ -29,7 +29,6 @@ const LeftSideContainer: FC<PropType> = ({
   players,
   mafias,
   selected,
-  timer,
   isNight,
   getSelectedImg,
   emitAbility,
@@ -110,10 +109,7 @@ const LeftSideContainer: FC<PropType> = ({
           </div>
         </div>
       </div>
-
-      <div css={timerStyle}>
-        <span>{timer}</span>
-      </div>
+      <Timer />
       <hr css={hrStyle} />
       <AbilityButtonList
         players={players}
@@ -163,25 +159,6 @@ const roomIconButtonsStyle = (isNight: boolean) => css`
   button {
     border: 2px solid ${isNight ? white : titleActive};
     border-radius: 15px;
-  }
-`;
-
-const timerStyle = css`
-  padding: 10px;
-  border-radius: 15px;
-  background-color: ${white};
-  box-shadow: 0px 4px 4px rgba(78, 65, 109, 0.25);
-
-  span {
-    display: block;
-    font-weight: bold;
-    text-align: center;
-
-    height: 70px;
-    font-size: 48px;
-    line-height: 80px;
-    letter-spacing: 0.1em;
-    color: ${titleActive};
   }
 `;
 

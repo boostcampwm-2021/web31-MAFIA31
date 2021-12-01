@@ -74,7 +74,7 @@ const JobStatCardStyle = css`
   gap: 24px;
 
   min-width: 370px;
-  height: 160px;
+  height: 150px;
   padding: 16px;
   border-radius: 20px;
   background-color: ${white};

@@ -1,6 +1,7 @@
 import { PlayerResult } from '@mafia/domain/types/game';
 import NotFoundError from '../../error/NotFoundError';
 import User from '../../models/User';
+import ScoreService from '../score/score.service';
 
 const UserService = {
   async findOne(userName: string) {
@@ -28,7 +29,13 @@ const UserService = {
         winCnt: result ? user.jobStat[job].winCnt + 1 : user.jobStat[job].winCnt,
       },
     };
-    await User.updateOne({ userName }, { playCnt: user.playCnt + 1, jobStat: newJobStat });
+
+    const newScore = result ? user.score + 100 : user.score;
+    await ScoreService.updateOneOrCreate(userName, newScore);
+    await User.updateOne(
+      { userName },
+      { score: newScore, playCnt: user.playCnt + 1, jobStat: newJobStat },
+    );
   },
 };
 

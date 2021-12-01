@@ -32,6 +32,7 @@ const JobStatListStyle = css`
   gap: 24px;
   width: 100%;
   padding: 16px;
+  height: 45vh;
 `;
 
 export default JobStatList;

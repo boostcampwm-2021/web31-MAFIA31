@@ -11,7 +11,7 @@ export const setupInterceptors = (history: any) => {
     (err) => {
       const { status } = err.response;
 
-      if (status === 401) {
+      if (status === 401 || status === 404) {
         history.push('/');
         history.go();
       }

@@ -1,7 +1,8 @@
-import { FC, useCallback, useEffect } from 'react';
+import { FC, useEffect, useRef } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
+import * as EVENT from '@mafia/domain/constants/event';
 import useModal from '@hooks/useModal';
 import { titleActive, white, grey1 } from '@constants/index';
 import { RoomOutIcon, AudioOffIcon, AudioOnIcon } from '@components/Icon';
@@ -13,6 +14,9 @@ import AbilityButtonList from '@src/lists/AbilityButtonList';
 import { useUserInfo } from '@src/contexts/userInfo';
 import Timer from '@src/components/Timer';
 import useAbility from '@hooks/useAbility';
+import { Event } from '@src/types';
+import useSocketEvent from '@hooks/useSocketEvent';
+import { useSocketContext } from '@src/contexts/socket';
 import GamePageModalContainer from './GamePageModalContainer';
 
 type PropType = {
@@ -22,7 +26,21 @@ type PropType = {
 };
 
 const LeftSideContainer: FC<PropType> = ({ initPlayers, isNight, myJob }) => {
+  const { socketRef } = useSocketContext();
   const { userInfo } = useUserInfo();
+  const amIDead = useRef<boolean>(false);
+
+  const setMyDeadState = (playerName: string) => {
+    if (userInfo?.userName === playerName) {
+      amIDead.current = true;
+    }
+  };
+
+  const executionEvent: Event = { event: EVENT.EXECUTION, handler: setMyDeadState };
+  const killEvent: Event = { event: EVENT.PUBLISH_VICTIM, handler: setMyDeadState };
+  const exitEvent: Event = { event: EVENT.EXIT, handler: setMyDeadState };
+  useSocketEvent(socketRef, [executionEvent, killEvent, exitEvent], [amIDead.current]);
+
   const { players, mafias, selected, emitAbility, getSelectedImg } = useAbility(
     initPlayers,
     isNight,
@@ -35,11 +53,6 @@ const LeftSideContainer: FC<PropType> = ({ initPlayers, isNight, myJob }) => {
   } = useModal();
 
   const { playing, updateLoop, toggle, pause } = useAudio(GAME_DAY_MP3);
-
-  const amIDead = useCallback(
-    () => players.find(({ userName: playerName }) => playerName === userInfo?.userName)?.isDead,
-    [players],
-  );
 
   useEffect(() => {
     updateLoop(true);
@@ -88,7 +101,7 @@ const LeftSideContainer: FC<PropType> = ({ initPlayers, isNight, myJob }) => {
         selected={selected}
         emitAbility={emitAbility}
         getSelectedImg={getSelectedImg}
-        amIDead={amIDead() ?? false}
+        amIDead={amIDead ?? false}
       />
     </div>
   );

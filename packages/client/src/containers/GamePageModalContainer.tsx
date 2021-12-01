@@ -1,10 +1,10 @@
 import ConfirmModal from '@src/components/Modal/ConfirmModal';
 import useExecutionModal from '@src/hooks/useExecutionModal';
-import { memo } from 'react';
+import { memo, MutableRefObject } from 'react';
 import { useHistory } from 'react-router-dom';
 
 interface PropType {
-  amIDead: () => boolean | undefined;
+  amIDead: MutableRefObject<boolean>;
   isRoomOutModalOpen: any;
   closeRoomOutModal: any;
 }
@@ -36,7 +36,7 @@ const GamePageModalContainer = memo(
           <p>진행중인 게임을 포기하고 나가시겠습니까?</p>
         </ConfirmModal>
         <ConfirmModal
-          isOpen={amIDead() ? false : isExecutionModalOpen}
+          isOpen={amIDead.current ? false : isExecutionModalOpen}
           eventHandler={executionHandler}
           closeModal={closeExecutionModal}
         >

@@ -14,6 +14,7 @@ import SocketProvider from './contexts/socket';
 import SocketRoute from './components/Route/SocketRoute';
 import { useUserInfo } from './contexts/userInfo';
 import InjectAxiosInterceptors from './axios/InjectAxiosInterceptors.tsx';
+import NotFound from './pages/Error/NotFound';
 
 const queryClient = new QueryClient();
 
@@ -41,13 +42,13 @@ const App = () => {
       <SocketRoute path="/waiting" component={Waiting} socket />
       <SocketRoute path="/game" component={Game} socket />
       <SocketRoute path="/game-result" component={GameResult} />
-      <Route component={Rooms} />
+      <SocketRoute exact path="/" component={Rooms} />
+      <Route component={NotFound} />
     </Switch>
   ) : (
     <Switch>
-      <SocketRoute exact path="/" component={Login} />
       <SocketRoute path="/callback" component={Callback} />
-      <Route component={Login} />
+      <SocketRoute path="/" component={Login} />
     </Switch>
   );
 

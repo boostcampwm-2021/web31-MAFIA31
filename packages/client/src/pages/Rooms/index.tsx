@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import Header from '@src/templates/Header';
-import RoomList from '@src/lists/RoomContainer';
+import RoomList from '@src/lists/RoomList';
 
 const Rooms = () => (
   <div css={roomsPageStyle}>

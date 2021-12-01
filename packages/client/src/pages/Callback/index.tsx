@@ -1,3 +1,4 @@
+import apiClient from '@src/axios/apiClient';
 import { useUserInfo } from '@src/contexts/userInfo';
 import { useEffect } from 'react';
 import { Redirect, useLocation, useHistory } from 'react-router-dom';
@@ -7,9 +8,7 @@ const Callback = () => {
   const history = useHistory();
 
   const getUserData = async (code: string) => {
-    const url = `${process.env.REACT_APP_API_URL}/api/auth/user?code=${code}`;
-    const response = await fetch(url, { credentials: 'include' });
-    const userData = await response.json();
+    const { data: userData } = await apiClient(`/auth/user?code=${code}`);
     setUserInfo(userData);
     history.push('/');
   };

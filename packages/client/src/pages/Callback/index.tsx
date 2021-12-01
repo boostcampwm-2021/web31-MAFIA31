@@ -1,6 +1,8 @@
 import { useUserInfo } from '@src/contexts/userInfo';
 import { useEffect } from 'react';
 import { Redirect, useLocation, useHistory } from 'react-router-dom';
+import SkeletonRoomContainer from '@src/components/Skeleton/SkeletonRoomContainer';
+import Header from '@src/templates/Header';
 
 const Callback = () => {
   const { setUserInfo } = useUserInfo();
@@ -22,7 +24,12 @@ const Callback = () => {
   }, []);
   // context, JWT cookie 설정
 
-  return <div>loading</div>;
+  return (
+    <>
+      <Header skeleton />
+      <SkeletonRoomContainer />
+    </>
+  );
 };
 
 export default Callback;

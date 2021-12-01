@@ -1,5 +1,5 @@
 import { useState, useLayoutEffect } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
@@ -17,11 +17,7 @@ interface locationType {
 const Waiting = () => {
   const { search } = useLocation<locationType>();
   const [roomName, setRoomName] = useState('');
-  const history = useHistory();
   const roomId = search.replace(/\?/g, '');
-  if (!roomId.match(/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/)) {
-    history.push({ pathname: '/rooms' });
-  }
 
   const getRoomInfo = async () => {
     const { data } = await apiClient.get(`/rooms/${roomId}`);

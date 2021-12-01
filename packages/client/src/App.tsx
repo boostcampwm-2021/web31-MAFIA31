@@ -1,5 +1,5 @@
 import { useLayoutEffect } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { useCookies } from 'react-cookie';
 import jwtDecode from 'jwt-decode';
@@ -13,6 +13,7 @@ import Waiting from './pages/Waiting';
 import SocketProvider from './contexts/socket';
 import SocketRoute from './components/Route/SocketRoute';
 import { useUserInfo } from './contexts/userInfo';
+import InjectAxiosInterceptors from './axios/InjectAxiosInterceptors.tsx';
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,9 @@ const App = () => {
   const [cookies] = useCookies();
 
   useLayoutEffect(() => {
+    if (!cookies.token) {
+      setUserInfo(undefined);
+    }
     if (!userInfo?.userName && cookies.token) {
       const token: { userName: string; profileImg: string } = jwtDecode(cookies.token);
       setUserInfo({
@@ -48,11 +52,12 @@ const App = () => {
   );
 
   return (
-    <Router>
+    <BrowserRouter>
       <QueryClientProvider client={queryClient}>
+        <InjectAxiosInterceptors />
         <SocketProvider>{routes}</SocketProvider>
       </QueryClientProvider>
-    </Router>
+    </BrowserRouter>
   );
 };
 export default App;

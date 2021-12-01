@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@mafia/domain": "^1.0.0",
+    "axios": "^0.24.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.17.1",

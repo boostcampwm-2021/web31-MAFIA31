@@ -15,6 +15,7 @@ const authMiddleware = (
     next();
   } catch (error) {
     if (error instanceof Error) {
+      res.clearCookie('token');
       next(new UnauthorizedError(error.message));
     } else {
       next(error);

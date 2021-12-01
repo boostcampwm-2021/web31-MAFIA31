@@ -15,7 +15,7 @@ const ScoreService = {
     return updateScore;
   },
   async find(userName: string) {
-    const scores = await Score.find({ userName });
+    const scores = await Score.find({ userName }).sort({ date: 'asc' });
     return scores;
   },
 };

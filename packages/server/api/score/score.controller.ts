@@ -9,8 +9,12 @@ const ScoreController = {
       next(new BadRequestError('Request not include userName'));
       return;
     }
-    const scores = await ScoreService.find(userName);
-    res.status(200).json({ scores });
+    try {
+      const scores = await ScoreService.find(userName);
+      res.status(200).json({ scores });
+    } catch (err) {
+      next(err);
+    }
   },
 };
 

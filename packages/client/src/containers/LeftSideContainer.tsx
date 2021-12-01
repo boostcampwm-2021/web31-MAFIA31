@@ -10,39 +10,32 @@ import ConfirmModal from '@components/Modal/ConfirmModal';
 import { IconButton, ButtonSizeList, ButtonThemeList } from '@components/Button';
 import { GAME_DAY_MP3 } from '@constants/audio';
 import useAudio from '@src/hooks/useAudio';
-import { Player, Selected } from '@src/types';
+import { User } from '@mafia/domain/types/user';
 import useExecutionModal from '@src/hooks/useExecutionModal';
 import AbilityButtonList from '@src/lists/AbilityButtonList';
 import { useUserInfo } from '@src/contexts/userInfo';
 import Timer from '@src/components/Timer';
+import useAbility from '@hooks/useAbility';
 
 type PropType = {
-  players: Player[];
-  mafias: string[];
-  selected: Selected;
+  initPlayers: User[];
   isNight: boolean;
-  getSelectedImg: any;
-  emitAbility: any;
+  myJob: string;
 };
 
-const LeftSideContainer: FC<PropType> = ({
-  players,
-  mafias,
-  selected,
-  isNight,
-  getSelectedImg,
-  emitAbility,
-}) => {
+const LeftSideContainer: FC<PropType> = ({ initPlayers, isNight, myJob }) => {
   const history = useHistory();
-
   const { userInfo } = useUserInfo();
-
+  const { players, mafias, selected, emitAbility, getSelectedImg } = useAbility(
+    initPlayers,
+    isNight,
+    myJob,
+  );
   const {
     isModalOpen: isRoomOutModalOpen,
     openModal: openRoomOutModal,
     closeModal: closeRoomOutModal,
   } = useModal();
-
   const {
     isModalOpen: isExecutionModalOpen,
     maxVotedPlayer,

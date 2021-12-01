@@ -9,7 +9,6 @@ import RightSideContainer from '@containers/RightSideContainer';
 import usePreventLeave from '@src/hooks/usePreventLeave';
 import { User } from '@mafia/domain/types/user';
 import useGame from '@src/hooks/useGame';
-import useAbility from '@hooks/useAbility';
 import Toast from '@components/Toast';
 
 interface locationType {
@@ -26,28 +25,15 @@ const Game = () => {
   }
 
   const { players: initPlayers } = state;
-  const { players, myJob, mafias, isNight } = useGame(initPlayers);
-  const { selected, emitAbility, getSelectedImg } = useAbility(isNight, myJob);
+  const { myJob, isNight } = useGame();
   usePreventLeave();
 
   return (
     <div css={gamePageStyle(isNight)}>
       <Toast isNight={isNight} />
-      <LeftSideContainer
-        players={players}
-        mafias={mafias}
-        selected={selected}
-        isNight={isNight}
-        getSelectedImg={getSelectedImg}
-        emitAbility={emitAbility}
-      />
+      <LeftSideContainer initPlayers={initPlayers} isNight={isNight} myJob={myJob} />
       <ChatContainer isNight={isNight} />
-      <RightSideContainer
-        players={players}
-        myJob={myJob}
-        isNight={isNight}
-        initPlayers={initPlayers}
-      />
+      <RightSideContainer myJob={myJob} isNight={isNight} initPlayers={initPlayers} />
     </div>
   );
 };

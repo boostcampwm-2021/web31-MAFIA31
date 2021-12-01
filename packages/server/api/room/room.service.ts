@@ -1,4 +1,5 @@
 import { RoomInfo } from '@mafia/domain/types/room';
+import NotFoundError from '../../error/NotFoundError';
 import Room from '../../models/Room';
 
 const RoomService = {
@@ -8,6 +9,7 @@ const RoomService = {
   },
   async findOne(roomId: string) {
     const room = await Room.findOne({ roomId });
+    if (!room) throw new NotFoundError('Room match with roomId not exists.');
     return room;
   },
   async create(newRoom: RoomInfo) {

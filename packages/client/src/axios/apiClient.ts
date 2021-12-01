@@ -5,4 +5,19 @@ const apiClient = axios.create({
   withCredentials: true,
 });
 
+export const setupInterceptors = (history: any) => {
+  apiClient.interceptors.response.use(
+    (res) => res,
+    (err) => {
+      const { status } = err.response;
+
+      if (status === 401) {
+        history.push('/');
+        history.go();
+      }
+      return Promise.reject(err);
+    },
+  );
+};
+
 export default apiClient;

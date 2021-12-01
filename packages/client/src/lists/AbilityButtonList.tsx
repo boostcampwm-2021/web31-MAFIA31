@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, MutableRefObject } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { Player, Selected } from '@src/types';
@@ -10,7 +10,7 @@ interface PropType {
   selected: Selected;
   emitAbility: any;
   getSelectedImg: any;
-  amIDead: boolean;
+  amIDead: MutableRefObject<boolean>;
 }
 
 const AbilityButtonList: FC<PropType> = ({
@@ -22,12 +22,12 @@ const AbilityButtonList: FC<PropType> = ({
   amIDead,
 }) => {
   const handleClick = (userName: string, isDead: boolean) => {
-    if (amIDead) return;
+    if (amIDead.current) return;
     emitAbility(userName, isDead);
   };
 
   const getStampImg = (userName: string, isDead: boolean) => {
-    if (amIDead) return false;
+    if (amIDead.current) return false;
     return getSelectedImg(userName, isDead);
   };
 

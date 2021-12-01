@@ -1,20 +1,21 @@
 import { BULLET_MP3, HEAL_MP3, SURVEY_MP3, VOTE_MP3 } from '@constants/audio';
 import * as EVENT from '@mafia/domain/constants/event';
 import * as TIME from '@mafia/domain/constants/time';
+import { User } from '@mafia/domain/types/user';
+import { RoomVote } from '@mafia/domain/types/vote';
 import { useSocketContext } from '@src/contexts/socket';
 import { useUserInfo } from '@src/contexts/userInfo';
-import { Event, Selected } from '@src/types';
-import { MutableRefObject, useEffect, useState } from 'react';
+import { Event, Player, Selected } from '@src/types';
+import { useEffect, useRef, useState } from 'react';
 import useAudio from './useAudio';
 import useSocketEvent from './useSocketEvent';
 
-const useAbility = (
-  isNight: boolean,
-  voteSec: MutableRefObject<number | undefined>,
-  job: string,
-) => {
+const useAbility = (initPlayers: User[], isNight: boolean, job: string) => {
   const { socketRef } = useSocketContext();
   const { userInfo } = useUserInfo();
+  const voteSec = useRef<number | undefined>(undefined);
+  const [players, setPlayers] = useState<Player[]>([]);
+  const [mafias, setMafias] = useState<string[]>([]);
   const [selected, setSelected] = useState<Selected>({ candidate: '' });
   const { updateAudio, load, play } = useAudio();
 
@@ -25,11 +26,46 @@ const useAbility = (
   const updateSurvivor = (survivor: string) => setSelected({ ...selected, survivor });
   const updateSuspect = (suspect: string) => setSelected({ ...selected, suspect });
   const updateCandidate = (candidate: string) => setSelected({ ...selected, candidate });
+  const updateVoteTimer = (remainTime: number): void => {
+    voteSec.current = remainTime;
+  };
+
+  const updateMafias = ({ mafiaList: mafias }: { mafiaList: string[] }) => {
+    if (!mafias) return;
+    setMafias(mafias);
+  };
+
+  const updatePlayerDead = (playerName: string) => {
+    setPlayers((players) =>
+      players.map((player) =>
+        player.userName === playerName ? { ...player, isDead: true } : player,
+      ),
+    );
+  };
+
+  const updatePlayerVote = (roomVotes: RoomVote) => {
+    setPlayers((prev) =>
+      prev.map((player) => {
+        const voteCount = roomVotes[player.userName];
+        return voteCount !== undefined ? { ...player, voteCount } : player;
+      }),
+    );
+  };
+
+  const noticeMafiaEvent: Event = { event: EVENT.NOTICE_MAFIA, handler: updateMafias };
+  useSocketEvent(socketRef, [noticeMafiaEvent]);
 
   const mafiaEvent: Event = { event: EVENT.MAFIA_ABILITY, handler: updateVictim };
   const policeEvent: Event = { event: EVENT.POLICE_ABILITY, handler: updateSuspect };
   const doctorEvent: Event = { event: EVENT.DOCTOR_ABILITY, handler: updateSurvivor };
-  useSocketEvent(socketRef, [mafiaEvent, policeEvent, doctorEvent]);
+  const voteTimeEvent: Event = { event: EVENT.VOTE_TIME, handler: updateVoteTimer };
+  useSocketEvent(socketRef, [mafiaEvent, policeEvent, doctorEvent, voteTimeEvent]);
+
+  const executionEvent: Event = { event: EVENT.EXECUTION, handler: updatePlayerDead };
+  const killEvent: Event = { event: EVENT.PUBLISH_VICTIM, handler: updatePlayerDead };
+  const exitEvent: Event = { event: EVENT.EXIT, handler: updatePlayerDead };
+  const voteEvent: Event = { event: EVENT.PUBLISH_VOTE, handler: updatePlayerVote };
+  useSocketEvent(socketRef, [executionEvent, killEvent, exitEvent, voteEvent]);
 
   const isVoteTime = () =>
     !isNight && voteSec.current !== TIME.VOTE_END && voteSec.current !== undefined;
@@ -123,12 +159,25 @@ const useAbility = (
     load();
   };
 
+  const initializePlayers = () => {
+    const newPlayers: Player[] = initPlayers.map((user: User) => ({
+      ...user,
+      isDead: false,
+      voteCount: 0,
+    }));
+    setPlayers(newPlayers);
+  };
+
   useEffect(() => {
     resetSelected();
     updateSoundEffect();
   }, [isNight]);
 
-  return { selected, emitAbility, getSelectedImg };
+  useEffect(() => {
+    initializePlayers();
+  }, []);
+
+  return { players, mafias, selected, emitAbility, getSelectedImg };
 };
 
 export default useAbility;

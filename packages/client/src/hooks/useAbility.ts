@@ -1,18 +1,13 @@
 import { BULLET_MP3, HEAL_MP3, SURVEY_MP3, VOTE_MP3 } from '@constants/audio';
 import * as EVENT from '@mafia/domain/constants/event';
-import * as TIME from '@mafia/domain/constants/time';
 import { useSocketContext } from '@src/contexts/socket';
 import { useUserInfo } from '@src/contexts/userInfo';
 import { Event, Selected } from '@src/types';
-import { MutableRefObject, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useAudio from './useAudio';
 import useSocketEvent from './useSocketEvent';
 
-const useAbility = (
-  isNight: boolean,
-  voteSec: MutableRefObject<number | undefined>,
-  job: string,
-) => {
+const useAbility = (isNight: boolean, job: string) => {
   const { socketRef } = useSocketContext();
   const { userInfo } = useUserInfo();
   const [selected, setSelected] = useState<Selected>({ candidate: '' });
@@ -31,8 +26,7 @@ const useAbility = (
   const doctorEvent: Event = { event: EVENT.DOCTOR_ABILITY, handler: updateSurvivor };
   useSocketEvent(socketRef, [mafiaEvent, policeEvent, doctorEvent]);
 
-  const isVoteTime = () =>
-    !isNight && voteSec.current !== TIME.VOTE_END && voteSec.current !== undefined;
+  const isVoteTime = () => !isNight; // && voteSec.current !== TIME.VOTE_END && voteSec.current !== undefined;
 
   const voteUser = (to: string): void => {
     socketRef.current?.emit(EVENT.VOTE, { from: userInfo?.userName, to });

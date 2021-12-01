@@ -1,4 +1,3 @@
-import useTimer from '@hooks/useTimer';
 import * as EVENT from '@mafia/domain/constants/event';
 import { PlayerResult } from '@mafia/domain/types/game';
 import { User } from '@mafia/domain/types/user';
@@ -16,7 +15,6 @@ const useGame = (initValue: User[]) => {
   const [players, setPlayers] = useState<Player[]>([]);
   const [mafias, setMafias] = useState<string[]>([]);
   const [myJob, setMyJob] = useState<string>('');
-  const { seconds: voteSec, updateTimer: updateVoteTimer } = useTimer();
 
   const updateMyJob = ({ job }: { job: string }) => {
     setMyJob(job);
@@ -64,8 +62,7 @@ const useGame = (initValue: User[]) => {
   useSocketEvent(socketRef, [executionEvent, killEvent, voteEvent, exitEvent]);
 
   const turnEvent: Event = { event: EVENT.TURN_CHANGE, handler: updateIsNight };
-  const voteTimeEvent: Event = { event: EVENT.VOTE_TIME, handler: updateVoteTimer };
-  useSocketEvent(socketRef, [turnEvent, voteTimeEvent]);
+  useSocketEvent(socketRef, [turnEvent]);
 
   const initPlayers = () => {
     const newPlayers: Player[] = initValue.map((user: User) => ({
@@ -80,7 +77,7 @@ const useGame = (initValue: User[]) => {
     initPlayers();
   }, []);
 
-  return { players, myJob, mafias, isNight, voteSec };
+  return { players, myJob, mafias, isNight };
 };
 
 export default useGame;

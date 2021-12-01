@@ -9,6 +9,7 @@ import useModal from '@hooks/useModal';
 import { RoomCard } from '@components/Card';
 import NoticeModal from '@components/Modal/NoticeModal';
 import { RoomInfo } from '@mafia/domain/types/room';
+import SkeletonRoomContainer from '@src/components/Skeleton/SkeletonRoomContainer';
 
 const RoomList = () => {
   const { isModalOpen, openModal, closeModal } = useModal();
@@ -25,7 +26,7 @@ const RoomList = () => {
 
   const { isLoading, data: roomList, error } = useQuery<RoomInfo[], Error>('rooms', getRoomList);
 
-  if (isLoading) return <div>Loading</div>;
+  if (isLoading) return <SkeletonRoomContainer />;
   if (error) return <div>An error has occurred: {error.message}</div>;
 
   return (

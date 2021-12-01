@@ -10,7 +10,6 @@ const Waiting = () => (
     <WaitingListContainer />
   </div>
 );
-
 const pageStyle = css`
   height: 100vh;
 `;

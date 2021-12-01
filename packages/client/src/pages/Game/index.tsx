@@ -13,6 +13,7 @@ import Toast from '@components/Toast';
 
 interface locationType {
   players: User[];
+  roomName: string;
 }
 
 const Game = () => {
@@ -24,14 +25,19 @@ const Game = () => {
     return <></>;
   }
 
-  const { players: initPlayers } = state;
+  const { players: initPlayers, roomName } = state;
   const { myJob, isNight } = useGame();
   usePreventLeave();
 
   return (
     <div css={gamePageStyle(isNight)}>
       <Toast isNight={isNight} />
-      <LeftSideContainer initPlayers={initPlayers} isNight={isNight} myJob={myJob} />
+      <LeftSideContainer
+        initPlayers={initPlayers}
+        isNight={isNight}
+        myJob={myJob}
+        roomName={roomName}
+      />
       <ChatContainer isNight={isNight} />
       <RightSideContainer myJob={myJob} isNight={isNight} initPlayers={initPlayers} />
     </div>

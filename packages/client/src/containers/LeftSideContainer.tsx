@@ -22,10 +22,11 @@ import GamePageModalContainer from './GamePageModalContainer';
 type PropType = {
   initPlayers: User[];
   isNight: boolean;
+  roomName: string;
   myJob: string;
 };
 
-const LeftSideContainer: FC<PropType> = ({ initPlayers, isNight, myJob }) => {
+const LeftSideContainer: FC<PropType> = ({ initPlayers, isNight, myJob, roomName }) => {
   const { socketRef } = useSocketContext();
   const { userInfo } = useUserInfo();
   const amIDead = useRef<boolean>(false);
@@ -76,7 +77,7 @@ const LeftSideContainer: FC<PropType> = ({ initPlayers, isNight, myJob }) => {
           alt="day-night-state"
         />
         <div css={roomActionStyle(isNight)}>
-          <span>ROOM NAME</span>
+          <div css={titleStyle}>{roomName}</div>
           <div css={roomIconButtonsStyle(isNight)}>
             <IconButton
               icon={playing ? AudioOnIcon : AudioOffIcon}
@@ -150,6 +151,17 @@ const hrStyle = css`
   border: 0;
   margin: 24px 0;
   border-top: 1px solid ${grey1};
+`;
+
+const titleStyle = css`
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 30px;
+  line-height: 35px;
+  display: flex;
+  align-items: center;
+  text-align: right;
 `;
 
 export default LeftSideContainer;

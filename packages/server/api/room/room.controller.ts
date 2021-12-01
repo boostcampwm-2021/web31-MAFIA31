@@ -29,7 +29,7 @@ const RoomController = {
 
     try {
       const room = await RoomService.findOne(roomId);
-      res.status(200).json({ room });
+      res.status(200).json(room);
     } catch (error) {
       next(error);
     }

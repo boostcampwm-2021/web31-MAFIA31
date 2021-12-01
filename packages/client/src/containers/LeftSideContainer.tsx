@@ -23,6 +23,7 @@ type PropType = {
   isNight: boolean;
   getSelectedImg: any;
   emitAbility: any;
+  roomName: string;
 };
 
 const LeftSideContainer: FC<PropType> = ({
@@ -32,6 +33,7 @@ const LeftSideContainer: FC<PropType> = ({
   isNight,
   getSelectedImg,
   emitAbility,
+  roomName,
 }) => {
   const history = useHistory();
 
@@ -92,7 +94,7 @@ const LeftSideContainer: FC<PropType> = ({
           alt="day-night-state"
         />
         <div css={roomActionStyle(isNight)}>
-          <span>ROOM NAME</span>
+          <div css={titleStyle}>{roomName}</div>
           <div css={roomIconButtonsStyle(isNight)}>
             <IconButton
               icon={playing ? AudioOnIcon : AudioOffIcon}
@@ -166,6 +168,17 @@ const hrStyle = css`
   border: 0;
   margin: 24px 0;
   border-top: 1px solid ${grey1};
+`;
+
+const titleStyle = css`
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 30px;
+  line-height: 35px;
+  display: flex;
+  align-items: center;
+  text-align: right;
 `;
 
 export default LeftSideContainer;

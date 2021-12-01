@@ -29,7 +29,7 @@ const Waiting = () => {
   }, []);
 
   useSocket(roomId);
-  const { players, isHost, sendReady, sendStart, isAllReady } = useRoom();
+  const { players, isHost, sendReady, sendStart, isAllReady } = useRoom(roomName);
 
   return (
     <div css={pageStyle}>

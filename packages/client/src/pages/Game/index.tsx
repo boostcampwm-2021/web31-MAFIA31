@@ -16,6 +16,7 @@ import useToast from '@src/hooks/useToast';
 
 interface locationType {
   players: User[];
+  roomName: string;
 }
 
 const Game = () => {
@@ -27,7 +28,7 @@ const Game = () => {
     return <></>;
   }
 
-  const { players: initPlayers } = state;
+  const { players: initPlayers, roomName } = state;
   const { players, myJob, mafias, isNight, voteSec } = useGame(initPlayers);
   const { selected, emitAbility, getSelectedImg } = useAbility(isNight, voteSec, myJob);
   useToast(isNight, voteSec);
@@ -43,6 +44,7 @@ const Game = () => {
         isNight={isNight}
         getSelectedImg={getSelectedImg}
         emitAbility={emitAbility}
+        roomName={roomName}
       />
       <ChatContainer isNight={isNight} />
       <RightSideContainer

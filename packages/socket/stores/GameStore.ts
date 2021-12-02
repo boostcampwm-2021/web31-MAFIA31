@@ -112,6 +112,9 @@ class GameStore {
   }
 
   static isSaved(roomId: string) {
+    if (!GameStore.victims[roomId] || !GameStore.survivors[roomId]) {
+      return false;
+    }
     return GameStore.victims[roomId] === GameStore.survivors[roomId];
   }
 
@@ -133,7 +136,7 @@ class GameStore {
   }
 
   static resetVote(roomId: string) {
-    const resetVoteGameInfo: GameInfo[] = GameStore.get(roomId).map((gameInfo) => ({
+    const resetVoteGameInfo: GameInfo[] = GameStore.get(roomId)?.map((gameInfo) => ({
       ...gameInfo,
       voteFrom: new Set(),
     }));
@@ -150,7 +153,8 @@ class GameStore {
     const votingUser = GameStore.getPlayerInfo(roomId, from);
 
     if (!votedUser || !votingUser) return false;
-    GameStore.get(roomId).forEach(({ voteFrom }) => voteFrom.delete(from));
+    // eslint-disable-next-line no-unused-expressions
+    GameStore.get(roomId)?.forEach(({ voteFrom }) => voteFrom.delete(from));
     votedUser.voteFrom.add(from);
     return true;
   }
@@ -194,7 +198,7 @@ class GameStore {
   }
 
   static getGameResult(roomId: string, win: string): PlayerResult[] {
-    return GameStore.instance[roomId].map(({ userName, job }) => ({
+    return GameStore.instance[roomId]?.map(({ userName, job }) => ({
       userName,
       job,
       result: (win === 'citizen' && job !== 'mafia') || win === job,

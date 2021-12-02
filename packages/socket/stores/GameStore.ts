@@ -1,6 +1,8 @@
 import { GameInfo, PlayerResult } from '@mafia/domain/types/game';
 import { RoomVote, Vote } from '@mafia/domain/types/vote';
 
+type Timer = ReturnType<typeof setInterval>;
+
 interface GameStoreType {
   [roomId: string]: GameInfo[];
 }
@@ -14,7 +16,7 @@ interface SurvivorStore {
 }
 
 interface TimerStore {
-  [roomId: string]: NodeJS.Timer;
+  [roomId: string]: Timer;
 }
 
 interface DashBoard {
@@ -24,8 +26,11 @@ interface DashBoard {
 
 class GameStore {
   static instance: GameStoreType = {};
+
   static victims: VictimStore = {};
+
   static survivors: SurvivorStore = {};
+
   static timers: TimerStore = {};
 
   private static canInvest: boolean = true;
@@ -70,7 +75,7 @@ class GameStore {
     GameStore.survivors[roomId] = survivor;
   }
 
-  static setTimer(roomId: string, timer: NodeJS.Timer) {
+  static setTimer(roomId: string, timer: Timer) {
     GameStore.timers[roomId] = timer;
   }
 
@@ -90,6 +95,7 @@ class GameStore {
 
   static getVoteInfos(roomId: string): RoomVote {
     return GameStore.instance[roomId].reduce((prev: RoomVote, { userName, voteFrom }) => {
+      // eslint-disable-next-line no-param-reassign
       prev[userName] = voteFrom.size;
       return prev;
     }, {});
@@ -151,12 +157,12 @@ class GameStore {
 
   static diePlayer(roomId: string, player: string) {
     const gameInfo = GameStore.get(roomId);
-    if (!gameInfo) return;
+    if (!gameInfo) return '';
 
     const deadPlayer = gameInfo.find(
       ({ userName, socketId }) => userName === player || socketId === player,
     );
-    if (!deadPlayer) return;
+    if (!deadPlayer) return '';
 
     deadPlayer.isDead = true;
     return deadPlayer.userName;
@@ -177,12 +183,12 @@ class GameStore {
     };
 
     const deadPlayer = GameStore.getVictim(roomId);
-    const mafia = GameStore.instance[roomId].filter(
-      (gameInfo) => condition(gameInfo, deadPlayer)[0],
-    ).length;
-    const citizen = GameStore.instance[roomId].filter(
-      (gameInfo) => condition(gameInfo, deadPlayer)[1],
-    ).length;
+    const mafia =
+      GameStore.instance[roomId]?.filter((gameInfo) => condition(gameInfo, deadPlayer)[0]).length ||
+      0;
+    const citizen =
+      GameStore.instance[roomId]?.filter((gameInfo) => condition(gameInfo, deadPlayer)[1]).length ||
+      0;
 
     return { mafia, citizen };
   }

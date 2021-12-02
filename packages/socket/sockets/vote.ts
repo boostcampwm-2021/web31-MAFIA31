@@ -53,14 +53,12 @@ const publishMaxVote = (namespace: Namespace, roomId: string) => {
   namespace.emit(PUBLISH_MAX_VOTE, maxVotePlayer);
 };
 
-const getStory = (storyName: StoryName, name: string = '') => {
-  return {
-    id: Date.now().toString(),
-    msg: STORY_DIC[storyName].msg(name),
-    imgSrc: STORY_DIC[storyName].src,
-    type: STORY_DIC[storyName].type,
-  };
-};
+const getStory = (storyName: StoryName, name: string = '') => ({
+  id: Date.now().toString(),
+  msg: STORY_DIC[storyName].msg(name),
+  imgSrc: STORY_DIC[storyName].src,
+  type: STORY_DIC[storyName].type,
+});
 
 const publishExecution = (namespace: Namespace, roomId: string) => {
   const playerList = GameStore.get(roomId);

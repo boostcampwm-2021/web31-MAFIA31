@@ -9,6 +9,7 @@ import useModal from '@src/hooks/useModal';
 import NoticeModal from '@src/components/Modal/NoticeModal';
 import RoomFormContainer from '@src/containers/RoomFormContainer';
 import SkeletonDefaultButton from '@src/components/Skeleton/SkeletonDefaultButton';
+import { withCondition } from '@src/hoc';
 
 const CREATE_ROOM_BUTTON = '방 만들기';
 const EXIT_ROOM_BUTTON = '나가기';
@@ -20,6 +21,10 @@ interface Props {
   profilePage?: boolean;
   skeleton?: boolean;
 }
+
+const DefaultButtonCondition = withCondition(DefaultButton);
+const LinkDefaultButtonCondition = withCondition(Link);
+const SkeletonDefaultButtonCondition = withCondition(SkeletonDefaultButton);
 
 const Header: FC<Props> = ({
   createRoom = false,
@@ -42,45 +47,29 @@ const Header: FC<Props> = ({
         <LightLogoIcon />
       </Link>
       <div css={buttonWrapperStyle}>
-        {createRoom ? (
+        <DefaultButtonCondition
+          condition={createRoom}
+          text={CREATE_ROOM_BUTTON}
+          size={ButtonSizeList.SMALL}
+          theme={ButtonThemeList.LIGHT}
+          onClick={openModal}
+        />
+        <DefaultButtonCondition
+          condition={exit}
+          text={EXIT_ROOM_BUTTON}
+          size={ButtonSizeList.SMALL}
+          theme={ButtonThemeList.LIGHT}
+          onClick={goRooms}
+        />
+        <LinkDefaultButtonCondition condition={profilePage} to={{ pathname: '/profile' }}>
           <DefaultButton
-            text={CREATE_ROOM_BUTTON}
+            text={MY_PAGE_BUTTON}
             size={ButtonSizeList.SMALL}
             theme={ButtonThemeList.LIGHT}
-            onClick={openModal}
           />
-        ) : (
-          <></>
-        )}
-        {exit ? (
-          <DefaultButton
-            text={EXIT_ROOM_BUTTON}
-            size={ButtonSizeList.SMALL}
-            theme={ButtonThemeList.LIGHT}
-            onClick={goRooms}
-          />
-        ) : (
-          <></>
-        )}
-        {profilePage ? (
-          <Link to={{ pathname: '/profile' }}>
-            <DefaultButton
-              text={MY_PAGE_BUTTON}
-              size={ButtonSizeList.SMALL}
-              theme={ButtonThemeList.LIGHT}
-            />
-          </Link>
-        ) : (
-          <></>
-        )}
-        {skeleton ? (
-          <>
-            <SkeletonDefaultButton size={ButtonSizeList.SMALL} />
-            <SkeletonDefaultButton size={ButtonSizeList.SMALL} />
-          </>
-        ) : (
-          <></>
-        )}
+        </LinkDefaultButtonCondition>
+        <SkeletonDefaultButtonCondition condition={skeleton} size={ButtonSizeList.SMALL} />
+        <SkeletonDefaultButtonCondition condition={skeleton} size={ButtonSizeList.SMALL} />
       </div>
     </header>
   );

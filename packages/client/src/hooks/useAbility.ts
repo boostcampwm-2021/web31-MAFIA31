@@ -6,7 +6,7 @@ import { RoomVote } from '@mafia/domain/types/vote';
 import { useSocketContext } from '@src/contexts/socket';
 import { useUserInfo } from '@src/contexts/userInfo';
 import { Event, Player, Selected } from '@src/types';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import useAudio from './useAudio';
 import useSocketEvent from './useSocketEvent';
 
@@ -22,15 +22,15 @@ const useAbility = (initPlayers: User[], isNight: boolean, job: string) => {
   const resetSelected = () => {
     setSelected({ candidate: '' });
   };
-  const updateVictim = (victim: string) => setSelected({ ...selected, victim });
-  const updateSurvivor = (survivor: string) => setSelected({ ...selected, survivor });
-  const updateSuspect = (suspect: string) => setSelected({ ...selected, suspect });
-  const updateCandidate = (candidate: string) => setSelected({ ...selected, candidate });
+  const updateVictim = (victim: string) => setSelected((prev) => ({ ...prev, victim }));
+  const updateSurvivor = (survivor: string) => setSelected((prev) => ({ ...prev, survivor }));
+  const updateSuspect = (suspect: string) => setSelected((prev) => ({ ...prev, suspect }));
+  const updateCandidate = (candidate: string) => setSelected((prev) => ({ ...prev, candidate }));
   const updateVoteTimer = (remainTime: number): void => {
     voteSec.current = remainTime;
   };
 
-  const updateMafias = ({ mafiaList: mafias }: { mafiaList: string[] }) => {
+  const updateMafias = (mafias: string[]) => {
     if (!mafias) return;
     setMafias(mafias);
   };
@@ -47,7 +47,7 @@ const useAbility = (initPlayers: User[], isNight: boolean, job: string) => {
     setPlayers((prev) =>
       prev.map((player) => {
         const voteCount = roomVotes[player.userName];
-        return voteCount !== undefined ? { ...player, voteCount } : player;
+        return voteCount !== player.voteCount ? { ...player, voteCount } : player;
       }),
     );
   };
@@ -74,71 +74,77 @@ const useAbility = (initPlayers: User[], isNight: boolean, job: string) => {
     socketRef.current?.emit(EVENT.VOTE, { from: userInfo?.userName, to });
   };
 
-  const emitAbility = (userName: string, isDead: boolean) => {
-    if (isDead) return;
+  const emitAbility = useCallback(
+    (userName: string, isDead: boolean) => {
+      if (isDead) return;
 
-    if (isVoteTime()) {
-      play();
-      updateCandidate(userName);
-      voteUser(userName);
-      return;
-    }
+      if (isVoteTime()) {
+        play();
+        updateCandidate(userName);
+        voteUser(userName);
+        return;
+      }
 
-    if (isNight) {
-      const eventName = (() => {
+      if (isNight) {
+        const eventName = (() => {
+          switch (job) {
+            case 'mafia':
+              return EVENT.MAFIA_ABILITY;
+            case 'police':
+              if (!selected.suspect) {
+                return EVENT.POLICE_ABILITY;
+              }
+              return '';
+            case 'doctor':
+              return EVENT.DOCTOR_ABILITY;
+            default:
+              return '';
+          }
+        })();
+        if (!eventName) return;
+        play();
+        socketRef.current?.emit(eventName, userName);
+      }
+    },
+    [isNight, job, socketRef],
+  );
+
+  const getSelectedImg = useCallback(
+    (userName: string, isDead: boolean) => {
+      if (isDead) return '';
+
+      const selectedUser = (() => {
+        if (!isNight) return selected.candidate;
         switch (job) {
           case 'mafia':
-            return EVENT.MAFIA_ABILITY;
+            return selected.victim;
           case 'police':
-            if (!selected.suspect) {
-              return EVENT.POLICE_ABILITY;
-            }
-            return '';
+            return selected.suspect;
           case 'doctor':
-            return EVENT.DOCTOR_ABILITY;
+            return selected.survivor;
+          default:
+            return undefined;
+        }
+      })();
+      if (selectedUser !== userName) return '';
+
+      const imageSrc = (() => {
+        if (!isNight) return 'check';
+        switch (job) {
+          case 'mafia':
+            return 'bullet';
+          case 'police':
+            return 'search';
+          case 'doctor':
+            return 'heal';
           default:
             return '';
         }
       })();
-      if (!eventName) return;
-      play();
-      socketRef.current?.emit(eventName, userName);
-    }
-  };
-
-  const getSelectedImg = (userName: string, isDead: boolean) => {
-    if (isDead) return '';
-
-    const selectedUser = (() => {
-      if (!isNight) return selected.candidate;
-      switch (job) {
-        case 'mafia':
-          return selected.victim;
-        case 'police':
-          return selected.suspect;
-        case 'doctor':
-          return selected.survivor;
-        default:
-          return undefined;
-      }
-    })();
-    if (selectedUser !== userName) return '';
-
-    const imageSrc = (() => {
-      if (!isNight) return 'check';
-      switch (job) {
-        case 'mafia':
-          return 'bullet';
-        case 'police':
-          return 'search';
-        case 'doctor':
-          return 'heal';
-        default:
-          return '';
-      }
-    })();
-    return imageSrc;
-  };
+      return imageSrc;
+    },
+    [isNight, job, selected],
+  );
 
   const updateSoundEffect = () => {
     const soundeEffect = (() => {
@@ -177,7 +183,7 @@ const useAbility = (initPlayers: User[], isNight: boolean, job: string) => {
     initializePlayers();
   }, []);
 
-  return { players, mafias, selected, emitAbility, getSelectedImg };
+  return { players, mafias, emitAbility, getSelectedImg };
 };
 
 export default useAbility;

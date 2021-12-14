@@ -1,33 +1,27 @@
 import { FC, MutableRefObject } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { Player, Selected } from '@src/types';
 import { AbilityButton } from '@src/components/Button';
+import { User } from '@mafia/domain/types/user';
+import useAbility from '@hooks/useAbility';
 
 interface PropType {
-  players: Player[];
-  mafias: string[];
-  selected: Selected;
-  emitAbility: any;
-  getSelectedImg: any;
+  initPlayers: User[];
+  isNight: boolean;
+  myJob: string;
   amIDead: MutableRefObject<boolean>;
 }
 
-const AbilityButtonList: FC<PropType> = ({
-  players,
-  mafias,
-  selected,
-  emitAbility,
-  getSelectedImg,
-  amIDead,
-}) => {
+const AbilityButtonList: FC<PropType> = ({ initPlayers, isNight, myJob, amIDead }) => {
+  const { players, mafias, emitAbility, getSelectedImg } = useAbility(initPlayers, isNight, myJob);
+
   const handleClick = (userName: string, isDead: boolean) => {
     if (amIDead.current) return;
     emitAbility(userName, isDead);
   };
 
   const getStampImg = (userName: string, isDead: boolean) => {
-    if (amIDead.current) return false;
+    if (amIDead.current) return '';
     return getSelectedImg(userName, isDead);
   };
 
@@ -38,8 +32,7 @@ const AbilityButtonList: FC<PropType> = ({
           key={player.userName}
           player={player}
           isMafia={mafias.includes(player.userName)}
-          selected={selected}
-          getStampImg={getStampImg}
+          stamp={getStampImg(player.userName, player.isDead)}
           onClick={handleClick}
         />
       ))}

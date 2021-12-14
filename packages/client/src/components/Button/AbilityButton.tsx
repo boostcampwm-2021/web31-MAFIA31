@@ -1,26 +1,18 @@
-/* eslint-disable no-nested-ternary */
-import { FC, useEffect, useState } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { white, titleActive, grey3, mafia } from '@constants/colors';
 import { VoteIcon } from '@components/Icon';
-import { Player, Selected } from '@src/types';
+import { Player } from '@src/types';
 
 interface PropType {
   player: Player;
   isMafia: boolean;
-  selected: Selected;
-  getStampImg: any;
+  stamp: string;
   onClick: any;
 }
 
-const AbilityButton: FC<PropType> = ({ player, isMafia, selected, getStampImg, onClick }) => {
+const AbilityButton = ({ player, isMafia, stamp, onClick }: PropType) => {
   const { userName, profileImg, isDead, voteCount } = player;
-  const [stamp, setStamp] = useState<string>('');
-
-  const updateStamp = () => {
-    setStamp(getStampImg(userName, isDead));
-  };
 
   const iconList = () => {
     const arr = Array.from({ length: voteCount }, (_, idx) => idx);
@@ -30,10 +22,6 @@ const AbilityButton: FC<PropType> = ({ player, isMafia, selected, getStampImg, o
   const handleClick = () => {
     onClick(userName, isDead);
   };
-
-  useEffect(() => {
-    updateStamp();
-  }, [selected]);
 
   return (
     <button type="button" css={buttonStyle(isDead)} onClick={handleClick}>
@@ -52,7 +40,7 @@ const AbilityButton: FC<PropType> = ({ player, isMafia, selected, getStampImg, o
 };
 
 const buttonStyle = (isDead: boolean) => css`
-  cursor: pointer;
+  cursor: ${isDead ? 'auto' : 'pointer'};
   position: relative;
   display: flex;
   align-items: center;

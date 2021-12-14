@@ -22,15 +22,15 @@ const useAbility = (initPlayers: User[], isNight: boolean, job: string) => {
   const resetSelected = () => {
     setSelected({ candidate: '' });
   };
-  const updateVictim = (victim: string) => setSelected({ ...selected, victim });
-  const updateSurvivor = (survivor: string) => setSelected({ ...selected, survivor });
-  const updateSuspect = (suspect: string) => setSelected({ ...selected, suspect });
-  const updateCandidate = (candidate: string) => setSelected({ ...selected, candidate });
+  const updateVictim = (victim: string) => setSelected((prev) => ({ ...prev, victim }));
+  const updateSurvivor = (survivor: string) => setSelected((prev) => ({ ...prev, survivor }));
+  const updateSuspect = (suspect: string) => setSelected((prev) => ({ ...prev, suspect }));
+  const updateCandidate = (candidate: string) => setSelected((prev) => ({ ...prev, candidate }));
   const updateVoteTimer = (remainTime: number): void => {
     voteSec.current = remainTime;
   };
 
-  const updateMafias = ({ mafiaList: mafias }: { mafiaList: string[] }) => {
+  const updateMafias = (mafias: string[]) => {
     if (!mafias) return;
     setMafias(mafias);
   };
@@ -47,7 +47,7 @@ const useAbility = (initPlayers: User[], isNight: boolean, job: string) => {
     setPlayers((prev) =>
       prev.map((player) => {
         const voteCount = roomVotes[player.userName];
-        return voteCount !== undefined ? { ...player, voteCount } : player;
+        return voteCount !== player.voteCount ? { ...player, voteCount } : player;
       }),
     );
   };
@@ -177,7 +177,7 @@ const useAbility = (initPlayers: User[], isNight: boolean, job: string) => {
     initializePlayers();
   }, []);
 
-  return { players, mafias, selected, emitAbility, getSelectedImg };
+  return { players, mafias, emitAbility, getSelectedImg };
 };
 
 export default useAbility;

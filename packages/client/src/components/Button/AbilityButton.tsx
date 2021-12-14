@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+import { memo } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { white, titleActive, grey3, mafia } from '@constants/colors';
@@ -11,7 +13,7 @@ interface PropType {
   onClick: any;
 }
 
-const AbilityButton = ({ player, isMafia, stamp, onClick }: PropType) => {
+const AbilityButton = memo(({ player, isMafia, stamp, onClick }: PropType) => {
   const { userName, profileImg, isDead, voteCount } = player;
 
   const iconList = () => {
@@ -37,7 +39,7 @@ const AbilityButton = ({ player, isMafia, stamp, onClick }: PropType) => {
       )}
     </button>
   );
-};
+});
 
 const buttonStyle = (isDead: boolean) => css`
   cursor: ${isDead ? 'auto' : 'pointer'};

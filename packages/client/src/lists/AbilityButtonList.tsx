@@ -1,4 +1,4 @@
-import { FC, MutableRefObject } from 'react';
+import { FC, MutableRefObject, useCallback } from 'react';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { AbilityButton } from '@src/components/Button';
@@ -15,15 +15,21 @@ interface PropType {
 const AbilityButtonList: FC<PropType> = ({ initPlayers, isNight, myJob, amIDead }) => {
   const { players, mafias, emitAbility, getSelectedImg } = useAbility(initPlayers, isNight, myJob);
 
-  const handleClick = (userName: string, isDead: boolean) => {
-    if (amIDead.current) return;
-    emitAbility(userName, isDead);
-  };
+  const handleClick = useCallback(
+    (userName: string, isDead: boolean) => {
+      if (amIDead.current) return;
+      emitAbility(userName, isDead);
+    },
+    [amIDead.current, emitAbility],
+  );
 
-  const getStampImg = (userName: string, isDead: boolean) => {
-    if (amIDead.current) return '';
-    return getSelectedImg(userName, isDead);
-  };
+  const getStampImg = useCallback(
+    (userName: string, isDead: boolean) => {
+      if (amIDead.current) return '';
+      return getSelectedImg(userName, isDead);
+    },
+    [amIDead.current, getSelectedImg],
+  );
 
   return (
     <div css={abilityListStyle}>

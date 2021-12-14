@@ -21,8 +21,8 @@ const GamePageModalContainer = memo(
     } = useExecutionModal();
 
     const roomOutHandler = () => {
-      history.push('/rooms');
       closeRoomOutModal();
+      history.push('/rooms');
     };
 
     return (

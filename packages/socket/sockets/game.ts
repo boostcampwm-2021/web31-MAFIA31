@@ -125,7 +125,8 @@ const noticeMafia = (namespace: Namespace, roomId: string): void => {
     }
   });
 
-  namespace.to('mafia').emit(EVENT.NOTICE_MAFIA, {
+  namespace.to('mafia').emit(EVENT.NOTICE_MAFIA, mafiaList);
+  namespace.to('mafia').emit(EVENT.PUBLISH_STORY, {
     id: Date.now().toString(),
     msg: STORY_DIC[StoryName.NOTICE_MAFIA].msg('', mafiaList),
     imgSrc: STORY_DIC[StoryName.NOTICE_MAFIA].src,

@@ -42,24 +42,22 @@ class RoomStore {
   }
 
   static async removePlayer(roomId: string, socketId: string) {
-    console.log(socketId);
-    RoomStore.instance[roomId] = RoomStore.instance[roomId].filter(
-      (user) => user.socketId !== socketId,
-    );
-    console.log(RoomStore.instance[roomId]);
+    const newRoomStore = RoomStore.get(roomId).filter((user) => user.socketId !== socketId);
 
-    if (RoomStore.instance[roomId].length <= 0) {
-      GameStore.clearTimer(roomId);
-      GameStore.removeGameInfos(roomId);
-      RoomStore.removeRoom(roomId);
-      await apiClient.put(`/rooms`, {
-        roomId: roomId.split('/')[1],
-        status: 'ready',
-      });
+    if (newRoomStore.length > 0) {
+      RoomStore.instance[roomId] = newRoomStore;
+      RoomStore.instance[roomId][0].isHost = true;
+      RoomStore.instance[roomId][0].isReady = true;
       return;
     }
-    RoomStore.instance[roomId][0].isHost = true;
-    RoomStore.instance[roomId][0].isReady = true;
+
+    GameStore.clearTimer(roomId);
+    GameStore.removeGameInfos(roomId);
+    RoomStore.removeRoom(roomId);
+    await apiClient.put(`/rooms`, {
+      roomId: roomId.split('/')[1],
+      status: 'ready',
+    });
   }
 
   static get(roomId: string) {

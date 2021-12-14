@@ -13,7 +13,6 @@ import { User } from '@mafia/domain/types/user';
 import AbilityButtonList from '@src/lists/AbilityButtonList';
 import { useUserInfo } from '@src/contexts/userInfo';
 import Timer from '@src/components/Timer';
-import useAbility from '@hooks/useAbility';
 import { Event } from '@src/types';
 import useSocketEvent from '@hooks/useSocketEvent';
 import { useSocketContext } from '@src/contexts/socket';
@@ -42,11 +41,6 @@ const LeftSideContainer: FC<PropType> = ({ initPlayers, isNight, myJob, roomName
   const exitEvent: Event = { event: EVENT.EXIT, handler: setMyDeadState };
   useSocketEvent(socketRef, [executionEvent, killEvent, exitEvent], [amIDead.current]);
 
-  const { players, mafias, selected, emitAbility, getSelectedImg } = useAbility(
-    initPlayers,
-    isNight,
-    myJob,
-  );
   const {
     isModalOpen: isRoomOutModalOpen,
     openModal: openRoomOutModal,
@@ -97,11 +91,9 @@ const LeftSideContainer: FC<PropType> = ({ initPlayers, isNight, myJob, roomName
       <Timer />
       <hr css={hrStyle} />
       <AbilityButtonList
-        players={players}
-        mafias={mafias}
-        selected={selected}
-        emitAbility={emitAbility}
-        getSelectedImg={getSelectedImg}
+        initPlayers={initPlayers}
+        isNight={isNight}
+        myJob={myJob}
         amIDead={amIDead ?? false}
       />
     </div>

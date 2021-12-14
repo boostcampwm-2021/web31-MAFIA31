@@ -15,8 +15,7 @@ const useLog = () => {
 
   const chatEvent: Event = { event: EVENT.PUBLISH_MESSAGE, handler: updateLogs };
   const storyEvent: Event = { event: EVENT.PUBLISH_STORY, handler: updateLogs };
-  const noticeMafiasEvent: Event = { event: EVENT.NOTICE_MAFIA, handler: updateLogs };
-  useSocketEvent(socketRef, [chatEvent, storyEvent, noticeMafiasEvent]);
+  useSocketEvent(socketRef, [chatEvent, storyEvent]);
 
   const sendChat = (chat: any, isNight: boolean) => {
     if (!chat.msg) return;

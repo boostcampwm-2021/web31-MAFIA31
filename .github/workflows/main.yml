@@ -4,20 +4,20 @@ name: CD
 
 on:
   push:
-    branches: [ main ]
-    
+    branches: [main]
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy api server
+      - name: Deploy server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PWD }}
-          port: ${{ secrets.API_SSH_PORT }} 
+          port: ${{ secrets.API_SSH_PORT }}
           script: |
             export repo=${{ secrets.REPOS }}
             export socket=${{ secrets.SOCKET_URL }}
@@ -26,14 +26,4 @@ jobs:
             export api_url=${{ secrets.API_URL }}            
             export client_url=${{ secrets.CLIENT_URL }}            
             export mongo_url=${{ secrets.MONGO_URL }}            
-            sh deploy.sh            
-      - name: Deploy socket server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PWD }}
-          port: ${{ secrets.SOCKET_SSH_PORT }} 
-          script: 
             sh deploy.sh
-                 

@@ -12,8 +12,7 @@
 
 ## 👋 소개
 
-<img src="https://user-images.githubusercontent.com/69030160/144362285-b4f6673d-328b-4736-be33-69c7ecdb36b7.png" width=60px alt="mafia">
-<img src="https://user-images.githubusercontent.com/69030160/144362524-962c7caa-83e8-4e48-a13a-e4626b4c61be.png" width=60px alt="police">
+<img src="https://user-images.githubusercontent.com/69030160/144362285-b4f6673d-328b-4736-be33-69c7ecdb36b7.png" width=60px alt="mafia"> <img src="https://user-images.githubusercontent.com/69030160/144362524-962c7caa-83e8-4e48-a13a-e4626b4c61be.png" width=60px alt="police">
 <img src="https://user-images.githubusercontent.com/69030160/144362470-e5927251-6825-4785-bbdd-e2581c57045d.png" width=60px alt="citizen">
 <img src="https://user-images.githubusercontent.com/69030160/144362467-6a70e5b1-01de-4bc7-a16d-33df14f944c5.png" width=60px alt="doctor">
 <img src="https://user-images.githubusercontent.com/69030160/144362890-2e16c956-26be-4663-87ac-226e6d798b27.png" width=60px alt="shamen">

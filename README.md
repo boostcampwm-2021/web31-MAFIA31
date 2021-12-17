@@ -4,7 +4,7 @@
 
 <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https://github.com/boostcampwm-2021/web31-MAFIA31&count_bg=%234E416D&title_bg=%23727272&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false" alt="hits" align='right' style='margin-left:5px;' />
 
-<img src="https://img.shields.io/badge/version-v0.0.1-blue" alt="version0.0.1" align='right' style='margin-left:5px;'/>
+<img src="https://img.shields.io/badge/version-v0.0.2-blue" alt="version0.0.2" align='right' style='margin-left:5px;'/>
 
 🔗 배포: <http://mafia31.kro.kr>
 
@@ -12,11 +12,17 @@
 
 ## 👋 소개
 
+<img src="https://user-images.githubusercontent.com/69030160/144362285-b4f6673d-328b-4736-be33-69c7ecdb36b7.png" width=60px alt="mafia">
+<img src="https://user-images.githubusercontent.com/69030160/144362524-962c7caa-83e8-4e48-a13a-e4626b4c61be.png" width=60px alt="police">
+<img src="https://user-images.githubusercontent.com/69030160/144362470-e5927251-6825-4785-bbdd-e2581c57045d.png" width=60px alt="citizen">
+<img src="https://user-images.githubusercontent.com/69030160/144362467-6a70e5b1-01de-4bc7-a16d-33df14f944c5.png" width=60px alt="doctor">
+<img src="https://user-images.githubusercontent.com/69030160/144362890-2e16c956-26be-4663-87ac-226e6d798b27.png" width=60px alt="shamen">
+
 마피아 게임을 웹에서 설치 없이 간편하게 즐겨보세요! 🔫
 
 귀여운 자체 제작 캐릭터와 애니메이션이 기다리고 있어요 💜
 
-<br/><br/><br/>
+<br/>
 
 ## ✨ 기능
 
@@ -26,14 +32,14 @@
 - 💬 밤 / 낮 및 직업별 실시간 채팅
 - 🌞 낮 유저별 투표
 - 🌝 밤 직업별 다양한 상호작용
-- 🥇 유저별 랭킹 시스템
+- 🥇 유저별 점수 시스템
 - 📊 유저별 통계 시스템
 
 <br/><br/><br/>
 
 ## 🛠 기술 스택
 
-![기술 스택](https://user-images.githubusercontent.com/69030160/142336884-078c4145-1124-4cfb-b52d-d0f2483aa0d5.png)
+![기술 스택](https://user-images.githubusercontent.com/69030160/144361842-775589b6-23b2-4e6c-a5db-517ea4ad57c0.png)
 
 <br/><br/><br/>
 
@@ -80,7 +86,7 @@
 
 ## 🗃 ERD
 
-![ERD](https://i.imgur.com/jaNSi1H.png)
+![ERD](https://user-images.githubusercontent.com/69030160/144361896-67e24eed-d3ee-467c-a0c6-6bb0ebeeadc1.png)
 
 <br/><br/><br/>
 
